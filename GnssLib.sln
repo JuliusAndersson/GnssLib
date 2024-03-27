@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibGUI", "GnssLibGUI\Gn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibDL", "GnssLibDL\GnssLibDL.csproj", "{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibCALC", "GnssLibCALC\GnssLibCALC.csproj", "{67F96BD0-4585-4A16-AB2A-9E83B117F93F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibNMEA_Writer", "GnssLibNMEA_Writer\GnssLibNMEA_Writer.csproj", "{8C738C98-8D4D-462A-9160-1D27966624A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F96BD0-4585-4A16-AB2A-9E83B117F93F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F96BD0-4585-4A16-AB2A-9E83B117F93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F96BD0-4585-4A16-AB2A-9E83B117F93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F96BD0-4585-4A16-AB2A-9E83B117F93F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C738C98-8D4D-462A-9160-1D27966624A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C738C98-8D4D-462A-9160-1D27966624A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C738C98-8D4D-462A-9160-1D27966624A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C738C98-8D4D-462A-9160-1D27966624A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
