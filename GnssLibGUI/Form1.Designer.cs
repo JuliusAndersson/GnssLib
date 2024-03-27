@@ -350,10 +350,12 @@
             // 
             // setRadR
             // 
-            setRadR.Location = new Point(148, 24);
+            setRadR.AutoSize = false;
+            setRadR.Cursor = Cursors.Hand;
+            setRadR.Location = new Point(145, 36);
             setRadR.Maximum = 100;
             setRadR.Name = "setRadR";
-            setRadR.Size = new Size(272, 56);
+            setRadR.Size = new Size(272, 36);
             setRadR.TabIndex = 15;
             setRadR.TickFrequency = 10;
             setRadR.Scroll += setRadR_Scroll;
