@@ -87,13 +87,14 @@
             Terminal.Name = "Terminal";
             Terminal.ReadOnly = true;
             Terminal.ScrollBars = ScrollBars.Both;
-            Terminal.Size = new Size(817, 192);
+            Terminal.Size = new Size(965, 192);
             Terminal.TabIndex = 0;
+            Terminal.TabStop = false;
             // 
             // Close
             // 
             Close.BackColor = Color.Black;
-            Close.Location = new Point(927, 464);
+            Close.Location = new Point(920, 515);
             Close.Name = "Close";
             Close.Size = new Size(91, 41);
             Close.TabIndex = 1;
@@ -110,7 +111,7 @@
             Simulate.Name = "Simulate";
             Simulate.Size = new Size(116, 41);
             Simulate.TabIndex = 2;
-            Simulate.Text = "Simulate ";
+            Simulate.Text = "Simulate";
             Simulate.UseVisualStyleBackColor = false;
             Simulate.Click += Simulate_Click;
             // 
@@ -133,57 +134,57 @@
             // 
             // setSecond
             // 
-            setSecond.Location = new Point(347, 22);
+            setSecond.Location = new Point(368, 22);
             setSecond.Margin = new Padding(2);
             setSecond.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             setSecond.Name = "setSecond";
-            setSecond.Size = new Size(45, 31);
+            setSecond.Size = new Size(49, 31);
             setSecond.TabIndex = 10;
             // 
             // setMinute
             // 
-            setMinute.Location = new Point(259, 24);
+            setMinute.Location = new Point(218, 22);
             setMinute.Margin = new Padding(2);
             setMinute.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             setMinute.Name = "setMinute";
-            setMinute.Size = new Size(33, 31);
+            setMinute.Size = new Size(49, 31);
             setMinute.TabIndex = 9;
             // 
             // setHour
             // 
-            setHour.Location = new Point(122, 22);
+            setHour.Location = new Point(76, 22);
             setHour.Margin = new Padding(2);
             setHour.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
             setHour.Name = "setHour";
-            setHour.Size = new Size(33, 31);
+            setHour.Size = new Size(49, 31);
             setHour.TabIndex = 8;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(303, 25);
+            label4.Location = new Point(280, 26);
             label4.Name = "label4";
-            label4.Size = new Size(39, 25);
+            label4.Size = new Size(87, 25);
             label4.TabIndex = 6;
-            label4.Text = "sec";
+            label4.Text = "Seconds:";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(181, 24);
+            label3.Location = new Point(143, 26);
             label3.Name = "label3";
-            label3.Size = new Size(73, 25);
+            label3.Size = new Size(78, 25);
             label3.TabIndex = 4;
-            label3.Text = "Minute";
+            label3.Text = "Minute:";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(60, 25);
+            label2.Location = new Point(16, 26);
             label2.Name = "label2";
-            label2.Size = new Size(55, 25);
+            label2.Size = new Size(61, 25);
             label2.TabIndex = 2;
-            label2.Text = "Hour";
+            label2.Text = "Hour:";
             // 
             // groupBox2
             // 
@@ -319,7 +320,7 @@
             groupBox5.Controls.Add(setIntOn);
             groupBox5.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox5.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox5.Location = new Point(579, 22);
+            groupBox5.Location = new Point(559, 22);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(454, 221);
             groupBox5.TabIndex = 12;
@@ -353,7 +354,7 @@
             setRadR.AutoSize = false;
             setRadR.Cursor = Cursors.Hand;
             setRadR.Location = new Point(145, 36);
-            setRadR.Maximum = 100;
+            setRadR.Maximum = 500;
             setRadR.Name = "setRadR";
             setRadR.Size = new Size(272, 36);
             setRadR.TabIndex = 15;
@@ -423,7 +424,7 @@
             setIntOff.AutoSize = true;
             setIntOff.Checked = true;
             setIntOff.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            setIntOff.Location = new Point(76, 35);
+            setIntOff.Location = new Point(77, 31);
             setIntOff.Name = "setIntOff";
             setIntOff.Size = new Size(58, 27);
             setIntOff.TabIndex = 1;
@@ -435,7 +436,7 @@
             // 
             setIntOn.AutoSize = true;
             setIntOn.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            setIntOn.Location = new Point(16, 35);
+            setIntOn.Location = new Point(17, 31);
             setIntOn.Name = "setIntOn";
             setIntOn.Size = new Size(54, 27);
             setIntOn.TabIndex = 0;
@@ -469,7 +470,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(52, 50, 46);
-            ClientSize = new Size(1047, 584);
+            ClientSize = new Size(1048, 571);
             ControlBox = false;
             Controls.Add(Stop);
             Controls.Add(setNMEA);
