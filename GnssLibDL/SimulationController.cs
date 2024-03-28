@@ -54,10 +54,10 @@ namespace GnssLibDL
             
 
             string filePath = $"Resources/Broadcast/{dt.Year}_{ dt.Month}_{dt.Day}_BroadCastFile.rnx"; // 2024_01_01_BroadCastFile.rnx
-            BroadCastDataReader bcdr = new BroadCastDataReader();
-            GNSS_Data = bcdr.ReadBroadcastData(filePath);
+            //BroadCastDataReader bcdr = new BroadCastDataReader();
+            //GNSS_Data = bcdr.ReadBroadCastData(filePath);
 
-
+            
         }
 
         public void Tick()

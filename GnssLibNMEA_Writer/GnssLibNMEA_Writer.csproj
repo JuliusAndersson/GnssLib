@@ -6,4 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GnssLibDL\GnssLibDL.csproj" />
+  </ItemGroup>
 </Project>

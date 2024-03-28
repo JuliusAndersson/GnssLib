@@ -2,7 +2,7 @@
 
 namespace GnssLibDL.Models.BroadCastDataModels
 {
-    internal class BroadCastDataINAV
+    public class BroadCastDataINAV
     {
         public string SatId { get; set; }
         public DateTime DateTime { get; set; }

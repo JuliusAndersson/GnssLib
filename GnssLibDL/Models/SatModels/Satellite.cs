@@ -5,7 +5,7 @@
 
 namespace GnssLibDL.Models.SatModels
 {
-	internal class Satellite
+	public class Satellite
 	{
 		public string SatId { get; set; }
 		public double Elevation { get; set; }
