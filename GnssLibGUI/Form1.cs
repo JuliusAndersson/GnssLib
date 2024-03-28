@@ -13,7 +13,7 @@ namespace GnssLibGUI
             setFile.Items.Add("File 3");
             setFile.SelectedIndex = 0;
 
-            
+
 
         }
 
@@ -29,11 +29,11 @@ namespace GnssLibGUI
             //Terminal.Text += hey + " __ ";
             //Terminal.Text += tc.testVar;
             DateTime dt;
-            if(setFile.SelectedIndex == 0)
+            if (setFile.SelectedIndex == 0)
             {
-                dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int) setSecond.Value);
+                dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
             }
-            else if(setFile.SelectedIndex == 1)
+            else if (setFile.SelectedIndex == 1)
             {
                 dt = new DateTime(2024, 02, 02, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
             }
@@ -42,13 +42,39 @@ namespace GnssLibGUI
                 dt = new DateTime(2024, 03, 03, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
             }
 
-            //String hey = tc.setValues(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, (int) setLat, setLong, setIntOn, setRadR, setJammerLat, setJammerLong);
 
+
+
+            double value;
+            if (double.TryParse(setLat.Text, out value) && double.TryParse(setLong.Text, out value) && double.TryParse(setJammerLat.Text, out value) && double.TryParse(setJammerLong.Text, out value))
+            {
+                string hey = tc.setValues(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, double.Parse(setLat.Text), double.Parse(setLong.Text), setIntOn.Checked, double.Parse(setRadR.Value.ToString()), double.Parse(setJammerLat.Text), double.Parse(setJammerLong.Text));
+                Terminal.Text += hey + Environment.NewLine;
+            }
+            else
+            {
+                Terminal.Text = "Invalid inputs";
+            }
         }
 
         private void setRadR_Scroll(object sender, EventArgs e)
         {
             labelRadR.Text = setRadR.Value.ToString() + " km";
+        }
+
+        private void Stop_Click(object sender, EventArgs e)
+        {
+            Terminal.Clear();
+        }
+
+        private void updateJammerPos_Click(object sender, EventArgs e)
+        {
+
+
+
+
+
+
         }
     }
 }

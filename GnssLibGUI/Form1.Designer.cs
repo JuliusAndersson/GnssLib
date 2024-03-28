@@ -52,11 +52,11 @@
             setFile = new ComboBox();
             groupBox4 = new GroupBox();
             groupBox5 = new GroupBox();
+            updateJammerPos = new Button();
             groupBox7 = new GroupBox();
             labelRadR = new Label();
             setRadR = new TrackBar();
             groupBox6 = new GroupBox();
-            updateJammerPos = new Button();
             setJammerLong = new TextBox();
             setJammerLat = new TextBox();
             label1 = new Label();
@@ -94,6 +94,7 @@
             // Close
             // 
             Close.BackColor = Color.Black;
+            Close.Cursor = Cursors.Hand;
             Close.Location = new Point(920, 515);
             Close.Name = "Close";
             Close.Size = new Size(91, 41);
@@ -105,6 +106,7 @@
             // Simulate
             // 
             Simulate.BackColor = Color.DimGray;
+            Simulate.Cursor = Cursors.Hand;
             Simulate.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             Simulate.ForeColor = Color.FromArgb(56, 203, 52);
             Simulate.Location = new Point(748, 257);
@@ -134,6 +136,7 @@
             // 
             // setSecond
             // 
+            setSecond.Cursor = Cursors.Hand;
             setSecond.Location = new Point(368, 22);
             setSecond.Margin = new Padding(2);
             setSecond.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
@@ -143,6 +146,7 @@
             // 
             // setMinute
             // 
+            setMinute.Cursor = Cursors.Hand;
             setMinute.Location = new Point(218, 22);
             setMinute.Margin = new Padding(2);
             setMinute.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
@@ -152,6 +156,7 @@
             // 
             // setHour
             // 
+            setHour.Cursor = Cursors.Hand;
             setHour.Location = new Point(76, 22);
             setHour.Margin = new Padding(2);
             setHour.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
@@ -205,6 +210,7 @@
             // updatePos
             // 
             updatePos.BackColor = Color.DimGray;
+            updatePos.Cursor = Cursors.Hand;
             updatePos.Location = new Point(322, 33);
             updatePos.Name = "updatePos";
             updatePos.Size = new Size(95, 34);
@@ -218,6 +224,7 @@
             setLong.Name = "setLong";
             setLong.Size = new Size(76, 31);
             setLong.TabIndex = 8;
+            setLong.Text = "0";
             // 
             // setLat
             // 
@@ -225,6 +232,7 @@
             setLat.Name = "setLat";
             setLat.Size = new Size(76, 31);
             setLat.TabIndex = 7;
+            setLat.Text = "0";
             // 
             // label5
             // 
@@ -261,6 +269,7 @@
             // setGlonass
             // 
             setGlonass.AutoSize = true;
+            setGlonass.Cursor = Cursors.Hand;
             setGlonass.Location = new Point(303, 25);
             setGlonass.Name = "setGlonass";
             setGlonass.Size = new Size(100, 29);
@@ -271,6 +280,7 @@
             // setGalileo
             // 
             setGalileo.AutoSize = true;
+            setGalileo.Cursor = Cursors.Hand;
             setGalileo.Location = new Point(170, 25);
             setGalileo.Name = "setGalileo";
             setGalileo.Size = new Size(93, 29);
@@ -283,6 +293,7 @@
             setGps.AutoSize = true;
             setGps.Checked = true;
             setGps.CheckState = CheckState.Checked;
+            setGps.Cursor = Cursors.Hand;
             setGps.Location = new Point(60, 25);
             setGps.Name = "setGps";
             setGps.Size = new Size(68, 29);
@@ -292,6 +303,7 @@
             // 
             // setFile
             // 
+            setFile.Cursor = Cursors.Hand;
             setFile.DropDownStyle = ComboBoxStyle.DropDownList;
             setFile.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             setFile.FormattingEnabled = true;
@@ -314,6 +326,7 @@
             // 
             // groupBox5
             // 
+            groupBox5.Controls.Add(updateJammerPos);
             groupBox5.Controls.Add(groupBox7);
             groupBox5.Controls.Add(groupBox6);
             groupBox5.Controls.Add(setIntOff);
@@ -326,6 +339,19 @@
             groupBox5.TabIndex = 12;
             groupBox5.TabStop = false;
             groupBox5.Text = "Interference";
+            // 
+            // updateJammerPos
+            // 
+            updateJammerPos.BackColor = Color.DimGray;
+            updateJammerPos.Cursor = Cursors.Hand;
+            updateJammerPos.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            updateJammerPos.Location = new Point(338, 167);
+            updateJammerPos.Name = "updateJammerPos";
+            updateJammerPos.Size = new Size(95, 34);
+            updateJammerPos.TabIndex = 10;
+            updateJammerPos.Text = "Update pos";
+            updateJammerPos.UseVisualStyleBackColor = false;
+            updateJammerPos.Click += updateJammerPos_Click;
             // 
             // groupBox7
             // 
@@ -363,7 +389,6 @@
             // 
             // groupBox6
             // 
-            groupBox6.Controls.Add(updateJammerPos);
             groupBox6.Controls.Add(setJammerLong);
             groupBox6.Controls.Add(setJammerLat);
             groupBox6.Controls.Add(label1);
@@ -372,20 +397,10 @@
             groupBox6.ForeColor = Color.FromArgb(255, 184, 56);
             groupBox6.Location = new Point(16, 132);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(423, 78);
+            groupBox6.Size = new Size(304, 78);
             groupBox6.TabIndex = 5;
             groupBox6.TabStop = false;
             groupBox6.Text = "Jammer Position";
-            // 
-            // updateJammerPos
-            // 
-            updateJammerPos.BackColor = Color.DimGray;
-            updateJammerPos.Location = new Point(322, 33);
-            updateJammerPos.Name = "updateJammerPos";
-            updateJammerPos.Size = new Size(95, 34);
-            updateJammerPos.TabIndex = 10;
-            updateJammerPos.Text = "Update pos";
-            updateJammerPos.UseVisualStyleBackColor = false;
             // 
             // setJammerLong
             // 
@@ -393,6 +408,7 @@
             setJammerLong.Name = "setJammerLong";
             setJammerLong.Size = new Size(76, 31);
             setJammerLong.TabIndex = 8;
+            setJammerLong.Text = "0";
             // 
             // setJammerLat
             // 
@@ -400,6 +416,7 @@
             setJammerLat.Name = "setJammerLat";
             setJammerLat.Size = new Size(76, 31);
             setJammerLat.TabIndex = 7;
+            setJammerLat.Text = "0";
             // 
             // label1
             // 
@@ -423,6 +440,7 @@
             // 
             setIntOff.AutoSize = true;
             setIntOff.Checked = true;
+            setIntOff.Cursor = Cursors.Hand;
             setIntOff.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             setIntOff.Location = new Point(77, 31);
             setIntOff.Name = "setIntOff";
@@ -435,6 +453,7 @@
             // setIntOn
             // 
             setIntOn.AutoSize = true;
+            setIntOn.Cursor = Cursors.Hand;
             setIntOn.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             setIntOn.Location = new Point(17, 31);
             setIntOn.Name = "setIntOn";
@@ -446,6 +465,7 @@
             // setNMEA
             // 
             setNMEA.AutoSize = true;
+            setNMEA.Cursor = Cursors.Hand;
             setNMEA.Location = new Point(595, 263);
             setNMEA.Name = "setNMEA";
             setNMEA.Size = new Size(123, 24);
@@ -456,6 +476,7 @@
             // Stop
             // 
             Stop.BackColor = Color.Silver;
+            Stop.Cursor = Cursors.Hand;
             Stop.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             Stop.ForeColor = Color.FromArgb(217, 40, 40);
             Stop.Location = new Point(897, 257);
@@ -464,13 +485,14 @@
             Stop.TabIndex = 14;
             Stop.Text = "Stop";
             Stop.UseVisualStyleBackColor = false;
+            Stop.Click += Stop_Click;
             // 
             // GUI_Window
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(52, 50, 46);
-            ClientSize = new Size(1048, 571);
+            ClientSize = new Size(1012, 586);
             ControlBox = false;
             Controls.Add(Stop);
             Controls.Add(setNMEA);
