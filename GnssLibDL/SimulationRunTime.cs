@@ -10,13 +10,14 @@ namespace GnssLibDL
     {
         private bool simulate;
         private SimulationController sc;
+
         public SimulationRunTime(SimulationController scIN) {
             sc = scIN;
-            simulate = true;
         }
 
         public void RunSimulation()
         {
+            simulate = true;
             long currentTimeMillis;
             while (simulate)
             {
