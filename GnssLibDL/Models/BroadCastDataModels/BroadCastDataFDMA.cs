@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exjobbv2.Models.BroadCastDataModels
+namespace GnssLibDL.Models.BroadCastDataModels
 {
     internal class BroadCastDataFDMA
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Exjobbv2.Models.SatelliteSystemModels;
+using GnssLibDL.Models.SatelliteSystemModels;
 
-namespace Exjobbv2.Models
+namespace GnssLibDL.Models
 {
     internal class Satellites
 	{

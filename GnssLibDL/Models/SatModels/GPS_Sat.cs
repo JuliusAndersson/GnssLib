@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Exjobbv2.Models.BroadCastDataModels;
+using GnssLibDL.Models.BroadCastDataModels;
 
-namespace Exjobbv2.Models.SatModels
+namespace GnssLibDL.Models.SatModels
 {
     internal class GPS_Sat
     {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Exjobbv2.Models.SatModels;
-namespace Exjobbv2.Models.SatelliteSystemModels
+using GnssLibDL.Models.SatModels;
+namespace GnssLibDL.Models.SatelliteSystemModels
 {
     internal class Gps
     {

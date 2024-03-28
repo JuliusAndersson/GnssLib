@@ -1,7 +1,7 @@
 ﻿using System;
-using Exjobbv2.Models.SatModels;
+using GnssLibDL.Models.SatModels;
 
-namespace Exjobbv2.Models.SatelliteSystemModels
+namespace GnssLibDL.Models.SatelliteSystemModels
 {
     internal class Galileo
     {

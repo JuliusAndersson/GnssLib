@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Exjobbv2.Models.BroadCastDataModels
+namespace GnssLibDL.Models.BroadCastDataModels
 {
-    internal class BroadCastDataLNAV : IBroadcastData
+    internal class BroadCastDataLNAV 
     {
         //SV/Epoch/SvClock
         public string SatId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System;
-using Exjobbv2.Models.BroadCastDataModels;
+using GnssLibDL.Models.BroadCastDataModels;
 
-namespace Exjobbv2.Models.SatModels
+namespace GnssLibDL.Models.SatModels
 {
     internal class Glonass_Sat
     {

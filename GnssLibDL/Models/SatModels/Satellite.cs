@@ -3,7 +3,7 @@
 
 
 
-namespace Exjobbv2.Models.SatModels
+namespace GnssLibDL.Models.SatModels
 {
 	internal class Satellite
 	{
