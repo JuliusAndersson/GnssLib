@@ -217,6 +217,7 @@
             updatePos.TabIndex = 10;
             updatePos.Text = "Update pos";
             updatePos.UseVisualStyleBackColor = false;
+            updatePos.Click += updatePos_Click;
             // 
             // setLong
             // 
@@ -492,7 +493,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(52, 50, 46);
-            ClientSize = new Size(1012, 586);
+            ClientSize = new Size(1008, 582);
             ControlBox = false;
             Controls.Add(Stop);
             Controls.Add(setNMEA);

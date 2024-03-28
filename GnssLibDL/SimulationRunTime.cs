@@ -6,29 +6,38 @@ using System.Threading.Tasks;
 
 namespace GnssLibDL
 {
-    internal class SimulationRunTime
+    public class SimulationRunTime
     {
         private bool simulate;
         private SimulationController sc;
+        public event EventHandler tickDone;
 
-        public SimulationRunTime(SimulationController scIN) {
-            sc = scIN;
+        public SimulationRunTime() {
+            
         }
 
-        public void RunSimulation()
+        public void RunSimulation(SimulationController scIN)
         {
+            sc = scIN;
+
             simulate = true;
             long currentTimeMillis;
-            while (simulate)
-            {
-                currentTimeMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                sc.Tick();
 
-                currentTimeMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() - currentTimeMillis;
+            Task.Run(() =>
+            {    
+                while (simulate)
+                {
+                    currentTimeMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-                Thread.Sleep(1000 - (int) currentTimeMillis);
+                    sc.Tick();
 
-            }
+                    currentTimeMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() - currentTimeMillis;
+
+                    Thread.Sleep(1000 - (int) currentTimeMillis);
+                    
+                    tickDone(this, EventArgs.Empty);  
+                }
+            });
         }
 
         public void StopSimulation()
