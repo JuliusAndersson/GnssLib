@@ -2,7 +2,7 @@
 
 namespace GnssLibDL.Models.BroadCastDataModels
 {
-    internal class BroadCastDataLNAV 
+    public class BroadCastDataLNAV 
     {
         //SV/Epoch/SvClock
         public string SatId { get; set; }

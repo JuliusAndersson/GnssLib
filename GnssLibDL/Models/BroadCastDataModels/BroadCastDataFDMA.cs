@@ -2,7 +2,7 @@
 
 namespace GnssLibDL.Models.BroadCastDataModels
 {
-    internal class BroadCastDataFDMA
+    public class BroadCastDataFDMA
     {
 
         public string SatId { get; set; }
