@@ -30,7 +30,6 @@
         private void InitializeComponent()
         {
             Terminal = new TextBox();
-            Close = new Button();
             Simulate = new Button();
             groupBox1 = new GroupBox();
             setSecond = new NumericUpDown();
@@ -82,26 +81,15 @@
             // 
             Terminal.BackColor = Color.Black;
             Terminal.ForeColor = Color.White;
-            Terminal.Location = new Point(47, 313);
+            Terminal.Location = new Point(41, 235);
+            Terminal.Margin = new Padding(3, 2, 3, 2);
             Terminal.Multiline = true;
             Terminal.Name = "Terminal";
             Terminal.ReadOnly = true;
             Terminal.ScrollBars = ScrollBars.Both;
-            Terminal.Size = new Size(965, 192);
+            Terminal.Size = new Size(692, 145);
             Terminal.TabIndex = 0;
             Terminal.TabStop = false;
-            // 
-            // Close
-            // 
-            Close.BackColor = Color.Black;
-            Close.Cursor = Cursors.Hand;
-            Close.Location = new Point(920, 515);
-            Close.Name = "Close";
-            Close.Size = new Size(91, 41);
-            Close.TabIndex = 1;
-            Close.Text = "Close";
-            Close.UseVisualStyleBackColor = false;
-            Close.Click += Close_Click;
             // 
             // Simulate
             // 
@@ -109,9 +97,10 @@
             Simulate.Cursor = Cursors.Hand;
             Simulate.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             Simulate.ForeColor = Color.FromArgb(56, 203, 52);
-            Simulate.Location = new Point(748, 257);
+            Simulate.Location = new Point(757, 314);
+            Simulate.Margin = new Padding(3, 2, 3, 2);
             Simulate.Name = "Simulate";
-            Simulate.Size = new Size(116, 41);
+            Simulate.Size = new Size(102, 31);
             Simulate.TabIndex = 2;
             Simulate.Text = "Simulate";
             Simulate.UseVisualStyleBackColor = false;
@@ -127,9 +116,11 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox1.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox1.Location = new Point(47, 88);
+            groupBox1.Location = new Point(41, 63);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(423, 60);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(370, 51);
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             groupBox1.Text = "Time";
@@ -137,57 +128,57 @@
             // setSecond
             // 
             setSecond.Cursor = Cursors.Hand;
-            setSecond.Location = new Point(368, 22);
+            setSecond.Location = new Point(322, 16);
             setSecond.Margin = new Padding(2);
             setSecond.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             setSecond.Name = "setSecond";
-            setSecond.Size = new Size(49, 31);
+            setSecond.Size = new Size(43, 27);
             setSecond.TabIndex = 10;
             // 
             // setMinute
             // 
             setMinute.Cursor = Cursors.Hand;
-            setMinute.Location = new Point(218, 22);
+            setMinute.Location = new Point(191, 16);
             setMinute.Margin = new Padding(2);
             setMinute.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             setMinute.Name = "setMinute";
-            setMinute.Size = new Size(49, 31);
+            setMinute.Size = new Size(43, 27);
             setMinute.TabIndex = 9;
             // 
             // setHour
             // 
             setHour.Cursor = Cursors.Hand;
-            setHour.Location = new Point(76, 22);
+            setHour.Location = new Point(66, 16);
             setHour.Margin = new Padding(2);
             setHour.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
             setHour.Name = "setHour";
-            setHour.Size = new Size(49, 31);
+            setHour.Size = new Size(43, 27);
             setHour.TabIndex = 8;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(280, 26);
+            label4.Location = new Point(245, 20);
             label4.Name = "label4";
-            label4.Size = new Size(87, 25);
+            label4.Size = new Size(70, 20);
             label4.TabIndex = 6;
             label4.Text = "Seconds:";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(143, 26);
+            label3.Location = new Point(125, 20);
             label3.Name = "label3";
-            label3.Size = new Size(78, 25);
+            label3.Size = new Size(63, 20);
             label3.TabIndex = 4;
             label3.Text = "Minute:";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(16, 26);
+            label2.Location = new Point(14, 20);
             label2.Name = "label2";
-            label2.Size = new Size(61, 25);
+            label2.Size = new Size(49, 20);
             label2.TabIndex = 2;
             label2.Text = "Hour:";
             // 
@@ -200,9 +191,11 @@
             groupBox2.Controls.Add(label6);
             groupBox2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox2.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox2.Location = new Point(47, 220);
+            groupBox2.Location = new Point(41, 165);
+            groupBox2.Margin = new Padding(3, 2, 3, 2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(423, 78);
+            groupBox2.Padding = new Padding(3, 2, 3, 2);
+            groupBox2.Size = new Size(370, 58);
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             groupBox2.Text = "Reciever Position";
@@ -211,9 +204,10 @@
             // 
             updatePos.BackColor = Color.DimGray;
             updatePos.Cursor = Cursors.Hand;
-            updatePos.Location = new Point(322, 33);
+            updatePos.Location = new Point(282, 25);
+            updatePos.Margin = new Padding(3, 2, 3, 2);
             updatePos.Name = "updatePos";
-            updatePos.Size = new Size(95, 34);
+            updatePos.Size = new Size(83, 26);
             updatePos.TabIndex = 10;
             updatePos.Text = "Update pos";
             updatePos.UseVisualStyleBackColor = false;
@@ -221,35 +215,38 @@
             // 
             // setLong
             // 
-            setLong.Location = new Point(213, 35);
+            setLong.Location = new Point(184, 23);
+            setLong.Margin = new Padding(3, 2, 3, 2);
             setLong.Name = "setLong";
-            setLong.Size = new Size(76, 31);
+            setLong.Size = new Size(67, 27);
             setLong.TabIndex = 8;
-            setLong.Text = "0";
+            setLong.Text = "00,0000";
             // 
             // setLat
             // 
-            setLat.Location = new Point(60, 34);
+            setLat.BackColor = Color.White;
+            setLat.Location = new Point(52, 23);
+            setLat.Margin = new Padding(3, 2, 3, 2);
             setLat.Name = "setLat";
-            setLat.Size = new Size(76, 31);
+            setLat.Size = new Size(67, 27);
             setLat.TabIndex = 7;
-            setLat.Text = "0";
+            setLat.Text = "00,0000";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(148, 35);
+            label5.Location = new Point(130, 26);
             label5.Name = "label5";
-            label5.Size = new Size(59, 25);
+            label5.Size = new Size(48, 20);
             label5.TabIndex = 6;
             label5.Text = "Long:";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(16, 34);
+            label6.Location = new Point(14, 26);
             label6.Name = "label6";
-            label6.Size = new Size(43, 25);
+            label6.Size = new Size(35, 20);
             label6.TabIndex = 4;
             label6.Text = "Lat:";
             // 
@@ -260,9 +257,11 @@
             groupBox3.Controls.Add(setGps);
             groupBox3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox3.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox3.Location = new Point(47, 22);
+            groupBox3.Location = new Point(41, 16);
+            groupBox3.Margin = new Padding(3, 2, 3, 2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(423, 60);
+            groupBox3.Padding = new Padding(3, 2, 3, 2);
+            groupBox3.Size = new Size(370, 45);
             groupBox3.TabIndex = 9;
             groupBox3.TabStop = false;
             groupBox3.Text = "GNSS Type";
@@ -271,9 +270,10 @@
             // 
             setGlonass.AutoSize = true;
             setGlonass.Cursor = Cursors.Hand;
-            setGlonass.Location = new Point(303, 25);
+            setGlonass.Location = new Point(265, 19);
+            setGlonass.Margin = new Padding(3, 2, 3, 2);
             setGlonass.Name = "setGlonass";
-            setGlonass.Size = new Size(100, 29);
+            setGlonass.Size = new Size(83, 24);
             setGlonass.TabIndex = 3;
             setGlonass.Text = "Glonass";
             setGlonass.UseVisualStyleBackColor = true;
@@ -282,9 +282,10 @@
             // 
             setGalileo.AutoSize = true;
             setGalileo.Cursor = Cursors.Hand;
-            setGalileo.Location = new Point(170, 25);
+            setGalileo.Location = new Point(149, 19);
+            setGalileo.Margin = new Padding(3, 2, 3, 2);
             setGalileo.Name = "setGalileo";
-            setGalileo.Size = new Size(93, 29);
+            setGalileo.Size = new Size(76, 24);
             setGalileo.TabIndex = 2;
             setGalileo.Text = "Galileo";
             setGalileo.UseVisualStyleBackColor = true;
@@ -295,9 +296,10 @@
             setGps.Checked = true;
             setGps.CheckState = CheckState.Checked;
             setGps.Cursor = Cursors.Hand;
-            setGps.Location = new Point(60, 25);
+            setGps.Location = new Point(52, 19);
+            setGps.Margin = new Padding(3, 2, 3, 2);
             setGps.Name = "setGps";
-            setGps.Size = new Size(68, 29);
+            setGps.Size = new Size(56, 24);
             setGps.TabIndex = 1;
             setGps.Text = "GPS";
             setGps.UseVisualStyleBackColor = true;
@@ -308,9 +310,10 @@
             setFile.DropDownStyle = ComboBoxStyle.DropDownList;
             setFile.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             setFile.FormattingEnabled = true;
-            setFile.Location = new Point(122, 20);
+            setFile.Location = new Point(107, 15);
+            setFile.Margin = new Padding(3, 2, 3, 2);
             setFile.Name = "setFile";
-            setFile.Size = new Size(284, 31);
+            setFile.Size = new Size(249, 27);
             setFile.TabIndex = 10;
             // 
             // groupBox4
@@ -318,9 +321,11 @@
             groupBox4.Controls.Add(setFile);
             groupBox4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox4.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox4.Location = new Point(47, 154);
+            groupBox4.Location = new Point(41, 116);
+            groupBox4.Margin = new Padding(3, 2, 3, 2);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(423, 60);
+            groupBox4.Padding = new Padding(3, 2, 3, 2);
+            groupBox4.Size = new Size(370, 48);
             groupBox4.TabIndex = 11;
             groupBox4.TabStop = false;
             groupBox4.Text = "Choose File";
@@ -334,9 +339,11 @@
             groupBox5.Controls.Add(setIntOn);
             groupBox5.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox5.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox5.Location = new Point(559, 22);
+            groupBox5.Location = new Point(489, 15);
+            groupBox5.Margin = new Padding(3, 2, 3, 2);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(454, 221);
+            groupBox5.Padding = new Padding(3, 2, 3, 2);
+            groupBox5.Size = new Size(370, 208);
             groupBox5.TabIndex = 12;
             groupBox5.TabStop = false;
             groupBox5.Text = "Interference";
@@ -346,9 +353,10 @@
             updateJammerPos.BackColor = Color.DimGray;
             updateJammerPos.Cursor = Cursors.Hand;
             updateJammerPos.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
-            updateJammerPos.Location = new Point(338, 167);
+            updateJammerPos.Location = new Point(285, 159);
+            updateJammerPos.Margin = new Padding(3, 2, 3, 2);
             updateJammerPos.Name = "updateJammerPos";
-            updateJammerPos.Size = new Size(95, 34);
+            updateJammerPos.Size = new Size(83, 26);
             updateJammerPos.TabIndex = 10;
             updateJammerPos.Text = "Update pos";
             updateJammerPos.UseVisualStyleBackColor = false;
@@ -360,9 +368,11 @@
             groupBox7.Controls.Add(setRadR);
             groupBox7.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox7.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox7.Location = new Point(16, 54);
+            groupBox7.Location = new Point(14, 66);
+            groupBox7.Margin = new Padding(3, 2, 3, 2);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(423, 82);
+            groupBox7.Padding = new Padding(3, 2, 3, 2);
+            groupBox7.Size = new Size(350, 62);
             groupBox7.TabIndex = 16;
             groupBox7.TabStop = false;
             groupBox7.Text = "Jammer Radius";
@@ -370,9 +380,9 @@
             // labelRadR
             // 
             labelRadR.AutoSize = true;
-            labelRadR.Location = new Point(59, 37);
+            labelRadR.Location = new Point(36, 27);
             labelRadR.Name = "labelRadR";
-            labelRadR.Size = new Size(59, 28);
+            labelRadR.Size = new Size(47, 21);
             labelRadR.TabIndex = 17;
             labelRadR.Text = "0 km";
             // 
@@ -380,10 +390,11 @@
             // 
             setRadR.AutoSize = false;
             setRadR.Cursor = Cursors.Hand;
-            setRadR.Location = new Point(145, 36);
+            setRadR.Location = new Point(89, 27);
+            setRadR.Margin = new Padding(3, 2, 3, 2);
             setRadR.Maximum = 500;
             setRadR.Name = "setRadR";
-            setRadR.Size = new Size(272, 36);
+            setRadR.Size = new Size(255, 27);
             setRadR.TabIndex = 15;
             setRadR.TickFrequency = 10;
             setRadR.Scroll += setRadR_Scroll;
@@ -396,44 +407,48 @@
             groupBox6.Controls.Add(label7);
             groupBox6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             groupBox6.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox6.Location = new Point(16, 132);
+            groupBox6.Location = new Point(14, 137);
+            groupBox6.Margin = new Padding(3, 2, 3, 2);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(304, 78);
+            groupBox6.Padding = new Padding(3, 2, 3, 2);
+            groupBox6.Size = new Size(266, 58);
             groupBox6.TabIndex = 5;
             groupBox6.TabStop = false;
             groupBox6.Text = "Jammer Position";
             // 
             // setJammerLong
             // 
-            setJammerLong.Location = new Point(213, 35);
+            setJammerLong.Location = new Point(184, 21);
+            setJammerLong.Margin = new Padding(3, 2, 3, 2);
             setJammerLong.Name = "setJammerLong";
-            setJammerLong.Size = new Size(76, 31);
+            setJammerLong.Size = new Size(67, 27);
             setJammerLong.TabIndex = 8;
-            setJammerLong.Text = "0";
+            setJammerLong.Text = "00,0000";
             // 
             // setJammerLat
             // 
-            setJammerLat.Location = new Point(60, 34);
+            setJammerLat.Location = new Point(52, 22);
+            setJammerLat.Margin = new Padding(3, 2, 3, 2);
             setJammerLat.Name = "setJammerLat";
-            setJammerLat.Size = new Size(76, 31);
+            setJammerLat.Size = new Size(67, 27);
             setJammerLat.TabIndex = 7;
-            setJammerLat.Text = "0";
+            setJammerLat.Text = "00,0000";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(148, 35);
+            label1.Location = new Point(130, 26);
             label1.Name = "label1";
-            label1.Size = new Size(59, 25);
+            label1.Size = new Size(48, 20);
             label1.TabIndex = 6;
             label1.Text = "Long:";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(16, 34);
+            label7.Location = new Point(14, 26);
             label7.Name = "label7";
-            label7.Size = new Size(43, 25);
+            label7.Size = new Size(35, 20);
             label7.TabIndex = 4;
             label7.Text = "Lat:";
             // 
@@ -443,9 +458,10 @@
             setIntOff.Checked = true;
             setIntOff.Cursor = Cursors.Hand;
             setIntOff.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            setIntOff.Location = new Point(77, 31);
+            setIntOff.Location = new Point(67, 35);
+            setIntOff.Margin = new Padding(3, 2, 3, 2);
             setIntOff.Name = "setIntOff";
-            setIntOff.Size = new Size(58, 27);
+            setIntOff.Size = new Size(48, 23);
             setIntOff.TabIndex = 1;
             setIntOff.TabStop = true;
             setIntOff.Text = "Off";
@@ -456,9 +472,10 @@
             setIntOn.AutoSize = true;
             setIntOn.Cursor = Cursors.Hand;
             setIntOn.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            setIntOn.Location = new Point(17, 31);
+            setIntOn.Location = new Point(15, 35);
+            setIntOn.Margin = new Padding(3, 2, 3, 2);
             setIntOn.Name = "setIntOn";
-            setIntOn.Size = new Size(54, 27);
+            setIntOn.Size = new Size(46, 23);
             setIntOn.TabIndex = 0;
             setIntOn.Text = "On";
             setIntOn.UseVisualStyleBackColor = true;
@@ -467,9 +484,10 @@
             // 
             setNMEA.AutoSize = true;
             setNMEA.Cursor = Cursors.Hand;
-            setNMEA.Location = new Point(595, 263);
+            setNMEA.Location = new Point(758, 237);
+            setNMEA.Margin = new Padding(3, 2, 3, 2);
             setNMEA.Name = "setNMEA";
-            setNMEA.Size = new Size(123, 24);
+            setNMEA.Size = new Size(101, 19);
             setNMEA.TabIndex = 13;
             setNMEA.Text = "NMEA Output";
             setNMEA.UseVisualStyleBackColor = true;
@@ -480,21 +498,20 @@
             Stop.Cursor = Cursors.Hand;
             Stop.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             Stop.ForeColor = Color.FromArgb(217, 40, 40);
-            Stop.Location = new Point(897, 257);
+            Stop.Location = new Point(757, 349);
+            Stop.Margin = new Padding(3, 2, 3, 2);
             Stop.Name = "Stop";
-            Stop.Size = new Size(116, 41);
+            Stop.Size = new Size(102, 31);
             Stop.TabIndex = 14;
-            Stop.Text = "Stop";
+            Stop.Text = "Clear";
             Stop.UseVisualStyleBackColor = false;
             Stop.Click += Stop_Click;
             // 
             // GUI_Window
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(52, 50, 46);
-            ClientSize = new Size(1008, 582);
-            ControlBox = false;
+            ClientSize = new Size(896, 412);
             Controls.Add(Stop);
             Controls.Add(setNMEA);
             Controls.Add(groupBox5);
@@ -503,10 +520,10 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(Simulate);
-            Controls.Add(Close);
             Controls.Add(Terminal);
             ForeColor = Color.FromArgb(255, 184, 56);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
@@ -537,7 +554,6 @@
         #endregion
 
         private TextBox Terminal;
-        private Button Close;
         private Button Simulate;
         private GroupBox groupBox1;
         private Label label3;

@@ -1,5 +1,6 @@
 using GnssLibDL;
 using GnssLibNMEA_Writer;
+using System.Diagnostics;
 
 namespace GnssLibGUI
 {
@@ -7,6 +8,7 @@ namespace GnssLibGUI
     {
         private SimulationController? sc;
         private SimulationRunTime srt;
+        private bool stopClear = true;
         public GUI_Window()
         {
             InitializeComponent();
@@ -22,14 +24,11 @@ namespace GnssLibGUI
 
         }
 
-        private void Close_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void Simulate_Click(object sender, EventArgs e)
         {
             DateTime dt;
+            Stop.Text = "Stop";
+            stopClear = false;
             if (setFile.SelectedIndex == 0)
             {
                 dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
@@ -55,7 +54,7 @@ namespace GnssLibGUI
             }
             else
             {
-                Terminal.Text = "Invalid inputs";
+                Terminal.Text = "Invalid inputs (Check if you use , or . in Coordinates)" + Environment.NewLine;
             }
 
 
@@ -74,20 +73,32 @@ namespace GnssLibGUI
 
         private void Stop_Click(object sender, EventArgs e)
         {
+            Stop.Text = "Clear";
             srt.StopSimulation();
-            Terminal.Clear();
+            if (stopClear)
+            {
+                Terminal.Clear();
+            }
+            stopClear = true;
         }
 
         private void updatePos_Click(object sender, EventArgs e)
         {
-            sc.UpdatePos(double.Parse(setLat.Text), double.Parse(setLong.Text));
-            Terminal.Text += "New Position Value Set" + Environment.NewLine;
+            if (sc != null) {
+                sc.UpdatePos(double.Parse(setLat.Text), double.Parse(setLong.Text));
+                Terminal.Text += "New Position Value Set: " + setLat.Text + " " + setLong.Text + Environment.NewLine;
+            }
+            
         }
 
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
-            sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text), double.Parse(setJammerLong.Text), double.Parse(setRadR.Value.ToString()));
-            Terminal.Text += "New Jammer Value Set" + Environment.NewLine;
+            if (sc != null)
+            {
+                sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text), double.Parse(setJammerLong.Text), double.Parse(setRadR.Value.ToString()));
+                Terminal.Text += "New Jammer Value Set: " + setJammerLat.Text + " " + setJammerLong.Text + Environment.NewLine;
+            }
+             
 
         }
 
