@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+	<ProjectReference Include="..\GnssLibCALC\GnssLibCALC.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="Resources\Broadcast\2024_01_01_BroadCastFile.rnx">

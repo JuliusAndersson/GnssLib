@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GnssLibDL.Models.SatModels;
-namespace GnssLibDL.Models.SatelliteSystemModels
+using GnssLibCALC.Models.SatModels;
+namespace GnssLibCALC.Models.SatelliteSystemModels
 {
-    internal class Gps
+    public class Gps
     {
         public List<GPS_Sat> satList { get; set; }
     }

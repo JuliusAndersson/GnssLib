@@ -3,7 +3,7 @@
 
 
 
-namespace GnssLibDL.Models.SatModels
+namespace GnssLibCALC.Models.SatModels
 {
 	public class Satellite
 	{

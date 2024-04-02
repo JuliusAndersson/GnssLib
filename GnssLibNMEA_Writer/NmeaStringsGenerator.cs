@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.IO.Ports;
 using System.Text;
-using GnssLibDL.Models.SatModels;
+using GnssLibCALC.Models.SatModels;
+using GnssLibDL;
 
 namespace GnssLibNMEA_Writer
 {
@@ -10,6 +12,46 @@ namespace GnssLibNMEA_Writer
 	{
         private static Random random = new Random();
         
+        public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
+        {
+
+            sc.NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP,
+                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude);
+
+            List<string> NMEAString = new List<string>();
+            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latitude.ToString(CultureInfo.InvariantCulture), "N", longitude.ToString(CultureInfo.InvariantCulture), "E", 1, satList.Count, HDOP, 10, -15, 0, ""));
+            NMEAString.Add(ConstructGPGSAString(activeSatellites, PDOP, HDOP, VDOP));
+
+            foreach (string message in ConstructGPGSVString(satList))
+            {
+                NMEAString.Add(message);
+            }
+
+
+            foreach (string str in NMEAString)
+            {
+                serialPort.WriteLine(str);
+            }
+
+        }
+
+        public static string ConstructGPGGAString(string utcTime, string latitude, string latitudeDirection,
+                                      string longitude, string longitudeDirection, int qualityIndicator,
+                                      int numberOfSatellites, double HDOP, double orthometricHeight,
+                                      double geoidSeparation, double ageOfDGPSData, string referenceStationID)
+        {
+            // Construct GGA message string
+            string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},0{longitude},{longitudeDirection}," +
+                                $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)},{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
+                                $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
+
+            // Calculate and append checksum
+            string checksum = CalculateChecksum(ggaMessage);
+            ggaMessage += $"*{checksum}";
+
+            return ggaMessage;
+        }
+
         public static string ConstructGPGSAString(List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
         {
 
@@ -60,6 +102,7 @@ namespace GnssLibNMEA_Writer
 
             return messages;
         }
+
         public static string ConstructGSVMessage(List<Satellite> satellites, int messageNumber, int totalMessages, int totaltSats)
         {
             StringBuilder sb = new StringBuilder();
@@ -78,22 +121,7 @@ namespace GnssLibNMEA_Writer
             return sb.ToString();
         }
 
-        public static string ConstructGPGGAMessage(string utcTime, string latitude, string latitudeDirection,
-                                      string longitude, string longitudeDirection, int qualityIndicator,
-                                      int numberOfSatellites, double HDOP, double orthometricHeight,
-                                      double geoidSeparation, double ageOfDGPSData, string referenceStationID)
-        {
-            // Construct GGA message string
-            string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},0{longitude},{longitudeDirection}," +
-                                $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)},{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
-                                $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
-
-            // Calculate and append checksum
-            string checksum = CalculateChecksum(ggaMessage);
-            ggaMessage += $"*{checksum}";
-
-            return ggaMessage;
-        }
+        
         private static string CalculateChecksum(string message)
         {
             int checksum = 0;

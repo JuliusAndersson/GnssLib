@@ -12,9 +12,9 @@ namespace GnssLibCALC
         }
 
         // Function to check if a line intersects with a sphere
-        public static bool DoesLineIntersectSphere(double[] satellite, double[] receiver, double[] jammerCenter)
+        public static bool DoesLineIntersectSphere(double[] satellite, double[] receiver, double[] jammerCenter, double jamStr)
         {
-            double jammerRadius = 100;
+            double jammerRadius = jamStr;
             // Vector from satellite to receiver
             double lineLength = Distance(satellite, receiver);
             double lineUnitX = (receiver[0] - satellite[0]) / lineLength;

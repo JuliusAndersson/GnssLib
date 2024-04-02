@@ -220,7 +220,7 @@
             setLong.Name = "setLong";
             setLong.Size = new Size(67, 27);
             setLong.TabIndex = 8;
-            setLong.Text = "00,0000";
+            setLong.Text = "13,1000";
             // 
             // setLat
             // 
@@ -230,7 +230,7 @@
             setLat.Name = "setLat";
             setLat.Size = new Size(67, 27);
             setLat.TabIndex = 7;
-            setLat.Text = "00,0000";
+            setLat.Text = "55,4200";
             // 
             // label5
             // 
@@ -423,7 +423,7 @@
             setJammerLong.Name = "setJammerLong";
             setJammerLong.Size = new Size(67, 27);
             setJammerLong.TabIndex = 8;
-            setJammerLong.Text = "00,0000";
+            setJammerLong.Text = "13,4049";
             // 
             // setJammerLat
             // 
@@ -432,7 +432,7 @@
             setJammerLat.Name = "setJammerLat";
             setJammerLat.Size = new Size(67, 27);
             setJammerLat.TabIndex = 7;
-            setJammerLat.Text = "00,0000";
+            setJammerLat.Text = "52,5200";
             // 
             // label1
             // 

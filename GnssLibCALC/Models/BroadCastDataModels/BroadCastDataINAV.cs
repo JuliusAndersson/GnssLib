@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GnssLibDL.Models.BroadCastDataModels
+namespace GnssLibCALC.Models.BroadCastDataModels
 {
     public class BroadCastDataINAV
     {

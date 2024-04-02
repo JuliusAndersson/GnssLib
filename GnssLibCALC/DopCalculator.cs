@@ -3,7 +3,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 namespace GnssLibCALC
 {
-    internal class DOPCalulator
+    public class DOPCalulator
     {
         public static void CalculateDOP(double[] receiverXYZ, List<double[]> satellitePositions,
             out double PDOP, out double HDOP, out double VDOP)

@@ -1,23 +1,33 @@
 using GnssLibDL;
 using GnssLibNMEA_Writer;
-using System.Diagnostics;
+using System.Globalization;
+using System.IO.Ports;
+
+
 
 namespace GnssLibGUI
 {
     public partial class GUI_Window : Form
     {
+        System.Windows.Forms.Timer timerRunTime = new System.Windows.Forms.Timer();
         private SimulationController? sc;
         private SimulationRunTime srt;
         private bool stopClear = true;
+        private SerialPort serialPort;
+
         public GUI_Window()
         {
             InitializeComponent();
+            serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
+            serialPort.Handshake = Handshake.None;
 
             setFile.Items.Add("File 1");
             setFile.Items.Add("File 2");
             setFile.Items.Add("File 3");
             setFile.SelectedIndex = 0;
 
+            timerRunTime.Tick += HandleRunTime;
+            timerRunTime.Interval = 1000;
 
             srt = new SimulationRunTime();
             srt.tickDone += HandleTickEvent;
@@ -26,44 +36,72 @@ namespace GnssLibGUI
 
         private void Simulate_Click(object sender, EventArgs e)
         {
-            DateTime dt;
-            Stop.Text = "Stop";
-            stopClear = false;
-            if (setFile.SelectedIndex == 0)
+            try
             {
-                dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
+                serialPort.Open();
+
+                DateTime dt;
+                Terminal.Text += double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) + " " + setLong.Text + Environment.NewLine;
+                Stop.Text = "Stop";
+                stopClear = false;
+                if (setFile.SelectedIndex == 0)
+                {
+                    dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
+                }
+                else if (setFile.SelectedIndex == 1)
+                {
+                    dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
+                }
+                else
+                {
+                    dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
+                }
+
+                double value;
+                if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                    && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                    && double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                    && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                {
+                    sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt,
+                        double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                        double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                        setIntOn.Checked,
+                        double.Parse(setRadR.Value.ToString()),
+                        double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+
+                    timerRunTime.Start();
+
+                    Terminal.Text += "it worked" + Environment.NewLine;
+                }
+                else
+                {
+                    Terminal.Text = "Invalid inputs (Check if you use , or . in Coordinates)" + Environment.NewLine;
+                }
+
             }
-            else if (setFile.SelectedIndex == 1)
+            catch (Exception ex)
             {
-                dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
-            }
-            else
-            {
-                dt = new DateTime(2024, 01, 01, (int)setHour.Value, (int)setMinute.Value, (int)setSecond.Value);
+                Console.WriteLine(ex.ToString());
             }
 
-            double value;
-            if (double.TryParse(setLat.Text, out value) && double.TryParse(setLong.Text, out value) && double.TryParse(setJammerLat.Text, out value) && double.TryParse(setJammerLong.Text, out value))
-            {
-                sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, double.Parse(setLat.Text), double.Parse(setLong.Text), setIntOn.Checked, double.Parse(setRadR.Value.ToString()), double.Parse(setJammerLat.Text), double.Parse(setJammerLong.Text), setNMEA.Checked);
+        }
 
-                srt.RunSimulation(sc);
-
-
-                Terminal.Text += "it worked" + Environment.NewLine;
-            }
-            else
-            {
-                Terminal.Text = "Invalid inputs (Check if you use , or . in Coordinates)" + Environment.NewLine;
-            }
-
-
-
+        public void HandleRunTime(object sender, EventArgs e)
+        {
+            srt.RunSimulation(sc);
+            //Thread simulationThread = new Thread(() => srt.RunSimulation(sc));
+            //simulationThread.Start();
+            Terminal.Text += "Tock" + Environment.NewLine;
         }
 
         public void HandleTickEvent(object sender, EventArgs e)
         {
-            Terminal.Text += "Tick" + Environment.NewLine;
+            Terminal.Text += "Tick: " + sc.GetValues() +Environment.NewLine;
+
+            NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
+
         }
 
         private void setRadR_Scroll(object sender, EventArgs e)
@@ -74,7 +112,13 @@ namespace GnssLibGUI
         private void Stop_Click(object sender, EventArgs e)
         {
             Stop.Text = "Clear";
-            srt.StopSimulation();
+            timerRunTime.Stop();
+
+            if (serialPort.IsOpen)
+            {
+                serialPort.Close();
+            }
+
             if (stopClear)
             {
                 Terminal.Clear();
@@ -85,7 +129,7 @@ namespace GnssLibGUI
         private void updatePos_Click(object sender, EventArgs e)
         {
             if (sc != null) {
-                sc.UpdatePos(double.Parse(setLat.Text), double.Parse(setLong.Text));
+                sc.UpdatePos(double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
                 Terminal.Text += "New Position Value Set: " + setLat.Text + " " + setLong.Text + Environment.NewLine;
             }
             
@@ -95,7 +139,7 @@ namespace GnssLibGUI
         {
             if (sc != null)
             {
-                sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text), double.Parse(setJammerLong.Text), double.Parse(setRadR.Value.ToString()));
+                sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
                 Terminal.Text += "New Jammer Value Set: " + setJammerLat.Text + " " + setJammerLong.Text + Environment.NewLine;
             }
              

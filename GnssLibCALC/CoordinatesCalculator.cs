@@ -1,5 +1,5 @@
 ﻿using System;
-using GnssLibDL.Models.BroadCastDataModels;
+using GnssLibCALC.Models.BroadCastDataModels;
 namespace GnssLibCALC
 {
 	public class CoordinatesCalculator
@@ -30,7 +30,7 @@ namespace GnssLibCALC
         }
         
 
-        public double[] CalculatePosition(BroadCastDataLNAV bcd, double seconds)
+        public static double[] CalculatePosition(BroadCastDataLNAV bcd, double seconds)
         {
             double A = bcd.sqrtA * bcd.sqrtA;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
@@ -62,7 +62,7 @@ namespace GnssLibCALC
             return new double[] { xk / 1000, yk / 1000, zk / 1000 };
         }
 
-        public double[] CalculatePosition(BroadCastDataINAV bcd, double seconds)
+        public static double[] CalculatePosition(BroadCastDataINAV bcd, double seconds)
         {
             double A = bcd.sqrtA * bcd.sqrtA;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
@@ -94,7 +94,7 @@ namespace GnssLibCALC
             return new double[] { xk / 1000, yk / 1000, zk / 1000 };
         }
 
-        private double CalculateTk(double t, double toe)
+        private static double CalculateTk(double t, double toe)
         {
             double tk = t - toe;
             if (tk > 302400.0)
@@ -108,7 +108,7 @@ namespace GnssLibCALC
             return tk;
         }
 
-        private double CalculateEk(double Mk, double e)
+        private static double CalculateEk(double Mk, double e)
         {
             double Ek = Mk;
             double temp = Ek;

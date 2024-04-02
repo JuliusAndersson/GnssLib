@@ -1,9 +1,9 @@
 ﻿using System;
-using GnssLibDL.Models.BroadCastDataModels;
+using GnssLibCALC.Models.BroadCastDataModels;
 
-namespace GnssLibDL.Models.SatModels
+namespace GnssLibCALC.Models.SatModels
 {
-    internal class Glonass_Sat
+    public class Glonass_Sat
     {
         public List<BroadCastDataFDMA> Data { get; set; }
         public string id { get; set; }

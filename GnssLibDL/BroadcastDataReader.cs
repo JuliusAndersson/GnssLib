@@ -1,7 +1,7 @@
-﻿using GnssLibDL.Models;
-using GnssLibDL.Models.BroadCastDataModels;
-using GnssLibDL.Models.SatelliteSystemModels;
-using GnssLibDL.Models.SatModels;
+﻿using GnssLibCALC.Models;
+using GnssLibCALC.Models.BroadCastDataModels;
+using GnssLibCALC.Models.SatelliteSystemModels;
+using GnssLibCALC.Models.SatModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

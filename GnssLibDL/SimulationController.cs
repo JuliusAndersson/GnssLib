@@ -1,28 +1,29 @@
-﻿using GnssLibDL.Models;
-using GnssLibDL.Models.BroadCastDataModels;
+﻿using GnssLibCALC.Models;
+using GnssLibCALC.Models.SatModels;
+using GnssLibCALC.Models.BroadCastDataModels;
+using System.IO.Ports;
+using GnssLibCALC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GnssLibDL
 {
     public class SimulationController
     {
+        private static readonly double MIN_ELEVATION = 10;
+        private static readonly double MAX_ELEVATION = 80;
+
         private bool useGPS;
         private bool useGalileo;
         private bool useGlonass;
         private DateTime dt;
-        private double latPos;
+        private double latPos = 0;
         private double longPos;
 
         private bool jamOn;
         private double jamStr;
         private double jamLat;
         private double jamLong;
-
-        private bool NMEA_On;
 
         private Satellites GNSS_Data;
 
@@ -32,15 +33,25 @@ namespace GnssLibDL
         private double updateJamLat;
         private double updateJamLong;
         private double updateJamStr;
+        private double continousMin = 0; //var to change for time simulations
 
+        private bool newHour = false;
+        private int boxHour;
 
-        public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong, bool NMEA_On) {
+        private List<string> visibleSatellitesPRN;
+        private List<double[]> satellitePositions;
+        private List<Satellite> satList;
+        private double PDOP;
+        private double HDOP;
+        private double VDOP;
+
+        public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, 
+            double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong) {
             useGPS = gps;
             useGalileo = galileo;
             useGlonass = glonass;
 
             dt = dateTime;
-
             this.latPos = latPos;
             this.longPos = longPos;
             updateLat = latPos;
@@ -50,14 +61,13 @@ namespace GnssLibDL
             this.jamStr = jamRad;
             this.jamLat = jamLat;
             this.jamLong = jamLong;
-            this.NMEA_On = NMEA_On;
-            
+            boxHour = dateTime.Hour - (dateTime.Hour % 2);
 
             string filePath = $"Resources/Broadcast/{dt.Year}_{ dt.Month}_{dt.Day}_BroadCastFile.rnx"; // 2024_01_01_BroadCastFile.rnx
-            //BroadCastDataReader bcdr = new BroadCastDataReader();
-            //GNSS_Data = bcdr.ReadBroadCastData(filePath);
-
+            BroadCastDataReader bcdr = new BroadCastDataReader();
+            GNSS_Data = bcdr.ReadBroadcastData(filePath);
             
+
         }
 
         public void Tick()
@@ -69,16 +79,57 @@ namespace GnssLibDL
             if(jamOn != updateJamOn) { jamOn = updateJamOn; }
             if(jamStr != updateJamStr) {  jamStr = updateJamStr; }
 
-
-
-
-
-            if (NMEA_On)
+            visibleSatellitesPRN = new List<string>();
+            satellitePositions = new List<double[]>();
+            satList = new List<Satellite>();
+            double[] receiverPos = CoordinatesCalculator.GeodeticToECEF(latPos, longPos, 0);
+            
+            foreach (var gps in GNSS_Data.gps.satList)
             {
-                //skicka till NMEA Generator
+                foreach (var broadcast in gps.Data)
+                {
+                    
+
+                    if (dt.Hour % 2 == 0 && newHour)
+                    {
+                        newHour = false;
+                        boxHour = dt.Hour;
+                        //continousMin = 0;
+                    }
+                    else if (dt.Hour % 2 == 1 && !newHour)
+                    {
+                        newHour = true;
+                    }
+
+                    //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
+                    if (broadcast.DateTime == new DateTime(2024, 01, 01, boxHour, 00, 00))
+                    {
+
+                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousMin);
+                        VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
+                        if (isVisible)
+                        {
+                            if (!InterferenceCalculator.DoesLineIntersectSphere(satPos, receiverPos, CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr))
+                            {
+                                satellitePositions.Add(satPos);
+                                visibleSatellitesPRN.Add(broadcast.SatId);
+                                satList.Add(new Satellite()
+                                {
+                                    SatId = broadcast.SatId.Substring(1),
+                                    Azimuth = Math.Round(azimuth, 0),
+                                    Elevation = Math.Round(elevation, 0)
+                                });
+                            }
+                        }
+                    }
+                }
             }
 
-
+            DOPCalulator.CalculateDOP(receiverPos, satellitePositions, out double PDOP, out double HDOP, out double VDOP);
+            this.PDOP = PDOP;
+            this.HDOP = HDOP;
+            this.VDOP = VDOP;
+            continousMin += 30;
         }
 
         public void UpdatePos(double latPos, double longPos)
@@ -95,10 +146,24 @@ namespace GnssLibDL
             updateJamStr = jamStr;
         }
 
-        public void GetValues()
+        public DateTime GetValues()
         {
-
+            return dt;
         }
+
+        public void NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP, 
+                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude)
+        {
+            activeSatellites = visibleSatellitesPRN;
+            PDOP = this.PDOP;
+            HDOP = this.HDOP;
+            VDOP = this.VDOP;
+            satList = this.satList;
+            utcTime = dt;
+            latitude = latPos;
+            longitude = longPos;
+        }
+
 
     }
 }

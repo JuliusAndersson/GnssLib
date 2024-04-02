@@ -1,9 +1,9 @@
 ﻿using System;
-using GnssLibDL.Models.SatelliteSystemModels;
+using GnssLibCALC.Models.SatelliteSystemModels;
 
-namespace GnssLibDL.Models
+namespace GnssLibCALC.Models
 {
-    internal class Satellites
+    public class Satellites
 	{
 
 		public Galileo galileo {get;set;}
