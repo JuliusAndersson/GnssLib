@@ -42,7 +42,6 @@ namespace GnssLibGUI
                 serialPort.Open();
 
                 DateTime dt;
-                Terminal.Text += double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) + " " + setLong.Text + Environment.NewLine;
                 Stop.Text = "Stop";
                 stopClear = false;
                 if (setFile.SelectedIndex == 0)
@@ -74,7 +73,7 @@ namespace GnssLibGUI
 
                     timerRunTime.Start();
 
-                    Terminal.Text += "it worked" + Environment.NewLine;
+                    Terminal.Text += "Simulation Started" + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
@@ -105,18 +104,18 @@ namespace GnssLibGUI
 
         public void HandleTickEvent(object sender, EventArgs e)
         {
-            
 
 
-            
+
+
             //Terminal.Text += sc.GetValues().ElementAt(0).Azimuth + Environment.NewLine;
-            
+
 
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
-
-            NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
-
+            if (setNMEA.Checked) {
+                NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
+            }
         }
 
         private void setRadR_Scroll(object sender, EventArgs e)
@@ -128,7 +127,11 @@ namespace GnssLibGUI
         private void Stop_Click(object sender, EventArgs e)
         {
             Stop.Text = "Clear";
+            Terminal.Text += "Simulation Stopped" + Environment.NewLine;
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
             timerRunTime.Stop();
+
 
             if (serialPort.IsOpen)
             {
