@@ -220,7 +220,7 @@
             setLong.Name = "setLong";
             setLong.Size = new Size(67, 27);
             setLong.TabIndex = 8;
-            setLong.Text = "13,1000";
+            setLong.Text = "12,6943";
             // 
             // setLat
             // 
@@ -230,7 +230,7 @@
             setLat.Name = "setLat";
             setLat.Size = new Size(67, 27);
             setLat.TabIndex = 7;
-            setLat.Text = "55,4200";
+            setLat.Text = "56,0467";
             // 
             // label5
             // 

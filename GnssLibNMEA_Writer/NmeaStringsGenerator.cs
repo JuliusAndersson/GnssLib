@@ -19,7 +19,8 @@ namespace GnssLibNMEA_Writer
                                 out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude);
 
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latitude.ToString(CultureInfo.InvariantCulture), "N", longitude.ToString(CultureInfo.InvariantCulture), "E", 1, satList.Count, HDOP, 10, -15, 0, ""));
+            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latitude.ToString(CultureInfo.InvariantCulture), "N", 
+                longitude.ToString(CultureInfo.InvariantCulture), "E", 1, satList.Count, HDOP, 10, -15, 0, ""));
             NMEAString.Add(ConstructGPGSAString(activeSatellites, PDOP, HDOP, VDOP));
 
             foreach (string message in ConstructGPGSVString(satList))

@@ -1,5 +1,6 @@
 using GnssLibDL;
 using GnssLibNMEA_Writer;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO.Ports;
 
@@ -74,10 +75,14 @@ namespace GnssLibGUI
                     timerRunTime.Start();
 
                     Terminal.Text += "it worked" + Environment.NewLine;
+                    Terminal.SelectionStart = Terminal.Text.Length;
+                    Terminal.ScrollToCaret();
                 }
                 else
                 {
                     Terminal.Text = "Invalid inputs (Check if you use , or . in Coordinates)" + Environment.NewLine;
+                    Terminal.SelectionStart = Terminal.Text.Length;
+                    Terminal.ScrollToCaret();
                 }
 
             }
@@ -93,12 +98,22 @@ namespace GnssLibGUI
             srt.RunSimulation(sc);
             //Thread simulationThread = new Thread(() => srt.RunSimulation(sc));
             //simulationThread.Start();
-            Terminal.Text += "Tock" + Environment.NewLine;
+            //Terminal.Text += "Tock" + Environment.NewLine;
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
         }
 
         public void HandleTickEvent(object sender, EventArgs e)
         {
-            Terminal.Text += "Tick: " + sc.GetValues() +Environment.NewLine;
+            
+
+
+            
+            //Terminal.Text += sc.GetValues().ElementAt(0).Azimuth + Environment.NewLine;
+            
+
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
 
             NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
 
@@ -107,6 +122,7 @@ namespace GnssLibGUI
         private void setRadR_Scroll(object sender, EventArgs e)
         {
             labelRadR.Text = setRadR.Value.ToString() + " km";
+            
         }
 
         private void Stop_Click(object sender, EventArgs e)
@@ -131,6 +147,8 @@ namespace GnssLibGUI
             if (sc != null) {
                 sc.UpdatePos(double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
                 Terminal.Text += "New Position Value Set: " + setLat.Text + " " + setLong.Text + Environment.NewLine;
+                Terminal.SelectionStart = Terminal.Text.Length;
+                Terminal.ScrollToCaret();
             }
             
         }
@@ -141,6 +159,8 @@ namespace GnssLibGUI
             {
                 sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
                 Terminal.Text += "New Jammer Value Set: " + setJammerLat.Text + " " + setJammerLong.Text + Environment.NewLine;
+                Terminal.SelectionStart = Terminal.Text.Length;
+                Terminal.ScrollToCaret();
             }
              
 

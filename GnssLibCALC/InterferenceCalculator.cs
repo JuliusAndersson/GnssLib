@@ -12,35 +12,38 @@ namespace GnssLibCALC
         }
 
         // Function to check if a line intersects with a sphere
-        public static bool DoesLineIntersectSphere(double[] satellite, double[] receiver, double[] jammerCenter, double jamStr)
+        public static bool DoesLineSegmentIntersectSphere(double[] satellite, double[] receiver, double[] jammerCenter, double jamStr)
         {
-            double jammerRadius = jamStr;
+
+            double jammerRadius = 395;
             // Vector from satellite to receiver
-            double lineLength = Distance(satellite, receiver);
-            double lineUnitX = (receiver[0] - satellite[0]) / lineLength;
-            double lineUnitY = (receiver[1] - satellite[1]) / lineLength;
-            double lineUnitZ = (receiver[2] - satellite[2]) / lineLength;
+            double[] lineVector = { receiver[0] - satellite[0], receiver[1] - satellite[1], receiver[2] - satellite[2] };
 
             // Vector from satellite to jammer center
-            double jammerDistance = Distance(satellite, jammerCenter);
+            double[] satelliteToJammer = { jammerCenter[0] - satellite[0], jammerCenter[1] - satellite[1], jammerCenter[2] - satellite[2] };
 
-            // Projection of the jammer center onto the line
-            double projection = ((jammerCenter[0] - satellite[0]) * lineUnitX) +
-                                ((jammerCenter[1] - satellite[1]) * lineUnitY) +
-                                ((jammerCenter[2] - satellite[2]) * lineUnitZ);
+            // Length of the line segment
+            double lineLength = Distance(satellite, receiver);
 
-            // If the projection is negative, the closest point on the line to the jammer center is before the satellite
-            if (projection < 0)
-                return false;
+            // Normalized direction vector of the line segment
+            double[] lineUnitVector = { lineVector[0] / lineLength, lineVector[1] / lineLength, lineVector[2] / lineLength };
 
-            // Calculate the distance from the projected point to the jammer center
-            double distanceToCenter = Distance(jammerCenter, new double[] {
-                                                           satellite[0] + projection * lineUnitX,
-                                                           satellite[1] + projection * lineUnitY,
-                                                           satellite[2] + projection * lineUnitZ });
+            // Dot product of (line segment direction vector) . (satellite to jammer vector)
+            double dotProduct = lineUnitVector[0] * satelliteToJammer[0] + lineUnitVector[1] * satelliteToJammer[1] + lineUnitVector[2] * satelliteToJammer[2];
 
-            // If the distance is less than or equal to the jammer radius, they intersect
-            return distanceToCenter <= jammerRadius;
+            // Closest point on the line segment to the jammer
+            double[] closestPoint;
+            if (dotProduct <= 0)
+                closestPoint = satellite;
+            else if (dotProduct >= lineLength)
+                closestPoint = receiver;
+            else
+                closestPoint = new double[] { satellite[0] + lineUnitVector[0] * dotProduct,
+                                           satellite[1] + lineUnitVector[1] * dotProduct,
+                                           satellite[2] + lineUnitVector[2] * dotProduct };
+
+            // Check if the closest point is within the jammer's radius
+            return Distance(closestPoint, jammerCenter) <= jamStr;
         }
     }
 }

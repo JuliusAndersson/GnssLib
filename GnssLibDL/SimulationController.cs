@@ -33,7 +33,7 @@ namespace GnssLibDL
         private double updateJamLat;
         private double updateJamLong;
         private double updateJamStr;
-        private double continousMin = 0; //var to change for time simulations
+        private double continousSec = 0; //var to change for time simulations
 
         private bool newHour = false;
         private int boxHour;
@@ -94,7 +94,7 @@ namespace GnssLibDL
                     {
                         newHour = false;
                         boxHour = dt.Hour;
-                        //continousMin = 0;
+                        continousSec = 0;
                     }
                     else if (dt.Hour % 2 == 1 && !newHour)
                     {
@@ -105,11 +105,11 @@ namespace GnssLibDL
                     if (broadcast.DateTime == new DateTime(2024, 01, 01, boxHour, 00, 00))
                     {
 
-                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousMin);
+                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);
                         VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
                         if (isVisible)
                         {
-                            if (!InterferenceCalculator.DoesLineIntersectSphere(satPos, receiverPos, CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr))
+                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, receiverPos, CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr)) || !jamOn)
                             {
                                 satellitePositions.Add(satPos);
                                 visibleSatellitesPRN.Add(broadcast.SatId);
@@ -129,7 +129,7 @@ namespace GnssLibDL
             this.PDOP = PDOP;
             this.HDOP = HDOP;
             this.VDOP = VDOP;
-            continousMin += 30;
+            continousSec += 1;
         }
 
         public void UpdatePos(double latPos, double longPos)
@@ -146,9 +146,10 @@ namespace GnssLibDL
             updateJamStr = jamStr;
         }
 
-        public DateTime GetValues()
+        public List<Satellite> GetValues()
         {
-            return dt;
+            
+            return satList;
         }
 
         public void NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP, 
