@@ -18,6 +18,9 @@
     <None Update="Resources\Broadcast\2024_01_01_BroadCastFile.rnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Broadcast\2024_1_1_BroadCastFile.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Broadcast\BroadCastTestFile.rnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
