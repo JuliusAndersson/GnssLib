@@ -10,8 +10,8 @@ namespace GnssLibDL
 {
     public class SimulationController
     {
-        private static readonly double MIN_ELEVATION = 10;
-        private static readonly double MAX_ELEVATION = 80;
+        private static readonly double MIN_ELEVATION = 0;
+        private static readonly double MAX_ELEVATION = 90;
 
         private bool useGPS;
         private bool useGalileo;

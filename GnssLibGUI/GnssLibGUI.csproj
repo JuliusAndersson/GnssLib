@@ -15,12 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\Broadcast\2024_01_01_BroadCastFile.rnx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Broadcast\2024_1_1_BroadCastFile.rnx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Broadcast\BRD400DLR_S_20231260000_01D_MN.rnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -37,9 +31,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Broadcast\BRD400DLR_S_20240050000_01D_MN.rnx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Broadcast\BroadCastTestFile.rnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
