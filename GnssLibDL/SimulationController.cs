@@ -45,7 +45,7 @@ namespace GnssLibDL
         private double HDOP;
         private double VDOP;
 
-        public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, 
+        public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, String fileName,  
             double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong) {
             useGPS = gps;
             useGalileo = galileo;
@@ -63,7 +63,7 @@ namespace GnssLibDL
             this.jamLong = jamLong;
             boxHour = dateTime.Hour - (dateTime.Hour % 2);
 
-            string filePath = $"Resources/Broadcast/{dt.Year}_{ dt.Month}_{dt.Day}_BroadCastFile.rnx"; // 2024_01_01_BroadCastFile.rnx
+            string filePath = $"Resources/Broadcast/{fileName}"; 
             BroadCastDataReader bcdr = new BroadCastDataReader();
             GNSS_Data = bcdr.ReadBroadcastData(filePath);
             
@@ -102,7 +102,7 @@ namespace GnssLibDL
                     }
 
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
-                    if (broadcast.DateTime == new DateTime(2024, 01, 01, boxHour, 00, 00))
+                    if (broadcast.DateTime == new DateTime(dt.Year, dt.Month, dt.Day, boxHour, 00, 00))
                     {
 
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);

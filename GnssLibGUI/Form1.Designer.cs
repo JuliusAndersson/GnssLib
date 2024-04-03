@@ -310,10 +310,10 @@
             setFile.DropDownStyle = ComboBoxStyle.DropDownList;
             setFile.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             setFile.FormattingEnabled = true;
-            setFile.Location = new Point(107, 15);
+            setFile.Location = new Point(114, 16);
             setFile.Margin = new Padding(3, 2, 3, 2);
             setFile.Name = "setFile";
-            setFile.Size = new Size(249, 27);
+            setFile.Size = new Size(251, 27);
             setFile.TabIndex = 10;
             // 
             // groupBox4
@@ -325,7 +325,7 @@
             groupBox4.Margin = new Padding(3, 2, 3, 2);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new Padding(3, 2, 3, 2);
-            groupBox4.Size = new Size(370, 48);
+            groupBox4.Size = new Size(370, 49);
             groupBox4.TabIndex = 11;
             groupBox4.TabStop = false;
             groupBox4.Text = "Choose File";
