@@ -185,12 +185,13 @@ namespace GnssLibDL
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
                     if (broadcast.DateTime == new DateTime(dt.Year, dt.Month, dt.Day, boxHour, boxMin, 00))
                     {
-
+                        //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);
                         VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, 
                             out double elevation, out double azimuth);
                         if (isVisible)
                         {
+                            //Check if a Satellite is blocked by the jammer
                             if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, receiverPos, 
                                 CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr)) || !jamOn)
                             {
