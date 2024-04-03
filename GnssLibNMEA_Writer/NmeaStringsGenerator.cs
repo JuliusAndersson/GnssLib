@@ -85,7 +85,8 @@ namespace GnssLibNMEA_Writer
             // Construct GGA message string
 
             string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
-                                $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)},{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
+                                $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)}," +
+                                $"{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
                                 $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
 
             // Calculate and append checksum

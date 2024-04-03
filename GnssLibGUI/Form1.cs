@@ -160,7 +160,14 @@ namespace GnssLibGUI
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-
+            if (sc.GetApproxPos() > 0)
+            {
+                labelPosAcc.Text = sc.GetApproxPos().ToString("F1") + " m";
+            }
+            else
+            {
+                labelPosAcc.Text = "-,- m";
+            }
             //When event happen at the end of RunTime write to NMEA if its on
             if (nmeaOn) {
                 NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
@@ -179,6 +186,7 @@ namespace GnssLibGUI
             Stop.Text = "Clear";
             Terminal.ForeColor = Color.White;
             Terminal.Text += "Simulation Stopped" + Environment.NewLine;
+            labelPosAcc.Text = "-,- m";
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
             timerRunTime.Stop();
@@ -195,6 +203,7 @@ namespace GnssLibGUI
                 Terminal.Clear();
             }
             stopClear = true;
+
         }
 
         private void updatePos_Click(object sender, EventArgs e)

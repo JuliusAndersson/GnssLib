@@ -64,6 +64,8 @@
             setIntOn = new RadioButton();
             setNMEA = new CheckBox();
             Stop = new Button();
+            labelPosAcc = new Label();
+            label10 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)setSecond).BeginInit();
             ((System.ComponentModel.ISupportInitialize)setMinute).BeginInit();
@@ -509,11 +511,34 @@
             Stop.UseVisualStyleBackColor = false;
             Stop.Click += Stop_Click;
             // 
+            // labelPosAcc
+            // 
+            labelPosAcc.AutoSize = true;
+            labelPosAcc.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            labelPosAcc.ForeColor = Color.White;
+            labelPosAcc.Location = new Point(786, 287);
+            labelPosAcc.Name = "labelPosAcc";
+            labelPosAcc.Size = new Size(38, 17);
+            labelPosAcc.TabIndex = 15;
+            labelPosAcc.Text = "-,- m";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label10.Location = new Point(746, 270);
+            label10.Name = "label10";
+            label10.Size = new Size(121, 17);
+            label10.TabIndex = 16;
+            label10.Text = "Position Accuracy:";
+            // 
             // GUI_Window
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(52, 50, 46);
             ClientSize = new Size(896, 412);
+            Controls.Add(label10);
+            Controls.Add(labelPosAcc);
             Controls.Add(Stop);
             Controls.Add(setNMEA);
             Controls.Add(groupBox5);
@@ -591,5 +616,7 @@
         private GroupBox groupBox7;
         private TrackBar setRadR;
         private Label labelRadR;
+        private Label labelPosAcc;
+        private Label label10;
     }
 }

@@ -243,6 +243,11 @@ namespace GnssLibDL
             longitude = longPos;
         }
 
+        public double GetApproxPos()
+        {
+            return PDOP * 3;
+        }
+
 
     }
 }
