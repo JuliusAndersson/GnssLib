@@ -150,7 +150,7 @@
             setHour.Cursor = Cursors.Hand;
             setHour.Location = new Point(66, 16);
             setHour.Margin = new Padding(2);
-            setHour.Maximum = new decimal(new int[] { 24, 0, 0, 0 });
+            setHour.Maximum = new decimal(new int[] { 23, 0, 0, 0 });
             setHour.Name = "setHour";
             setHour.Size = new Size(43, 27);
             setHour.TabIndex = 8;

@@ -80,7 +80,7 @@ namespace GnssLibGUI
                     DateTime targetDate = firstDayOfYear.AddDays(int.Parse(day) - 1);
                     int month = targetDate.Month;
                     int days = targetDate.Day;
-                    dt = new DateTime(int.Parse(year), month, days);
+                    dt = new DateTime(int.Parse(year), month, days, int.Parse(setHour.Text), int.Parse(setMinute.Text), int.Parse(setSecond.Text));
 
                     //Check so correct values are in then start the simulation
                     double value;
