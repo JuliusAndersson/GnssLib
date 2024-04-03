@@ -111,7 +111,7 @@ namespace GnssLibNMEA_Writer
 
             foreach (Satellite satellite in satellites)
             {
-                sb.Append($",{satellite.SatId},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR()}");// fixed snr for now, to test
+                sb.Append($",{satellite.SatId},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
             }
 
             // Calculate and append checksum
@@ -137,9 +137,40 @@ namespace GnssLibNMEA_Writer
             return checksum.ToString("X2");
         }
 
-        private static int GenerateRandomSNR()
+        private static int GenerateRandomSNR(double elevation)
         {
-            return random.Next(0, 51);
+
+            if (elevation < 10)
+            {
+                return (int) SimulateSnrHelper(0, 25, 10, 20);
+            }
+            else
+            {
+                return (int)SimulateSnrHelper(10, 45, 22, 33);
+            }
+
+            //return random.Next(0, 40);
+
+
+        }
+        private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
+        {
+            double mean = (focusMin + focusMax) / 2;
+            double stdDev = (focusMax - focusMin) / 6;
+
+
+
+
+            double u1 = 1.0 - random.NextDouble();
+            double u2 = 1.0 - random.NextDouble();
+
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            double randNormal = mean + stdDev * randStdNormal;
+            return Math.Max(minValue, Math.Min(maxValue, randNormal));
+
+
+
+
         }
     }
 }
