@@ -17,6 +17,7 @@ namespace GnssLibGUI
         private SerialPort serialPort;
         private List<String> fileList = new List<string>();
         private bool running = false;
+        private bool nmeaOn = false;
 
         public GUI_Window()
         {
@@ -31,14 +32,14 @@ namespace GnssLibGUI
                 string[] fileNames = Directory.GetFiles(folderPath);
 
                 
-                foreach (string fileName in fileNames)
+                foreach (string filePath in fileNames)
                 {
-                    fileList.Add(Path.GetFileName(fileName));
-                    int dayIndexs = fileName.IndexOf('_') + 7;
-                    string days = fileName.Substring(dayIndexs, 3);
-                    int yearIndexs = fileName.IndexOf('_') + 3;
-                    string years = fileName.Substring(yearIndexs, 4);
-                    setFile.Items.Add(Path.GetFileName("Day: " + days + " Year: " + years));
+                    fileList.Add(Path.GetFileName(filePath));
+                    int dayIndexs = Path.GetFileName(filePath).IndexOf('_') + 7;
+                    string days = Path.GetFileName(filePath).Substring(dayIndexs, 3);
+                    int yearIndexs = Path.GetFileName(filePath).IndexOf('_') + 3;
+                    string years = Path.GetFileName(filePath).Substring(yearIndexs, 4);
+                    setFile.Items.Add("Day: " + days + " Year: " + years);
                 }
             }
             else
@@ -69,7 +70,15 @@ namespace GnssLibGUI
             {
                 try
                 {
-                    serialPort.Open();
+
+                    if (setNMEA.Checked)
+                    {
+                        serialPort.Open();
+                        nmeaOn = true;
+                    }
+
+
+
                     running = true;
                     stopClear = false;
                     DateTime dt;
@@ -153,7 +162,7 @@ namespace GnssLibGUI
 
 
             //When event happen at the end of RunTime write to NMEA if its on
-            if (setNMEA.Checked) {
+            if (nmeaOn) {
                 NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
             }
         }
@@ -174,6 +183,7 @@ namespace GnssLibGUI
             Terminal.ScrollToCaret();
             timerRunTime.Stop();
             running = false;
+            nmeaOn = false;
 
             if (serialPort.IsOpen)
             {

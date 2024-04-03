@@ -84,7 +84,6 @@ namespace GnssLibNMEA_Writer
         {
             // Construct GGA message string
 
-            //if 009 019 129
             string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
                                 $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)},{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
                                 $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
