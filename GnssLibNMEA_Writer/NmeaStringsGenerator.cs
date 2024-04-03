@@ -15,12 +15,53 @@ namespace GnssLibNMEA_Writer
         public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
         {
 
+
             sc.NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP,
                                 out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude);
+            String latD = "N";
+            String longD = "E";
+            if(latitude < 0)
+            {
+                latD = "S";
+            }
+            if(longitude < 0)
+            {
+                longD = "W";
+            }
+
+            String latString = latitude.ToString(CultureInfo.InvariantCulture);
+            if(latitude > 0 && latitude < 10)
+            {
+                latString = "0" + latString;
+            }else if(latitude > -10 && latitude < 0)
+            {
+                latString = "0" + (latitude * -1).ToString(CultureInfo.InvariantCulture);
+            }else if(latitude < -10)
+            {
+                latString = (latitude * -1).ToString(CultureInfo.InvariantCulture);
+            }
+            String longString = longitude.ToString(CultureInfo.InvariantCulture);
+            if(longitude > 0 && longitude < 10)
+            {
+                longString = "00" + longString;
+            }else if(longitude > 0 && longitude < 100)
+            {
+                longString = "0" + longString;
+            }else if(longitude > -10 && longitude < 0)
+            {
+                longString = "00" +(longitude * -1).ToString(CultureInfo.InvariantCulture);
+            }else if(longitude > -100 && longitude < 0 )
+            {
+                longString = "0" + (longitude * -1).ToString(CultureInfo.InvariantCulture);
+            }else if(longitude < -100)
+            {
+                longString = (longitude * -1).ToString(CultureInfo.InvariantCulture);
+            }
+
+
 
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latitude.ToString(CultureInfo.InvariantCulture), "N", 
-                longitude.ToString(CultureInfo.InvariantCulture), "E", 1, satList.Count, HDOP, 10, -15, 0, ""));
+            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, 10, -15, 0, ""));
             NMEAString.Add(ConstructGPGSAString(activeSatellites, PDOP, HDOP, VDOP));
 
             foreach (string message in ConstructGPGSVString(satList))
@@ -42,7 +83,9 @@ namespace GnssLibNMEA_Writer
                                       double geoidSeparation, double ageOfDGPSData, string referenceStationID)
         {
             // Construct GGA message string
-            string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},0{longitude},{longitudeDirection}," +
+
+            //if 009 019 129
+            string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
                                 $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)},{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
                                 $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
 

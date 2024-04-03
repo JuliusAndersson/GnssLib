@@ -33,7 +33,7 @@ namespace GnssLibDL
         private double updateJamLat;
         private double updateJamLong;
         private double updateJamStr;
-        private double continousSec = 0; //var to change for time simulations
+        private double continousSec = 0;
 
         private bool newHour = false;
         private int boxHour;
@@ -98,6 +98,7 @@ namespace GnssLibDL
             satList = new List<Satellite>();
             receiverPos = CoordinatesCalculator.GeodeticToECEF(latPos, longPos, 0);
 
+            //Check if GPS, Galileo, Glonass is to be Used
             if (useGPS)
             {
                 MakeGps();
@@ -108,7 +109,7 @@ namespace GnssLibDL
             }
 
 
-
+            // Calculate DOP for Visible Satellites
             DOPCalulator.CalculateDOP(receiverPos, satellitePositions, out double PDOP, out double HDOP, out double VDOP);
             this.PDOP = PDOP;
             this.HDOP = HDOP;
@@ -123,7 +124,7 @@ namespace GnssLibDL
                 foreach (var broadcast in gps.Data)
                 {
 
-
+                    //Check if it's another 2h mark so the next messege Block should be used
                     if (dt.Hour % 2 == 0 && newHour)
                     {
                         newHour = false;
@@ -138,11 +139,12 @@ namespace GnssLibDL
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
                     if (broadcast.DateTime == new DateTime(dt.Year, dt.Month, dt.Day, boxHour, 00, 00))
                     {
-
+                        //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);
                         VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
                         if (isVisible)
                         {
+                            //Check if a Satellite is blocked by the jammer
                             if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, receiverPos, CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr)) || !jamOn)
                             {
                                 satellitePositions.Add(satPos);
@@ -167,7 +169,7 @@ namespace GnssLibDL
                 foreach (var broadcast in galileo.Data)
                 {
 
-
+                    //Check if it's another 15min mark so the next messege Block should be used
                     if (dt.Minute % 15 == 0 && newQuart)
                     {
                         newQuart = false;

@@ -483,6 +483,8 @@
             // setNMEA
             // 
             setNMEA.AutoSize = true;
+            setNMEA.Checked = true;
+            setNMEA.CheckState = CheckState.Checked;
             setNMEA.Cursor = Cursors.Hand;
             setNMEA.Location = new Point(758, 237);
             setNMEA.Margin = new Padding(3, 2, 3, 2);

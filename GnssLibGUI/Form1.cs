@@ -30,7 +30,7 @@ namespace GnssLibGUI
             {
                 string[] fileNames = Directory.GetFiles(folderPath);
 
-                Terminal.Text += "Files in the folder:" + Environment.NewLine;
+                
                 foreach (string fileName in fileNames)
                 {
                     fileList.Add(Path.GetFileName(fileName));
@@ -56,6 +56,10 @@ namespace GnssLibGUI
             //subscribe to event in RunTime
             srt = new SimulationRunTime();
             srt.tickDone += HandleTickEvent;
+
+            Terminal.ForeColor = Color.Green;
+            Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
+            
 
         }
 
@@ -89,7 +93,11 @@ namespace GnssLibGUI
                     if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                         && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                         && double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                        && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                        && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value) 
+                        && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90 
+                        && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
+                        && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
+                        && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
                     {
                         sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, fileName,
                             double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
@@ -108,7 +116,7 @@ namespace GnssLibGUI
                     else
                     {
                         Terminal.ForeColor = Color.Red;
-                        Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) #" + Environment.NewLine;
+                        Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                         Terminal.SelectionStart = Terminal.Text.Length;
                         Terminal.ScrollToCaret();
                         
@@ -188,9 +196,9 @@ namespace GnssLibGUI
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    sc.UpdatePos(double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                    sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
                     Terminal.ForeColor = Color.White;
-                    Terminal.Text += "New Position Value Set: " + setLat.Text + " " + setLong.Text + Environment.NewLine;
+                    Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
@@ -218,7 +226,7 @@ namespace GnssLibGUI
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
 
                     Terminal.ForeColor = Color.White;
-                    Terminal.Text += "New Jammer Value Set: " + setJammerLat.Text + " " + setJammerLong.Text + Environment.NewLine;
+                    Terminal.Text += "New Jammer Value Set:  Lat: " + setJammerLat.Text + " Long: " + setJammerLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
