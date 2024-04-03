@@ -24,9 +24,8 @@ namespace GnssLibGUI
             serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
             serialPort.Handshake = Handshake.None;
 
-            
+            //Check what files exist
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Broadcast");
-
             if (Directory.Exists(folderPath))
             {
                 string[] fileNames = Directory.GetFiles(folderPath);
@@ -50,9 +49,11 @@ namespace GnssLibGUI
 
             setFile.SelectedIndex = 0;
 
+            //Event that repeats ever 1s
             timerRunTime.Tick += HandleRunTime;
             timerRunTime.Interval = 1000;
 
+            //subscribe to event in RunTime
             srt = new SimulationRunTime();
             srt.tickDone += HandleTickEvent;
 
@@ -66,9 +67,10 @@ namespace GnssLibGUI
                 {
                     serialPort.Open();
                     running = true;
+                    stopClear = false;
                     DateTime dt;
                     Stop.Text = "Stop";
-                    stopClear = false;
+                    
 
                     //Get DateTime from file
                     string fileName = fileList[setFile.SelectedIndex];
@@ -136,6 +138,12 @@ namespace GnssLibGUI
 
         public void HandleTickEvent(object sender, EventArgs e)
         {
+            //Test values from Controller
+            //Terminal.Text += sc.GetValues() + Environment.NewLine;
+            //Terminal.SelectionStart = Terminal.Text.Length;
+            //Terminal.ScrollToCaret();
+
+
             //When event happen at the end of RunTime write to NMEA if its on
             if (setNMEA.Checked) {
                 NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
@@ -206,7 +214,9 @@ namespace GnssLibGUI
                 if (double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
+                    sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
+                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
+
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Jammer Value Set: " + setJammerLat.Text + " " + setJammerLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
