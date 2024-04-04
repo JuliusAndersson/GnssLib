@@ -37,7 +37,10 @@ namespace GnssLibDL
         private double updateJamLat;
         private double updateJamLong;
         private double updateJamStr;
-        private double continousSec = 0;
+        private double continousSecGPS = 0;
+        private double continousSecGAL = 0;
+        private double continousSecFromStart = 0;
+
 
         private bool newHour = false;
         private int boxHour;
@@ -134,7 +137,9 @@ namespace GnssLibDL
             this.PDOP = PDOP;
             this.HDOP = HDOP;
             this.VDOP = VDOP;
-            continousSec += 1;
+            continousSecGPS += 1;
+            continousSecGAL += 1;
+            continousSecFromStart += 1;
         }
 
         private void MakeGps()
@@ -149,7 +154,7 @@ namespace GnssLibDL
                     {
                         newHour = false;
                         boxHour = dt.Hour;
-                        continousSec = 0;
+                        continousSecGPS = 0;
                     }
                     else if (dt.Hour % 2 == 1 && !newHour)
                     {
@@ -160,7 +165,7 @@ namespace GnssLibDL
                     if (broadcast.DateTime == new DateTime(dt.Year, dt.Month, dt.Day, boxHour, 00, 00))
                     {
                         //Check if a Satellite is visible
-                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);
+                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSecGPS);
                         VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
                         if (isVisible)
                         {
@@ -195,7 +200,7 @@ namespace GnssLibDL
                         newQuart = false;
                         boxHour = dt.Hour;
                         boxMin = dt.Minute;
-                        continousSec = 0;
+                        continousSecGAL = 0;
                     }
                     else if (dt.Hour % 15 == 14 && !newQuart)
                     {
@@ -206,7 +211,7 @@ namespace GnssLibDL
                     if (broadcast.DateTime == new DateTime(dt.Year, dt.Month, dt.Day, boxHour, boxMin, 00))
                     {
                         //Check if a Satellite is visible
-                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSec);
+                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, continousSecGAL);
                         VisibleSatCalulator.IsSatelliteVisible(MIN_ELEVATION, MAX_ELEVATION, receiverPos, satPos, out bool isVisible, 
                             out double elevation, out double azimuth);
                         if (isVisible)
@@ -262,7 +267,7 @@ namespace GnssLibDL
             VDOP = this.VDOP;
             satList = this.satList;
             satListGL = this.satListGL;
-            utcTime = dt.AddSeconds(continousSec);
+            utcTime = dt.AddSeconds(continousSecFromStart);
             latitude = latPos;
             longitude = longPos;
             elevation = this.elevation;
