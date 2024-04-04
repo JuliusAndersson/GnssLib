@@ -10,7 +10,7 @@ namespace GnssLibNMEA_Writer
 
 	public class NmeaStringsGenerator
 	{
-        private static Random random = new Random();
+        private static Random _random = new Random();
         
         public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
         {
@@ -218,8 +218,8 @@ namespace GnssLibNMEA_Writer
             double mean = (focusMin + focusMax) / 2;
             double stdDev = (focusMax - focusMin) / 6;
 
-            double u1 = 1.0 - random.NextDouble();
-            double u2 = 1.0 - random.NextDouble();
+            double u1 = 1.0 - _random.NextDouble();
+            double u2 = 1.0 - _random.NextDouble();
 
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
             double randNormal = mean + stdDev * randStdNormal;

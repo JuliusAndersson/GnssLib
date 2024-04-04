@@ -9,7 +9,7 @@ namespace GnssLibDL
 {
     public class SimulationRunTime
     {
-        public event EventHandler tickDone;
+        public event EventHandler _tickDone;
 
         public void RunSimulation(SimulationController scIN)
         {
@@ -17,7 +17,7 @@ namespace GnssLibDL
 
             scIN.Tick();
                 
-            tickDone(this, EventArgs.Empty);  
+            _tickDone(this, EventArgs.Empty);  
 
         }
 

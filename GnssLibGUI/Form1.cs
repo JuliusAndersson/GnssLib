@@ -1,6 +1,5 @@
 using GnssLibDL;
 using GnssLibNMEA_Writer;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO.Ports;
 
@@ -10,20 +9,20 @@ namespace GnssLibGUI
 {
     public partial class GUI_Window : Form
     {
-        System.Windows.Forms.Timer timerRunTime = new System.Windows.Forms.Timer();
-        private SimulationController? sc;
-        private SimulationRunTime srt;
-        private bool stopClear = true;
-        private SerialPort serialPort;
-        private List<String> fileList = new List<string>();
-        private bool running = false;
-        private bool nmeaOn = false;
+        System.Windows.Forms.Timer _timerRunTime = new System.Windows.Forms.Timer();
+        private SimulationController? _sc;
+        private SimulationRunTime _srt;
+        private bool _hasStopped = true;
+        private SerialPort _serialPort;
+        private List<String> _fileList = new List<string>();
+        private bool _isRunning = false;
+        private bool _isNmeaOn = false;
 
         public GUI_Window()
         {
             InitializeComponent();
-            serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
-            serialPort.Handshake = Handshake.None;
+            _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
+            _serialPort.Handshake = Handshake.None;
 
             //Check what files exist
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Broadcast");
@@ -34,7 +33,7 @@ namespace GnssLibGUI
                 
                 foreach (string filePath in fileNames)
                 {
-                    fileList.Add(Path.GetFileName(filePath));
+                    _fileList.Add(Path.GetFileName(filePath));
                     int dayIndexs = Path.GetFileName(filePath).IndexOf('_') + 7;
                     string days = Path.GetFileName(filePath).Substring(dayIndexs, 3);
                     int yearIndexs = Path.GetFileName(filePath).IndexOf('_') + 3;
@@ -51,12 +50,12 @@ namespace GnssLibGUI
             setFile.SelectedIndex = 0;
 
             //Event that repeats ever 1s
-            timerRunTime.Tick += HandleRunTime;
-            timerRunTime.Interval = 1000;
+            _timerRunTime.Tick += HandleRunTime;
+            _timerRunTime.Interval = 1000;
 
             //subscribe to event in RunTime
-            srt = new SimulationRunTime();
-            srt.tickDone += HandleTickEvent;
+            _srt = new SimulationRunTime();
+            _srt._tickDone += HandleTickEvent;
 
             Terminal.ForeColor = Color.Green;
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
@@ -66,27 +65,27 @@ namespace GnssLibGUI
 
         private void Simulate_Click(object sender, EventArgs e)
         {
-            if (!running)
+            if (!_isRunning)
             {
                 try
                 {
 
                     if (setNMEA.Checked)
                     {
-                        serialPort.Open();
-                        nmeaOn = true;
+                        _serialPort.Open();
+                        _isNmeaOn = true;
                     }
 
 
 
-                    running = true;
-                    stopClear = false;
+                    _isRunning = true;
+                    _hasStopped = false;
                     DateTime dt;
                     Stop.Text = "Stop";
                     
 
                     //Get DateTime from file
-                    string fileName = fileList[setFile.SelectedIndex];
+                    string fileName = _fileList[setFile.SelectedIndex];
                     int dayIndex = fileName.IndexOf('_') + 7;
                     string day = fileName.Substring(dayIndex, 3);
                     int yearIndex = fileName.IndexOf('_') + 3;
@@ -108,7 +107,7 @@ namespace GnssLibGUI
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
                     {
-                        sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, fileName,
+                        _sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, fileName,
                             double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             setIntOn.Checked,
@@ -116,7 +115,7 @@ namespace GnssLibGUI
                             double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
 
-                        timerRunTime.Start();
+                        _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
                         Terminal.Text += "Simulation Started: " + dt + Environment.NewLine;
                         Terminal.SelectionStart = Terminal.Text.Length;
@@ -150,27 +149,27 @@ namespace GnssLibGUI
         public void HandleRunTime(object sender, EventArgs e)
         {
             //When event happen in this file run SimulationRunTime once
-            srt.RunSimulation(sc);
+            _srt.RunSimulation(_sc);
         }
 
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            Terminal.Text += sc.GetValues() + Environment.NewLine;
+            Terminal.Text += _sc.GetValues() + Environment.NewLine;
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
 
-            if (sc.GetApproxPos() > 0)
+            if (_sc.GetApproxPos() > 0)
             {
-                labelPosAcc.Text = sc.GetApproxPos().ToString("F1") + " m";
+                labelPosAcc.Text = _sc.GetApproxPos().ToString("F1") + " m";
             }
             else
             {
                 labelPosAcc.Text = "-,- m";
             }
             //When event happen at the end of RunTime write to NMEA if its on
-            if (nmeaOn) {
-                NmeaStringsGenerator.NmeaGenerator(serialPort, sc);
+            if (_isNmeaOn) {
+                NmeaStringsGenerator.NmeaGenerator(_serialPort, _sc);
             }
         }
 
@@ -189,33 +188,33 @@ namespace GnssLibGUI
             labelPosAcc.Text = "-,- m";
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
-            timerRunTime.Stop();
-            running = false;
-            nmeaOn = false;
+            _timerRunTime.Stop();
+            _isRunning = false;
+            _isNmeaOn = false;
 
-            if (serialPort.IsOpen)
+            if (_serialPort.IsOpen)
             {
-                serialPort.Close();
+                _serialPort.Close();
             }
 
-            if (stopClear)
+            if (_hasStopped)
             {
                 Terminal.Clear();
             }
-            stopClear = true;
+            _hasStopped = true;
 
         }
 
         private void updatePos_Click(object sender, EventArgs e)
         {
             //When you update the Position of Reciver check so Simulation is on and that values are correct
-            if (sc != null)
+            if (_sc != null)
             {
                 double value;
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                    _sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
@@ -235,13 +234,13 @@ namespace GnssLibGUI
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
             //When you update the Position of Jammer check so Simulation is on and that values are correct
-            if (sc != null)
+            if (_sc != null)
             {
                 double value;
                 if (double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
+                    _sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
 
                     Terminal.ForeColor = Color.White;
