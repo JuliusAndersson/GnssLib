@@ -15,7 +15,7 @@ namespace GnssLibNMEA_Writer
         public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
         {
             sc.NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP,
-                                out List<Satellite> satList, out List<Satellite> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
+                                out List<SatelliteElevationAndAzimuthInfo> satList, out List<SatelliteElevationAndAzimuthInfo> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
   
             String latD = "N";
             String longD = "E";
@@ -137,7 +137,7 @@ namespace GnssLibNMEA_Writer
         //=====================================================================================
         //This function constructs the GSV-String for the Nmea Message 
         //=====================================================================================
-        public static List<string> ConstructGPGSVString(string satType, List<Satellite> satList)
+        public static List<string> ConstructGPGSVString(string satType, List<SatelliteElevationAndAzimuthInfo> satList)
         {
             List<string> messages = new List<string>();
 
@@ -150,7 +150,7 @@ namespace GnssLibNMEA_Writer
             {
                 int startIndex = i * 4;
                 int endIndex = Math.Min(startIndex + 4, totalSatellites);
-                List<Satellite> subset = satList.GetRange(startIndex, endIndex - startIndex);
+                List<SatelliteElevationAndAzimuthInfo> subset = satList.GetRange(startIndex, endIndex - startIndex);
                 string message = ConstructGSVMessage(satType, subset, i + 1, totalMessages, totalSatellites);
                 messages.Add(message);
             }
@@ -160,12 +160,12 @@ namespace GnssLibNMEA_Writer
         //=====================================================================================
         //This is a helper-function for the GSV-String creator 
         //=====================================================================================
-        public static string ConstructGSVMessage(string satType, List<Satellite> satellites, int messageNumber, int totalMessages, int totaltSats)
+        public static string ConstructGSVMessage(string satType, List<SatelliteElevationAndAzimuthInfo> satellites, int messageNumber, int totalMessages, int totaltSats)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($"${satType}GSV,{totalMessages},{messageNumber},{totaltSats}");
 
-            foreach (Satellite satellite in satellites)
+            foreach (SatelliteElevationAndAzimuthInfo satellite in satellites)
             {
                 if (satType == "GL")
                 {

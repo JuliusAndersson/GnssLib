@@ -5,7 +5,7 @@ namespace GnssLibCALC.Models.SatelliteSystemModels
 {
     public class Galileo
     {
-        public List<GAL_sat> satList { get; set; }
+        public List<GalileoSatellite> ListOfSatellites { get; set; }
     }
 }
 

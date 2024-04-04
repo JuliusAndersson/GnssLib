@@ -5,33 +5,40 @@ namespace GnssLibCALC
 {
     public class DOPCalulator
     {
+        /// <summary>
+        /// Calculates VDOP, HDOP, PDOP based on sateliites in satellitePositions and receivers location of XYZ. 
+        /// </summary>
         public static void CalculateDOP(double[] receiverXYZ, List<double[]> satellitePositions,
             out double PDOP, out double HDOP, out double VDOP)
         {
-            int numSatellites = satellitePositions.Count;
-            double[,] matrixA = new double[numSatellites, 4];
-            for (int i = 0; i < numSatellites; i++)
+            int numberOfSatellites = satellitePositions.Count;
+            double[,] matrix = new double[numberOfSatellites, 4];
+            for (int i = 0; i < numberOfSatellites; i++)
             {
                 double[] unitVector = CalculateUnitVector(receiverXYZ, satellitePositions[i]);
                 for (int j = 0; j < 3; j++)
                 {
-                    matrixA[i, j] = unitVector[j];
+                    matrix[i, j] = unitVector[j];
                 }
-                matrixA[i, 3] = 1; // Last element of each row is always 1
+                matrix[i, 3] = 1; // Last element of each row is always 1
             }
-            Matrix<double> A = DenseMatrix.OfArray(matrixA);
-            Matrix<double> returnMatrix = (A.Transpose() * A).Inverse();
+            
+            Matrix<double> A = DenseMatrix.OfArray(matrix);
+            Matrix<double> Q = (A.Transpose() * A).Inverse(); 
 
-
-            double t = returnMatrix.At(0, 0) + returnMatrix.At(1, 1) + returnMatrix.At(2, 2);
-            double t2 = returnMatrix.At(1, 1) + returnMatrix.At(0, 0);
+            //retrive values from matrix to calculate DOP-Values
+            double t = Q.At(0, 0) + Q.At(1, 1) + Q.At(2, 2);
+            double t2 = Q.At(1, 1) + Q.At(0, 0);
+            
             HDOP = Math.Round(Math.Sqrt(t2), 1);
             PDOP = Math.Round(Math.Sqrt(t), 1);
-            VDOP = Math.Round(Math.Sqrt(returnMatrix.At(2, 2)), 1);
+            VDOP = Math.Round(Math.Sqrt(Q.At(2, 2)), 1);
         }
 
 
-        // Function to calculate distance between two points in ECEF coordinates
+        /// <summary>
+        /// Calculates distance between two points in ECEF coordinates.
+        /// </summary>
         private static double CalculateDistance(double[] pos1, double[] pos2)
         {
             double dx = pos2[0] - pos1[0];
@@ -39,14 +46,16 @@ namespace GnssLibCALC
             double dz = pos2[2] - pos1[2];
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
-        // Function to calculate unit vector from receiver to satellite
-        private static double[] CalculateUnitVector(double[] receiverPos, double[] satellitePos)
+        /// <summary>
+        /// calculates the unitvector between the recivers position and the satellites position.
+        /// </summary>
+        private static double[] CalculateUnitVector(double[] receiverPosition, double[] satellitePosition)
         {
-            double distance = CalculateDistance(receiverPos, satellitePos);
+            double distance = CalculateDistance(receiverPosition, satellitePosition);
             double[] unitVector = new double[3];
             for (int i = 0; i < 3; i++)
             {
-                unitVector[i] = (satellitePos[i] - receiverPos[i]) / distance;
+                unitVector[i] = (satellitePosition[i] - receiverPosition[i]) / distance;
             }
             return unitVector;
         }

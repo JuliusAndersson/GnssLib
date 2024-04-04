@@ -8,6 +8,16 @@ namespace GnssLibCALC
 {
     public class VisibleSatCalulator
     {
+        /// <summary>
+        /// Determines whether a satellite is visible based on specified visibility conditions and coordinates of the satellite and receiver.
+        /// </summary>
+        /// <param name="minElevation">The minimum elevation angle (in degrees) for the satellite to be considered visible.</param>
+        /// <param name="maxElevation">The maximum elevation angle (in degrees) for the satellite to be considered visible.</param>
+        /// <param name="locationXYZ">The coordinates (X, Y, Z) of the receiver's location.</param>
+        /// <param name="satXYZ">The coordinates (X, Y, Z) of the satellite.</param>
+        /// <param name="isVisible">[out] Indicates whether the satellite is visible (true) or not (false).</param>
+        /// <param name="angleOfView">[out] The elevation angle (in degrees) at which the satellite is visible from the receivers location.</param>
+        /// <param name="azimuthDegrees">[out] The azimuth angle (in degrees) at which the satellite is visible from the receivers location.</param>
         public static void IsSatelliteVisible(double minElevation, double maxElevation, double[] locationXYZ, double[] satXYZ, out bool isVisible, out double angleOfView, out double azimuthDegrees)
         {
             // Constants
@@ -18,7 +28,7 @@ namespace GnssLibCALC
             double y2 = satXYZ[1];
             double z2 = satXYZ[2];
 
-            // Calculate the unit vector pointing from the observer to the satellite
+            // Calculate the vector pointing from the observer to the satellite
             double dx = x2 - x1;
             double dy = y2 - y1;
             double dz = z2 - z1;
@@ -36,9 +46,11 @@ namespace GnssLibCALC
             double numeratorCos = (-z1 * x1 * dx) - (z1 * y1 * dy) + ((x1 * x1) + (y1 * y1)) * dz;
             double denominatorCos = Math.Sqrt((x1 * x1 + y1 * y1) * (x1 * x1 + y1 * y1 + z1 * z1) * (dx * dx + dy * dy + dz * dz));
             double cosAzimuth = numeratorCos / denominatorCos;
+            
             double numeratorSin = (-y1 * dx) + (x1 * dy);
             double denominatorSin = Math.Sqrt((x1 * x1 + y1 * y1) * (dx * dx + dy * dy + dz * dz));
             double sinAzimuth = numeratorSin / denominatorSin;
+           
             double azimuthRadians = Math.Atan2(sinAzimuth, cosAzimuth);
             azimuthDegrees = azimuthRadians * (180 / Math.PI);
 

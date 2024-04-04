@@ -3,10 +3,10 @@ using GnssLibCALC.Models.BroadCastDataModels;
 
 namespace GnssLibCALC.Models.SatModels
 {
-    public class GAL_sat
+    public class GalileoSatellite
     {
         public List<BroadCastDataINAV> Data { get; set; }
-        public string id { get; set; }
+        public string Id { get; set; }
     }
 }
 

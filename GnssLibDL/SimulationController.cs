@@ -51,8 +51,8 @@ namespace GnssLibDL
         private List<string> _visibleSatellitesPRN;
         private List<string> _visibleSatellitesPRNGL;
         private List<double[]> _satellitePositions;
-        private List<Satellite> _satList;
-        private List<Satellite> _satListGL;
+        private List<SatelliteElevationAndAzimuthInfo> _satList;
+        private List<SatelliteElevationAndAzimuthInfo> _satListGL;
         
         private double _PDOP;
         private double _HDOP;
@@ -95,11 +95,11 @@ namespace GnssLibDL
             //Reset Lists for new values at the new time
             _visibleSatellitesPRN = new List<string>();
             _satellitePositions = new List<double[]>();
-            _satList = new List<Satellite>();
+            _satList = new List<SatelliteElevationAndAzimuthInfo>();
             _receiverPos = CoordinatesCalculator.GeodeticToECEF(_latPos, _longPos, _elevation);
             
             _visibleSatellitesPRNGL = new List<string>();
-            _satListGL = new List<Satellite>();
+            _satListGL = new List<SatelliteElevationAndAzimuthInfo>();
 
             //Check if GPS, Galileo, Glonass is to be Used
             if (_isUsingGPS)
@@ -124,7 +124,7 @@ namespace GnssLibDL
 
         private void MakeGps()
         {
-            foreach (var gps in _GNSS_Data.gps.satList)
+            foreach (var gps in _GNSS_Data.Gps.satList)
             {
                 foreach (var broadcast in gps.Data)
                 {
@@ -154,7 +154,7 @@ namespace GnssLibDL
                             {
                                 _satellitePositions.Add(satPos);
                                 _visibleSatellitesPRN.Add(broadcast.SatId);
-                                _satList.Add(new Satellite()
+                                _satList.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
                                     SatId = broadcast.SatId.Substring(1),
                                     Azimuth = Math.Round(azimuth, 0),
@@ -169,7 +169,7 @@ namespace GnssLibDL
 
         private void MakeGalileo()
         {
-            foreach (var galileo in _GNSS_Data.galileo.satList)
+            foreach (var galileo in _GNSS_Data.Galileo.ListOfSatellites)
             {
                 foreach (var broadcast in galileo.Data)
                 {
@@ -202,7 +202,7 @@ namespace GnssLibDL
                             {
                                 _satellitePositions.Add(satPos);
                                 _visibleSatellitesPRNGL.Add(broadcast.SatId);
-                                _satListGL.Add(new Satellite()
+                                _satListGL.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
                                     SatId = broadcast.SatId.Substring(1),
                                     Azimuth = Math.Round(azimuth, 0),
@@ -238,7 +238,7 @@ namespace GnssLibDL
         }
 
         public void NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP, 
-                                out List<Satellite> satList, out List<Satellite> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
+                                out List<SatelliteElevationAndAzimuthInfo> satList, out List<SatelliteElevationAndAzimuthInfo> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
         {
             activeSatellites = _visibleSatellitesPRN;
             activeSatellitesGL = _visibleSatellitesPRNGL;

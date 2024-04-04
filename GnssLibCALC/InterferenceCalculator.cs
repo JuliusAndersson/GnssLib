@@ -3,7 +3,10 @@ namespace GnssLibCALC
 {
 	public class InterferenceCalculator
 	{
-        public static double Distance(double[] p1, double[] p2)
+        /// <summary>
+        /// Calculates distance between two points in ECEF coordinates
+        /// </summary>
+        private static double Distance(double[] p1, double[] p2)
         {
             double dx = p1[0] - p2[0];
             double dy = p1[1] - p2[1];
@@ -11,39 +14,45 @@ namespace GnssLibCALC
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 
-        // Function to check if a line intersects with a sphere
-        public static bool DoesLineSegmentIntersectSphere(double[] satellite, double[] receiver, double[] jammerCenter, double jamStr)
+        /// <summary>
+        /// Checks if the line between satellite and reciever intersects the sphere
+        /// </summary>
+        /// <param name="satellitePosition">The coordinates (X ,Y ,Z) of the satellite.</param>
+        /// <param name="receieverPosition">The coordinates (X ,Y ,Z) of the receiver.</param>
+        /// <param name="jammerCenter">The coordinates (X ,Y ,Z) of the jammers centre.</param>
+        /// <param name="jammerRadius">The radius (in kilometers) of the sphere representing a jammer.</param>
+        /// <returns></returns>
+        public static bool DoesLineSegmentIntersectSphere(double[] satellitePosition, double[] receieverPosition, double[] jammerCenter, double jammerRadius)
         {
 
-            double jammerRadius = 395;
             // Vector from satellite to receiver
-            double[] lineVector = { receiver[0] - satellite[0], receiver[1] - satellite[1], receiver[2] - satellite[2] };
+            double[] receiverToSatellieVector = { receieverPosition[0] - satellitePosition[0], receieverPosition[1] - satellitePosition[1], receieverPosition[2] - satellitePosition[2] };
 
             // Vector from satellite to jammer center
-            double[] satelliteToJammer = { jammerCenter[0] - satellite[0], jammerCenter[1] - satellite[1], jammerCenter[2] - satellite[2] };
+            double[] satelliteToJammerVector = { jammerCenter[0] - satellitePosition[0], jammerCenter[1] - satellitePosition[1], jammerCenter[2] - satellitePosition[2] };
 
             // Length of the line segment
-            double lineLength = Distance(satellite, receiver);
+            double lineLength = Distance(satellitePosition, receieverPosition);
 
             // Normalized direction vector of the line segment
-            double[] lineUnitVector = { lineVector[0] / lineLength, lineVector[1] / lineLength, lineVector[2] / lineLength };
+            double[] lineUnitVector = { receiverToSatellieVector[0] / lineLength, receiverToSatellieVector[1] / lineLength, receiverToSatellieVector[2] / lineLength };
 
             // Dot product of (line segment direction vector) . (satellite to jammer vector)
-            double dotProduct = lineUnitVector[0] * satelliteToJammer[0] + lineUnitVector[1] * satelliteToJammer[1] + lineUnitVector[2] * satelliteToJammer[2];
+            double dotProduct = lineUnitVector[0] * satelliteToJammerVector[0] + lineUnitVector[1] * satelliteToJammerVector[1] + lineUnitVector[2] * satelliteToJammerVector[2];
 
             // Closest point on the line segment to the jammer
             double[] closestPoint;
             if (dotProduct <= 0)
-                closestPoint = satellite;
+                closestPoint = satellitePosition;
             else if (dotProduct >= lineLength)
-                closestPoint = receiver;
+                closestPoint = receieverPosition;
             else
-                closestPoint = new double[] { satellite[0] + lineUnitVector[0] * dotProduct,
-                                           satellite[1] + lineUnitVector[1] * dotProduct,
-                                           satellite[2] + lineUnitVector[2] * dotProduct };
+                closestPoint = new double[] { satellitePosition[0] + lineUnitVector[0] * dotProduct,
+                                           satellitePosition[1] + lineUnitVector[1] * dotProduct,
+                                           satellitePosition[2] + lineUnitVector[2] * dotProduct };
 
             // Check if the closest point is within the jammer's radius
-            return Distance(closestPoint, jammerCenter) <= jamStr;
+            return Distance(closestPoint, jammerCenter) <= jammerRadius;
         }
     }
 }

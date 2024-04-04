@@ -5,7 +5,7 @@
 
 namespace GnssLibCALC.Models.SatModels
 {
-	public class Satellite
+	public class SatelliteElevationAndAzimuthInfo
 	{
 		public string SatId { get; set; }
 		public double Elevation { get; set; }
