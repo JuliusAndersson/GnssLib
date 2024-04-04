@@ -17,8 +17,10 @@ namespace GnssLibDL
 
         private bool useGPS;
         private bool useGalileo;
-        private bool useGlonass;
+        private bool _useGlonass;
         private DateTime dt;
+
+
         private double latPos = 0;
         private double longPos;
 
@@ -58,7 +60,7 @@ namespace GnssLibDL
             double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong) {
             useGPS = gps;
             useGalileo = galileo;
-            useGlonass = glonass;
+            _useGlonass = glonass;
 
             dt = dateTime;
             this.latPos = latPos;
