@@ -14,10 +14,9 @@ namespace GnssLibNMEA_Writer
         
         public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
         {
-
-
-            sc.NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP,
-                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
+            sc.NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP,
+                                out List<Satellite> satList, out List<Satellite> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
+  
             String latD = "N";
             String longD = "E";
             if(latitude < 0)
@@ -58,18 +57,22 @@ namespace GnssLibNMEA_Writer
                 longString = (longitude * -1).ToString(CultureInfo.InvariantCulture);
             }
 
-
-
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, elevation, -15, 0, ""));
-            NMEAString.Add(ConstructGPGSAString(activeSatellites, PDOP, HDOP, VDOP));
+            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count+satListGL.Count, HDOP, elevation, -15, 0, ""));
+            NMEAString.Add(ConstructGPGSAString("GP", activeSatellites, PDOP, HDOP, VDOP));
 
-            foreach (string message in ConstructGPGSVString(satList))
+            foreach (string message in ConstructGPGSVString("GP", satList))
             {
                 NMEAString.Add(message);
             }
 
+            //NMEAString.Add(ConstructGPGGAString("GL", utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, elevation, -15, 0, ""));
+            NMEAString.Add(ConstructGPGSAString("GL", activeSatellitesGL, PDOP, HDOP, VDOP));
 
+            foreach (string message in ConstructGPGSVString("GL", satListGL))
+            {
+                NMEAString.Add(message);
+            }
             foreach (string str in NMEAString)
             {
                 serialPort.WriteLine(str);
@@ -77,26 +80,23 @@ namespace GnssLibNMEA_Writer
 
         }
 
-        public static string ConstructGPGGAString(string utcTime, string latitude, string latitudeDirection,
+        public static string ConstructGPGGAString(string satType, string utcTime, string latitude, string latitudeDirection,
                                       string longitude, string longitudeDirection, int qualityIndicator,
                                       int numberOfSatellites, double HDOP, double orthometricHeight,
                                       double geoidSeparation, double ageOfDGPSData, string referenceStationID)
         {
             // Construct GGA message string
-
-            string ggaMessage = $"$GPGGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
+            string ggaMessage = $"${satType}GGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
                                 $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)}," +
                                 $"{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
                                 $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";
-
             // Calculate and append checksum
             string checksum = CalculateChecksum(ggaMessage);
             ggaMessage += $"*{checksum}";
-
             return ggaMessage;
         }
 
-        public static string ConstructGPGSAString(List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
+        public static string ConstructGPGSAString(string satType,List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
         {
 
             int numberCommas = 0;
@@ -110,23 +110,24 @@ namespace GnssLibNMEA_Writer
                 numberCommas = 12 - activeSatellites.Count;
             }
 
-
             string prnNumbers = string.Join(",", activeSatellites.Select(prn => prn.ToString().Substring(1)));
-            string gsaMessage = $"$GPGSA,A,3,{prnNumbers},";
+            string gsaMessage = $"${satType}GSA,A,3,{prnNumbers},";
             for (int i = 0; i < numberCommas; i++)
             {
                 gsaMessage += ",";
             }
 
-
             gsaMessage += $"{PDOP.ToString(CultureInfo.InvariantCulture)},{HDOP.ToString(CultureInfo.InvariantCulture)},{VDOP.ToString(CultureInfo.InvariantCulture)}";
-
             string checksum = CalculateChecksum(gsaMessage);
             gsaMessage += "*" + checksum;
             return gsaMessage;
         }
-
-        public static List<string> ConstructGPGSVString(List<Satellite> satList)
+        
+        
+        //=====================================================================================
+        //This function constructs the GSV-String for the Nmea Message 
+        //=====================================================================================
+        public static List<string> ConstructGPGSVString(string satType, List<Satellite> satList)
         {
             List<string> messages = new List<string>();
 
@@ -140,32 +141,41 @@ namespace GnssLibNMEA_Writer
                 int startIndex = i * 4;
                 int endIndex = Math.Min(startIndex + 4, totalSatellites);
                 List<Satellite> subset = satList.GetRange(startIndex, endIndex - startIndex);
-                string message = ConstructGSVMessage(subset, i + 1, totalMessages, totalSatellites);
+                string message = ConstructGSVMessage(satType, subset, i + 1, totalMessages, totalSatellites);
                 messages.Add(message);
             }
-
             return messages;
         }
 
-        public static string ConstructGSVMessage(List<Satellite> satellites, int messageNumber, int totalMessages, int totaltSats)
+        //=====================================================================================
+        //This is a helper-function for the GSV-String creator 
+        //=====================================================================================
+        public static string ConstructGSVMessage(string satType, List<Satellite> satellites, int messageNumber, int totalMessages, int totaltSats)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"$GPGSV,{totalMessages},{messageNumber},{totaltSats}");
+            sb.Append($"${satType}GSV,{totalMessages},{messageNumber},{totaltSats}");
 
             foreach (Satellite satellite in satellites)
             {
-                sb.Append($",{satellite.SatId},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
-            }
+                if (satType == "GL")
+                {
+                    sb.Append($",{int.Parse(satellite.SatId)+64},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
+                }
+                else
+                {
+                    sb.Append($",{satellite.SatId},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
+                }
 
+            }
             // Calculate and append checksum
-            // added fixed for now
             string checksum = CalculateChecksum(sb.ToString());
             sb.Append($"*{checksum}");
-
             return sb.ToString();
         }
 
-        
+        //=====================================================================================
+        //Calculate the checksum for each NMEA-String
+        //=====================================================================================
         private static string CalculateChecksum(string message)
         {
             int checksum = 0;
@@ -182,7 +192,6 @@ namespace GnssLibNMEA_Writer
 
         private static int GenerateRandomSNR(double elevation)
         {
-
             if (elevation < 10)
             {
                 return (int) SimulateSnrHelper(0, 25, 10, 20);
@@ -191,18 +200,13 @@ namespace GnssLibNMEA_Writer
             {
                 return (int)SimulateSnrHelper(10, 45, 22, 33);
             }
-
-            //return random.Next(0, 40);
-
-
         }
+
+
         private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
         {
             double mean = (focusMin + focusMax) / 2;
             double stdDev = (focusMax - focusMin) / 6;
-
-
-
 
             double u1 = 1.0 - random.NextDouble();
             double u2 = 1.0 - random.NextDouble();
@@ -210,10 +214,6 @@ namespace GnssLibNMEA_Writer
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
             double randNormal = mean + stdDev * randStdNormal;
             return Math.Max(minValue, Math.Min(maxValue, randNormal));
-
-
-
-
         }
     }
 }

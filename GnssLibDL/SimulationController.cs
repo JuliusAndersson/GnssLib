@@ -47,6 +47,8 @@ namespace GnssLibDL
         private List<string> visibleSatellitesPRN;
         private List<double[]> satellitePositions;
         private List<Satellite> satList;
+        private List<Satellite> satListGL;
+        private List<string> visibleSatellitesPRNGL;
         private double PDOP;
         private double HDOP;
         private double VDOP;
@@ -111,6 +113,9 @@ namespace GnssLibDL
             satList = new List<Satellite>();
             receiverPos = CoordinatesCalculator.GeodeticToECEF(latPos, longPos, elevation);
             
+            visibleSatellitesPRNGL = new List<string>();
+            satListGL = new List<Satellite>();
+
             //Check if GPS, Galileo, Glonass is to be Used
             if (useGPS)
             {
@@ -209,8 +214,8 @@ namespace GnssLibDL
                                 CoordinatesCalculator.GeodeticToECEF(jamLat, jamLong, 0), jamStr)) || !jamOn)
                             {
                                 satellitePositions.Add(satPos);
-                                visibleSatellitesPRN.Add(broadcast.SatId);
-                                satList.Add(new Satellite()
+                                visibleSatellitesPRNGL.Add(broadcast.SatId);
+                                satListGL.Add(new Satellite()
                                 {
                                     SatId = broadcast.SatId.Substring(1),
                                     Azimuth = Math.Round(azimuth, 0),
@@ -245,15 +250,17 @@ namespace GnssLibDL
             return elevation;
         }
 
-        public void NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP, 
-                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
+        public void NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP, 
+                                out List<Satellite> satList, out List<Satellite> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
         {
             activeSatellites = visibleSatellitesPRN;
+            activeSatellitesGL = visibleSatellitesPRNGL;
             PDOP = this.PDOP;
             HDOP = this.HDOP;
             VDOP = this.VDOP;
             satList = this.satList;
-            utcTime = dt;
+            satListGL = this.satListGL;
+            utcTime = dt.AddSeconds(continousSec);
             latitude = latPos;
             longitude = longPos;
             elevation = this.elevation;
