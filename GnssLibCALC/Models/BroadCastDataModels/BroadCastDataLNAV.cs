@@ -2,53 +2,56 @@
 
 namespace GnssLibCALC.Models.BroadCastDataModels
 {
+    /// <summary>
+    /// Object for all paramaters parsed from a Rinex v.4 File related to GPS in the LNAV format
+    /// </summary>
     public class BroadCastDataLNAV 
     {
-        //SV/Epoch/SvClock
+        
         public string SatId { get; set; }
         public DateTime DateTime { get; set; }
-        public double ClockBias { get; set; }
-        public double ClockDrift { get; set; }
-        public double ClockDriftRate { get; set; }
+        public double ClockBias { get; set; } //Not Used
+        public double ClockDrift { get; set; } //Not Used
+        public double ClockDriftRate { get; set; } //Not Used
 
         //Orbit1
-        public double A_DOT { get; set; }
-        public double C_rs { get; set; }
+        public double IssueOfDataEphemeris { get; set; }
+        public double RadiusCorrectionSinusComponent { get; set; }
         public double Delta_n0 { get; set; }
-        public double M0 { get; set; }
+        public double M0_Angle { get; set; }
 
         //Orbit2
-        public double C_uc { get; set; }
-        public double e_Ecentricity { get; set; }
-        public double C_us { get; set; }
-        public double sqrtA { get; set; }
+        public double LatitudeCorrectionCosinusComponent { get; set; }
+        public double OrbitEcentricity { get; set; }
+        public double LatitudeCorrectionSinusComponent { get; set; }
+        public double SqrtOfMajorAxis { get; set; }
 
         //Orbit3
-        public double t_oe { get; set; } //toe?
-        public double C_ic { get; set; }
-        public double OmegaA0 { get; set; } //omega
-        public double C_is { get; set; }
+        public double TimeOfEphemeris { get; set; } 
+        public double InclinationCorrectionCosinusComponent { get; set; }
+        public double OmegaAngle0 { get; set; } 
+        public double AngularVelocity { get; set; }
 
         //Orbit4
-        public double i0 { get; set; }
-        public double C_rc { get; set; }
-        public double omega { get; set; }
-        public double OMEGA_DOT { get; set; }
+        public double InitialInclination { get; set; }
+        public double RadiusCorrectionCosinusComponent { get; set; }
+        public double OmegaAngle { get; set; }
+        public double AngularVelocityPerSec { get; set; }
 
         //Orbit5
-        public double IDOT { get; set; }
-        public double L2_code { get; set; }
-        public double GPS_WEEK { get; set; }
-        public double L2_P { get; set; }
+        public double InclinationRate { get; set; }
+        public double CodesOnL2Channel { get; set; } //Not Used
+        public double ContinousGpsWeek { get; set; } //Not Used
+        public double L2PDataFlag { get; set; } //Not Used
 
         //Orbit6
-        public double SV_acc { get; set; }
-        public double SV_health { get; set; }
-        public double TGD { get; set; } //tgd
-        public double IODC { get; set; }
+        public double SpaceVehicleAccuarcy { get; set; } //Not Used
+        public double SpaceVehicleHealth { get; set; } //Not Used
+        public double TotalGroupDelay { get; set; } //Not Used
+        public double IssueOfDataClock { get; set; } 
 
         //orbit7
-        public double t_tm { get; set; }
+        public double TransmissionTime { get; set; }
 
     }
 }

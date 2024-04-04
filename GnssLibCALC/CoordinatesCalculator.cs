@@ -43,29 +43,29 @@ namespace GnssLibCALC
 
         public static double[] CalculatePosition(BroadCastDataLNAV bcd, double seconds)
         {
-            double A = bcd.sqrtA * bcd.sqrtA;
+            double A = bcd.SqrtOfMajorAxis * bcd.SqrtOfMajorAxis;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
             double n = n_0 + bcd.Delta_n0;
-            double e = bcd.e_Ecentricity;
-            double tk = CalculateTk(bcd.t_tm + seconds, bcd.t_oe);
-            double Mk = bcd.M0 + n * tk;
+            double e = bcd.OrbitEcentricity;
+            double tk = CalculateTk(bcd.TransmissionTime + seconds, bcd.TimeOfEphemeris);
+            double Mk = bcd.M0_Angle + n * tk;
             double Ek = CalculateEk(Mk, e);
 
             double vk = Math.Atan2(Math.Sqrt(1 - e * e) * Math.Sin(Ek), Math.Cos(Ek) - e);
-            double phi_k = vk + bcd.omega;
+            double phi_k = vk + bcd.OmegaAngle;
 
-            double d_uk = bcd.C_uc * Math.Cos(2 * phi_k) + bcd.C_us * Math.Sin(2 * phi_k);
-            double d_rk = bcd.C_rc * Math.Cos(2 * phi_k) + bcd.C_rs * Math.Sin(2 * phi_k);
-            double d_ik = bcd.C_ic * Math.Cos(2 * phi_k) + bcd.C_is * Math.Sin(2 * phi_k);
+            double d_uk = bcd.LatitudeCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.LatitudeCorrectionSinusComponent * Math.Sin(2 * phi_k);
+            double d_rk = bcd.RadiusCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.RadiusCorrectionSinusComponent * Math.Sin(2 * phi_k);
+            double d_ik = bcd.InclinationCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.AngularVelocity * Math.Sin(2 * phi_k);
 
             double uk = phi_k + d_uk;
             double rk = A * (1 - e * Math.Cos(Ek)) + d_rk;
-            double ik = bcd.i0 + d_ik + bcd.IDOT * tk;
+            double ik = bcd.InitialInclination + d_ik + bcd.InclinationRate * tk;
 
             double xk_prim = rk * Math.Cos(uk);
             double yk_prim = rk * Math.Sin(uk);
 
-            double omega_k = bcd.OmegaA0 + (bcd.OMEGA_DOT - OMEGA_e) * tk - OMEGA_e * bcd.t_oe;
+            double omega_k = bcd.OmegaAngle0 + (bcd.AngularVelocityPerSec - OMEGA_e) * tk - OMEGA_e * bcd.TimeOfEphemeris;
 
             double xk = xk_prim * Math.Cos(omega_k) - yk_prim * Math.Cos(ik) * Math.Sin(omega_k);
             double yk = xk_prim * Math.Sin(omega_k) + yk_prim * Math.Cos(ik) * Math.Cos(omega_k);
@@ -75,29 +75,29 @@ namespace GnssLibCALC
 
         public static double[] CalculatePosition(BroadCastDataINAV bcd, double seconds)
         {
-            double A = bcd.sqrtA * bcd.sqrtA;
+            double A = bcd.SrqtOfMajorAxis * bcd.SrqtOfMajorAxis;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
             double n = n_0 + bcd.Delta_n;
-            double e = bcd.e_Ecentricity;
-            double tk = CalculateTk(bcd.t_tm + seconds, bcd.t_oe);
-            double Mk = bcd.M0 + n * tk;
+            double e = bcd.OrbitEcentricity;
+            double tk = CalculateTk(bcd.TransmissionTime + seconds, bcd.TimeOfEphemeris);
+            double Mk = bcd.M0_Angle + n * tk;
             double Ek = CalculateEk(Mk, e);
 
             double vk = Math.Atan2(Math.Sqrt(1 - e * e) * Math.Sin(Ek), Math.Cos(Ek) - e);
-            double phi_k = vk + bcd.omega;
+            double phi_k = vk + bcd.OmegaAngle;
 
-            double d_uk = bcd.C_uc * Math.Cos(2 * phi_k) + bcd.C_us * Math.Sin(2 * phi_k);
-            double d_rk = bcd.C_rc * Math.Cos(2 * phi_k) + bcd.C_rs * Math.Sin(2 * phi_k);
-            double d_ik = bcd.C_ic * Math.Cos(2 * phi_k) + bcd.C_is * Math.Sin(2 * phi_k);
+            double d_uk = bcd.LatitudeCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.LatitudeCorrectionSinusComponent * Math.Sin(2 * phi_k);
+            double d_rk = bcd.RandiusCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.RadiusCorrectionSinusComponent * Math.Sin(2 * phi_k);
+            double d_ik = bcd.nclinationCorrectionCosinusComponent * Math.Cos(2 * phi_k) + bcd.AngularVelocity * Math.Sin(2 * phi_k);
 
             double uk = phi_k + d_uk;
             double rk = A * (1 - e * Math.Cos(Ek)) + d_rk;
-            double ik = bcd.i0 + d_ik + bcd.IDOT * tk;
+            double ik = bcd.InitialInclination + d_ik + bcd.InclinationRate * tk;
 
             double xk_prim = rk * Math.Cos(uk);
             double yk_prim = rk * Math.Sin(uk);
 
-            double omega_k = bcd.OmegaA0 + (bcd.OMEGA_DOT - OMEGA_e) * tk - OMEGA_e * bcd.t_oe;
+            double omega_k = bcd.OmegaAngle0 + (bcd.AngularVelocityPerSec - OMEGA_e) * tk - OMEGA_e * bcd.TimeOfEphemeris;
 
             double xk = xk_prim * Math.Cos(omega_k) - yk_prim * Math.Cos(ik) * Math.Sin(omega_k);
             double yk = xk_prim * Math.Sin(omega_k) + yk_prim * Math.Cos(ik) * Math.Cos(omega_k);

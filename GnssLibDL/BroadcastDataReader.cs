@@ -179,37 +179,37 @@ namespace GnssLibDL
                 ClockDrift = double.Parse(broadCastDataAsList[8], NumberStyles.Float, CultureInfo.InvariantCulture),
                 ClockDriftRate = double.Parse(broadCastDataAsList[9], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 1
-                A_DOT = double.Parse(broadCastDataAsList[10], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_rs = double.Parse(broadCastDataAsList[11], NumberStyles.Float, CultureInfo.InvariantCulture),
+                IssueOfDataEphemeris = double.Parse(broadCastDataAsList[10], NumberStyles.Float, CultureInfo.InvariantCulture),
+                RadiusCorrectionSinusComponent = double.Parse(broadCastDataAsList[11], NumberStyles.Float, CultureInfo.InvariantCulture),
                 Delta_n0 = double.Parse(broadCastDataAsList[12], NumberStyles.Float, CultureInfo.InvariantCulture),
-                M0 = double.Parse(broadCastDataAsList[13], NumberStyles.Float, CultureInfo.InvariantCulture),
+                M0_Angle = double.Parse(broadCastDataAsList[13], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 2
-                C_uc = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
-                e_Ecentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_us = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
-                sqrtA = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
+                LatitudeCorrectionCosinusComponent = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OrbitEcentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
+                LatitudeCorrectionSinusComponent = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SqrtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 3
-                t_oe = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_ic = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
-                OmegaA0 = double.Parse(broadCastDataAsList[20], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_is = double.Parse(broadCastDataAsList[21], NumberStyles.Float, CultureInfo.InvariantCulture),
+                TimeOfEphemeris = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InclinationCorrectionCosinusComponent = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OmegaAngle0 = double.Parse(broadCastDataAsList[20], NumberStyles.Float, CultureInfo.InvariantCulture),
+                AngularVelocity = double.Parse(broadCastDataAsList[21], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 4
-                i0 = double.Parse(broadCastDataAsList[22], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_rc = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
-                omega = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture),
-                OMEGA_DOT = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InitialInclination = double.Parse(broadCastDataAsList[22], NumberStyles.Float, CultureInfo.InvariantCulture),
+                RadiusCorrectionCosinusComponent = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OmegaAngle = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture),
+                AngularVelocityPerSec = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 5
-                IDOT = double.Parse(broadCastDataAsList[26], NumberStyles.Float, CultureInfo.InvariantCulture),
-                L2_code = double.Parse(broadCastDataAsList[27], NumberStyles.Float, CultureInfo.InvariantCulture),
-                GPS_WEEK = double.Parse(broadCastDataAsList[28], NumberStyles.Float, CultureInfo.InvariantCulture),
-                L2_P = double.Parse(broadCastDataAsList[29], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InclinationRate = double.Parse(broadCastDataAsList[26], NumberStyles.Float, CultureInfo.InvariantCulture),
+                CodesOnL2Channel = double.Parse(broadCastDataAsList[27], NumberStyles.Float, CultureInfo.InvariantCulture),
+                ContinousGpsWeek = double.Parse(broadCastDataAsList[28], NumberStyles.Float, CultureInfo.InvariantCulture),
+                L2PDataFlag = double.Parse(broadCastDataAsList[29], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 6
-                SV_acc = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
-                SV_health = double.Parse(broadCastDataAsList[31], NumberStyles.Float, CultureInfo.InvariantCulture),
-                TGD = double.Parse(broadCastDataAsList[32], NumberStyles.Float, CultureInfo.InvariantCulture),
-                IODC = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SpaceVehicleAccuarcy = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SpaceVehicleHealth = double.Parse(broadCastDataAsList[31], NumberStyles.Float, CultureInfo.InvariantCulture),
+                TotalGroupDelay = double.Parse(broadCastDataAsList[32], NumberStyles.Float, CultureInfo.InvariantCulture),
+                IssueOfDataClock = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 7
-                t_tm = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
+                TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
 
@@ -223,36 +223,36 @@ namespace GnssLibDL
                 ClockDrift = double.Parse(broadCastDataAsList[8], NumberStyles.Float, CultureInfo.InvariantCulture),
                 ClockDriftRate = double.Parse(broadCastDataAsList[9], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 1
-                IOD = double.Parse(broadCastDataAsList[10], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_rs = double.Parse(broadCastDataAsList[11], NumberStyles.Float, CultureInfo.InvariantCulture),
+                IssueOfData = double.Parse(broadCastDataAsList[10], NumberStyles.Float, CultureInfo.InvariantCulture),
+                RadiusCorrectionSinusComponent = double.Parse(broadCastDataAsList[11], NumberStyles.Float, CultureInfo.InvariantCulture),
                 Delta_n = double.Parse(broadCastDataAsList[12], NumberStyles.Float, CultureInfo.InvariantCulture),
-                M0 = double.Parse(broadCastDataAsList[13], NumberStyles.Float, CultureInfo.InvariantCulture),
+                M0_Angle = double.Parse(broadCastDataAsList[13], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 2
-                C_uc = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
-                e_Ecentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_us = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
-                sqrtA = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
+                LatitudeCorrectionCosinusComponent = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OrbitEcentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
+                LatitudeCorrectionSinusComponent = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SrqtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 3
-                t_oe = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_ic = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
-                OmegaA0 = double.Parse(broadCastDataAsList[20], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_is = double.Parse(broadCastDataAsList[21], NumberStyles.Float, CultureInfo.InvariantCulture),
+                TimeOfEphemeris = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
+                nclinationCorrectionCosinusComponent = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OmegaAngle0 = double.Parse(broadCastDataAsList[20], NumberStyles.Float, CultureInfo.InvariantCulture),
+                AngularVelocity = double.Parse(broadCastDataAsList[21], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 4     
-                i0 = double.Parse(broadCastDataAsList[22], NumberStyles.Float, CultureInfo.InvariantCulture),
-                C_rc = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
-                omega = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture),
-                OMEGA_DOT = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InitialInclination = double.Parse(broadCastDataAsList[22], NumberStyles.Float, CultureInfo.InvariantCulture),
+                RandiusCorrectionCosinusComponent = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
+                OmegaAngle = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture),
+                AngularVelocityPerSec = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 5
-                IDOT = double.Parse(broadCastDataAsList[26], NumberStyles.Float, CultureInfo.InvariantCulture),
-                Datasources = double.Parse(broadCastDataAsList[27], NumberStyles.Float, CultureInfo.InvariantCulture),
-                GAL_WEEK = double.Parse(broadCastDataAsList[28], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InclinationRate = double.Parse(broadCastDataAsList[26], NumberStyles.Float, CultureInfo.InvariantCulture),
+                DataSources = double.Parse(broadCastDataAsList[27], NumberStyles.Float, CultureInfo.InvariantCulture),
+                GalileoWeek = double.Parse(broadCastDataAsList[28], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 6      
                 //SISA_Signal = double.Parse(broadCastDataAsList[29], NumberStyles.Float, CultureInfo.InvariantCulture),
-                SV_health = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SpaceVehicleHealth = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
                 BGD_a = double.Parse(broadCastDataAsList[31], NumberStyles.Float, CultureInfo.InvariantCulture),
                 BGD_b = double.Parse(broadCastDataAsList[32], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 7
-                t_tm = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture)
+                TransmissionTime = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
 
