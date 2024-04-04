@@ -8,8 +8,19 @@ namespace GnssLibCALC
         private const double b = 6356752.3142;        // semi-minor axis in meters
         private const double GM = 3.986005e14;        //WGS-84 value for the product of gravitational constant G and the mass of the Earth M
         private const double OMEGA_e = 7.292115e-5;   //WGS-84 value of the Earth’s rotation rate
-        
 
+
+        public static string DoubleToDegreesMinutesSeconds(double coordinate, bool isLatitude)
+        {
+            int degrees = (int)coordinate;
+            double remaining = Math.Abs(coordinate - degrees) * 60;
+            int minutes = (int)remaining;
+            double seconds = (remaining - minutes) * 60;
+
+            char direction = isLatitude ? (coordinate >= 0 ? 'N' : 'S') : (coordinate >= 0 ? 'E' : 'W');
+
+            return $"{direction} {degrees:D3}º {minutes:D2}' {seconds:00.00}\"".Replace(',', '.');
+        }
 
         public static double[] GeodeticToECEF(double latitude, double longitude, double altitude)
         {

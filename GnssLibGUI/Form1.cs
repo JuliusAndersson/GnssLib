@@ -156,9 +156,9 @@ namespace GnssLibGUI
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            //Terminal.Text += sc.GetValues() + Environment.NewLine;
-            //Terminal.SelectionStart = Terminal.Text.Length;
-            //Terminal.ScrollToCaret();
+            Terminal.Text += sc.GetValues() + Environment.NewLine;
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
 
             if (sc.GetApproxPos() > 0)
             {

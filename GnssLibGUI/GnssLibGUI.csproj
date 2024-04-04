@@ -33,6 +33,9 @@
     <None Update="Resources\Broadcast\BRD400DLR_S_20240050000_01D_MN.rnx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\ElevationMaps\62_3_2023.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

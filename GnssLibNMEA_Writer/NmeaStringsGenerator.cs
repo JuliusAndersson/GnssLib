@@ -17,7 +17,7 @@ namespace GnssLibNMEA_Writer
 
 
             sc.NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP,
-                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude);
+                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
             String latD = "N";
             String longD = "E";
             if(latitude < 0)
@@ -28,7 +28,7 @@ namespace GnssLibNMEA_Writer
             {
                 longD = "W";
             }
-
+            
             String latString = latitude.ToString(CultureInfo.InvariantCulture);
             if(latitude > 0 && latitude < 10)
             {
@@ -61,7 +61,7 @@ namespace GnssLibNMEA_Writer
 
 
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, 10, -15, 0, ""));
+            NMEAString.Add(ConstructGPGGAString(utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, elevation, -15, 0, ""));
             NMEAString.Add(ConstructGPGSAString(activeSatellites, PDOP, HDOP, VDOP));
 
             foreach (string message in ConstructGPGSVString(satList))

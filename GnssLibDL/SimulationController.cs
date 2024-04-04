@@ -4,6 +4,8 @@ using GnssLibCALC.Models.BroadCastDataModels;
 using System.IO.Ports;
 using GnssLibCALC;
 using System;
+using GeoTiffElevationReader;
+using MightyLittleGeodesy.Positions;
 
 
 namespace GnssLibDL
@@ -39,6 +41,8 @@ namespace GnssLibDL
         private int boxHour;
         private bool newQuart = false;
         private int boxMin;
+        private double elevation;
+        private string geoFilePath;
 
         private List<string> visibleSatellitesPRN;
         private List<double[]> satellitePositions;
@@ -78,7 +82,16 @@ namespace GnssLibDL
             string filePath = $"Resources/Broadcast/{fileName}"; 
             BroadCastDataReader bcdr = new BroadCastDataReader();
             GNSS_Data = bcdr.ReadBroadcastData(filePath);
-            
+
+        
+
+
+
+            geoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ElevationMaps/62_3_2023.tif");
+
+            elevation = initElevation(latPos, longPos);
+
+
 
         }
 
@@ -96,8 +109,8 @@ namespace GnssLibDL
             visibleSatellitesPRN = new List<string>();
             satellitePositions = new List<double[]>();
             satList = new List<Satellite>();
-            receiverPos = CoordinatesCalculator.GeodeticToECEF(latPos, longPos, 0);
-
+            receiverPos = CoordinatesCalculator.GeodeticToECEF(latPos, longPos, elevation);
+            
             //Check if GPS, Galileo, Glonass is to be Used
             if (useGPS)
             {
@@ -214,6 +227,8 @@ namespace GnssLibDL
         {
             updateLat = latPos;
             updateLong = longPos;
+
+            elevation = initElevation(latPos, longPos);
         }
 
         public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamStr)
@@ -224,14 +239,14 @@ namespace GnssLibDL
             updateJamStr = jamStr;
         }
 
-        public string GetValues()
+        public double GetValues()
         {
             
-            return jamStr.ToString();
+            return elevation;
         }
 
         public void NmeaValues(out List<string> activeSatellites, out double PDOP, out double HDOP, out double VDOP, 
-                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude)
+                                out List<Satellite> satList, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
         {
             activeSatellites = visibleSatellitesPRN;
             PDOP = this.PDOP;
@@ -241,11 +256,31 @@ namespace GnssLibDL
             utcTime = dt;
             latitude = latPos;
             longitude = longPos;
+            elevation = this.elevation;
         }
 
         public double GetApproxPos()
         {
             return PDOP * 3;
+        }
+
+
+        private double initElevation(double latitude, double longitude)
+        {
+            WGS84Position wgsPos = new WGS84Position();
+            wgsPos.SetLatitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(latitude, true), WGS84Position.WGS84Format.DegreesMinutesSeconds);
+            wgsPos.SetLongitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(longitude, false), WGS84Position.WGS84Format.DegreesMinutesSeconds);
+            SWEREF99Position rtPos = new SWEREF99Position(wgsPos, SWEREF99Position.SWEREFProjection.sweref_99_tm);
+            double elevation = 0;
+            if (rtPos.Latitude > 6200000 &&  rtPos.Latitude < 6300000 && rtPos.Longitude <400000 && rtPos.Longitude > 300000)
+            {
+                if (File.Exists(geoFilePath))
+                {
+                    GeoTiff elevationtiff = new GeoTiff(geoFilePath);
+                    elevation = elevationtiff.GetElevationAtLatLon(rtPos.Latitude, rtPos.Longitude);
+                }
+            }
+            return elevation;
         }
 
 

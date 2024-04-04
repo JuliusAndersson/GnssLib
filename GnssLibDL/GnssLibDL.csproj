@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GeoTiffElevationReader" Version="1.0.1" />
+    <PackageReference Include="MightyLittleGeodesy" Version="1.0.2" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
 	<ProjectReference Include="..\GnssLibCALC\GnssLibCALC.csproj" />
   </ItemGroup>
