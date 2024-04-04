@@ -8,6 +8,11 @@ namespace GnssLibCALC
         /// <summary>
         /// Calculates VDOP, HDOP, PDOP based on sateliites in satellitePositions and receivers location of XYZ. 
         /// </summary>
+        /// <param name="receiverXYZ">Reciver's position in (X, Y, Z).</param>
+        /// <param name="satellitePositions">A list of visible satelliteposition coordinates in (X, Y, Z).</param>
+        /// <param name="PDOP">[out] Position Dilution of precision.</param>
+        /// <param name="HDOP">[out] Horizontal Dilution of precision.</param>
+        /// <param name="VDOP">[out] Vertical Dilution of precision.</param>
         public static void CalculateDOP(double[] receiverXYZ, List<double[]> satellitePositions,
             out double PDOP, out double HDOP, out double VDOP)
         {
@@ -46,6 +51,8 @@ namespace GnssLibCALC
             double dz = pos2[2] - pos1[2];
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
+
+
         /// <summary>
         /// calculates the unitvector between the recivers position and the satellites position.
         /// </summary>
