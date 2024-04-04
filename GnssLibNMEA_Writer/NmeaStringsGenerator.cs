@@ -59,20 +59,30 @@ namespace GnssLibNMEA_Writer
 
             List<string> NMEAString = new List<string>();
             NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count+satListGL.Count, HDOP, elevation, -15, 0, ""));
-            NMEAString.Add(ConstructGPGSAString("GP", activeSatellites, PDOP, HDOP, VDOP));
-
-            foreach (string message in ConstructGPGSVString("GP", satList))
+            if (satList.Count != 0)
             {
-                NMEAString.Add(message);
+                NMEAString.Add(ConstructGPGSAString("GP", activeSatellites, PDOP, HDOP, VDOP));
+
+                foreach (string message in ConstructGPGSVString("GP", satList))
+                {
+                    NMEAString.Add(message);
+                }
             }
 
+
             //NMEAString.Add(ConstructGPGGAString("GL", utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, elevation, -15, 0, ""));
-            NMEAString.Add(ConstructGPGSAString("GL", activeSatellitesGL, PDOP, HDOP, VDOP));
+
+            if (satListGL.Count != 0)
+            {
+                NMEAString.Add(ConstructGPGSAString("GL", activeSatellitesGL, PDOP, HDOP, VDOP));
 
             foreach (string message in ConstructGPGSVString("GL", satListGL))
             {
                 NMEAString.Add(message);
             }
+
+            }
+            
             foreach (string str in NMEAString)
             {
                 serialPort.WriteLine(str);
@@ -112,7 +122,7 @@ namespace GnssLibNMEA_Writer
 
             string prnNumbers = string.Join(",", activeSatellites.Select(prn => prn.ToString().Substring(1)));
             string gsaMessage = $"${satType}GSA,A,3,{prnNumbers},";
-            for (int i = 0; i < numberCommas; i++)
+            for (int i = 0; i < numberCommas-1; i++)
             {
                 gsaMessage += ",";
             }
