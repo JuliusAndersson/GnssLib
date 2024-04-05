@@ -89,7 +89,7 @@
             Terminal.Name = "Terminal";
             Terminal.ReadOnly = true;
             Terminal.ScrollBars = ScrollBars.Both;
-            Terminal.Size = new Size(692, 145);
+            Terminal.Size = new Size(692, 177);
             Terminal.TabIndex = 0;
             Terminal.TabStop = false;
             // 
@@ -283,6 +283,8 @@
             // setGalileo
             // 
             setGalileo.AutoSize = true;
+            setGalileo.Checked = true;
+            setGalileo.CheckState = CheckState.Checked;
             setGalileo.Cursor = Cursors.Hand;
             setGalileo.Location = new Point(149, 19);
             setGalileo.Margin = new Padding(3, 2, 3, 2);

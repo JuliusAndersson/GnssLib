@@ -11,7 +11,7 @@ namespace GnssLibCALC.Models.Configuration
         public bool IsUsingGPS { get; set; }
         public bool IsUsingGalileo { get; set; }
         public bool IsUsingGlonass { get; set; }
-        public DateTime ReceiverDT { get; set; }
+        public DateTime ReceiverStartDT { get; set; }
         public double ReceiverLatitude { get; set; }
         public double ReceiverLongitude { get; set; }
         public double ReceiverElevetion { get; set; }

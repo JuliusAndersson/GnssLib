@@ -48,6 +48,26 @@ namespace GnssLibCALC.Models.BroadCastDataModels
 
         //orbit7
         public double TransmissionTime { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"SatId: {SatId}\nDateTime: {DateTime}\nClockBias: {ClockBias}\nClockDrift: {ClockDrift}\nClockDriftRate: {ClockDriftRate}\n\n" +
+                   $"// Orbit1\nIssueOfData: {IssueOfData}\nRadiusCorrectionSinusComponent: {RadiusCorrectionSinusComponent}\nDelta_n: {Delta_n}\nM0_Angle: {M0_Angle}\n\n" +
+                   $"// Orbit2\nLatitudeCorrectionCosinusComponent: {LatitudeCorrectionCosinusComponent}\nOrbitEcentricity: {OrbitEcentricity}\n" +
+                   $"LatitudeCorrectionSinusComponent: {LatitudeCorrectionSinusComponent}\nSqtOfMajorAxis: {SrqtOfMajorAxis}\n\n" +
+                   $"// Orbit3\nTimeOfEphemeris: {TimeOfEphemeris}\nInclinationCorrectionCosinusComponent: {nclinationCorrectionCosinusComponent}\n" +
+                   $"OmegaAngle0: {OmegaAngle0}\nAngularVelocity: {AngularVelocity}\n\n" +
+                   $"// Orbit4\nInitialInclination: {InitialInclination}\nRadiusCorrectionCosinusComponent: {RandiusCorrectionCosinusComponent}\n" +
+                   $"OmegaAngle: {OmegaAngle}\nAngularVelocityPerSec: {AngularVelocityPerSec}\n\n" +
+                   $"// Orbit5\nInclinationRate: {InclinationRate}\nDataSources: {DataSources}\nGalileoWeek: {GalileoWeek}\n\n" +
+                   $"// Orbit6\nSignalInSpaceAccuarcy: {SignalInSpaceAccuarcy}\nSpaceVehicleHealth: {SpaceVehicleHealth}\nBGD_a: {BGD_a}\nBGD_b: {BGD_b} \n t: {TransmissionTime}";
+        }
+
+
+
+
     }
+
 }
 

@@ -158,6 +158,7 @@ namespace GnssLibDL
                 {
                     satList = gloSatList
                 };
+
                 Satellites sats = new Satellites
                 {
                     Galileo = GroupAndConstructGalileoObject(broadcastDataListGAL), //Test to make it "prettier/easier to read"
@@ -246,13 +247,15 @@ namespace GnssLibDL
                 InclinationRate = double.Parse(broadCastDataAsList[26], NumberStyles.Float, CultureInfo.InvariantCulture),
                 DataSources = double.Parse(broadCastDataAsList[27], NumberStyles.Float, CultureInfo.InvariantCulture),
                 GalileoWeek = double.Parse(broadCastDataAsList[28], NumberStyles.Float, CultureInfo.InvariantCulture),
+                
                 //Orbit 6      
-                //SISA_Signal = double.Parse(broadCastDataAsList[29], NumberStyles.Float, CultureInfo.InvariantCulture),
-                SpaceVehicleHealth = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
-                BGD_a = double.Parse(broadCastDataAsList[31], NumberStyles.Float, CultureInfo.InvariantCulture),
-                BGD_b = double.Parse(broadCastDataAsList[32], NumberStyles.Float, CultureInfo.InvariantCulture),
+
+                //SignalInSpaceAccuarcy = double.Parse(broadCastDataAsList[30], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SpaceVehicleHealth = double.Parse(broadCastDataAsList[31], NumberStyles.Float, CultureInfo.InvariantCulture),
+                BGD_a = double.Parse(broadCastDataAsList[32], NumberStyles.Float, CultureInfo.InvariantCulture),
+                BGD_b = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 7
-                TransmissionTime = double.Parse(broadCastDataAsList[33], NumberStyles.Float, CultureInfo.InvariantCulture)
+                TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
 

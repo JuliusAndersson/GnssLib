@@ -122,7 +122,7 @@ namespace GnssLibGUI
                             IsUsingGPS = setGps.Checked,
                             IsUsingGalileo = setGalileo.Checked,
                             IsUsingGlonass = setGlonass.Checked,
-                            ReceiverDT = dt,
+                            ReceiverStartDT = dt,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
@@ -183,6 +183,17 @@ namespace GnssLibGUI
             Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
+
+            Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
+
+            //foreach (var val in _sc.DebugToTerminalGUIGetValuesBool())
+            //{
+            //    Terminal.Text += val + Environment.NewLine;
+            //    Terminal.SelectionStart = Terminal.Text.Length;
+            //    Terminal.ScrollToCaret();
+            //}
 
             if (_sc.GetApproxPos() > 0)
             {

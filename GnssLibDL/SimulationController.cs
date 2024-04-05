@@ -7,22 +7,28 @@ using System;
 using GeoTiffElevationReader;
 using MightyLittleGeodesy.Positions;
 using GnssLibCALC.Models.Configuration;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace GnssLibDL
 {
     public class SimulationController
     {
+
+        private List<DateTime> debugDT = new List<DateTime>();
+        private double debugAzi = 0;
+        private string debugBrod;
+        private double[] debugSatPos;
+
+        private readonly double _speedForSimulation = 600;
         private static readonly double _MIN_ELEVATION = 0;
         private static readonly double _MAX_ELEVATION = 90;
 
         private double _continousSecGPS = 0;
         private double _continousSecGAL = 0;
         
-
-        private bool _isNewHour = false;
-        private int _boxHour;
-        private bool _isNewQuart = false;
+        private int _boxHourGPS;
+        private int _boxHourGAL;
         private int _boxMin;
 
         private Satellites _GNSS_Data;
@@ -53,8 +59,17 @@ namespace GnssLibDL
             this._rConfig = rConfig;
             this._jConfig = jConfig;
 
-            _boxHour = rConfig.ReceiverDT.Hour - (rConfig.ReceiverDT.Hour % 2);
-            _boxMin = rConfig.ReceiverDT.Minute - (rConfig.ReceiverDT.Minute % 15);
+            _boxHourGPS = rConfig.ReceiverStartDT.Hour - (rConfig.ReceiverStartDT.Hour % 2);
+            if(rConfig.ReceiverStartDT.Hour % 2 == 1)
+            {
+                _continousSecGPS = 3600;
+            }
+            _boxMin = rConfig.ReceiverStartDT.Minute - (rConfig.ReceiverStartDT.Minute % 10);
+            if(rConfig.ReceiverStartDT.Minute % 10 != 0)
+            {
+                _continousSecGAL = (rConfig.ReceiverStartDT.Minute % 10) * 60;
+            }
+
             //Read File and put in a Satellites variable
             string filePath = $"Resources/Broadcast/{fileName}"; 
             BroadCastDataReader bcdr = new BroadCastDataReader();
@@ -67,12 +82,14 @@ namespace GnssLibDL
 
             //Reset Lists for new values at the new time
             _visibleSatellitesPRN_GPS = new List<string>();
-            _satellitePositions = new List<double[]>();
             _satListGPS = new List<SatelliteElevationAndAzimuthInfo>();
-            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverElevetion);
-            
             _visibleSatellitesPRN_GL = new List<string>();
             _satListGL = new List<SatelliteElevationAndAzimuthInfo>();
+
+            _satellitePositions = new List<double[]>();
+            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverElevetion);
+            
+            
 
             //Check if GPS, Galileo, Glonass is to be Used
             if (_rConfig.IsUsingGPS)
@@ -90,35 +107,34 @@ namespace GnssLibDL
             this._PDOP = PDOP;
             this._HDOP = HDOP;
             this._VDOP = VDOP;
-            _continousSecGPS += 1;
-            _continousSecGAL += 1;
-            _continousSecFromStart += 1;
+            _continousSecGPS += _speedForSimulation;
+            _continousSecGAL += _speedForSimulation;
+            _continousSecFromStart += _speedForSimulation;
         }
 
         private void MakeGps()
         {
             foreach (var gps in _GNSS_Data.Gps.satList)
             {
+
+                //Check if it's another 2h mark so the next messege Block should be used
+                if (_rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Hour % 2 == 0 && _rConfig.ReceiverStartDT.AddSeconds(_continousSecGPS).Minute == 0 && _rConfig.ReceiverStartDT.AddSeconds(_continousSecGPS).Second == 0)
+                {
+                    _boxHourGPS = _rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Hour;
+                    _continousSecGPS = 0;
+                }
+
                 foreach (var broadcast in gps.Data)
                 {
 
-                    //Check if it's another 2h mark so the next messege Block should be used
-                    if (_rConfig.ReceiverDT.Hour % 2 == 0 && _isNewHour)
-                    {
-                        _isNewHour = false;
-                        _boxHour = _rConfig.ReceiverDT.Hour;
-                        _continousSecGPS = 0;
-                    }
-                    else if (_rConfig.ReceiverDT.Hour % 2 == 1 && !_isNewHour)
-                    {
-                        _isNewHour = true;
-                    }
+                    
 
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
-                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverDT.Year, _rConfig.ReceiverDT.Month, _rConfig.ReceiverDT.Day, _boxHour, 00, 00))
+                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverStartDT.Year, _rConfig.ReceiverStartDT.Month, _rConfig.ReceiverStartDT.Day, _boxHourGPS, 00, 00))
                     {
                         //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGPS);
+
                         VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
                         if (isVisible)
                         {
@@ -144,27 +160,32 @@ namespace GnssLibDL
         {
             foreach (var galileo in _GNSS_Data.Galileo.ListOfSatellites)
             {
+                //Check if it's another 15min mark so the next messege Block should be used
+                if (_rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Minute % 10 == 0 && _rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Second == 0)
+                {
+                    _boxHourGAL = _rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Hour;
+                    _boxMin = _rConfig.ReceiverStartDT.AddSeconds(_continousSecFromStart).Minute;
+                    _continousSecGAL = 0;
+                }
+
                 foreach (var broadcast in galileo.Data)
                 {
 
-                    //Check if it's another 15min mark so the next messege Block should be used
-                    if (_rConfig.ReceiverDT.Minute % 15 == 0 && _isNewQuart)
-                    {
-                        _isNewQuart = false;
-                        _boxHour = _rConfig.ReceiverDT.Hour;
-                        _boxMin = _rConfig.ReceiverDT.Minute;
-                        _continousSecGAL = 0;
-                    }
-                    else if (_rConfig.ReceiverDT    .Hour % 15 == 14 && !_isNewQuart)
-                    {
-                        _isNewQuart = true;
-                    }
-
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
-                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverDT.Year, _rConfig.ReceiverDT.Month, _rConfig.ReceiverDT.Day, _boxHour, _boxMin, 00))
+                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverStartDT.Year, _rConfig.ReceiverStartDT.Month, _rConfig.ReceiverStartDT.Day, _boxHourGAL, _boxMin, 00))
                     {
+
+                        if (broadcast.SatId == "E25")
+                        {
+                            debugBrod = broadcast.ToString();
+                        }
+
+
                         //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGAL);
+
+                        
+
                         VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPos, out bool isVisible, 
                             out double elevation, out double azimuth);
                         if (isVisible)
@@ -173,6 +194,7 @@ namespace GnssLibDL
                             if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, 
                                 CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
+                               
                                 _satellitePositions.Add(satPos);
                                 _visibleSatellitesPRN_GL.Add(broadcast.SatId);
                                 _satListGL.Add(new SatelliteElevationAndAzimuthInfo()
@@ -204,11 +226,20 @@ namespace GnssLibDL
             this._jConfig.JammerRadius = jamRad;
         }
 
-        public double DebugToTerminalGUIGetValues()
+        public DateTime DebugToTerminalGUIGetValues()
         {
-            return _rConfig.ReceiverElevetion;
+            return new DateTime(_rConfig.ReceiverStartDT.Year, _rConfig.ReceiverStartDT.Month, _rConfig.ReceiverStartDT.Day, _boxHourGPS, _boxMin, 00);
         }
 
+        public string DebugToTerminalGUIGetValuesDouble()
+        {
+            return debugBrod;
+        }
+
+        public List<DateTime> DebugToTerminalGUIGetValuesBool()
+        {
+            return debugDT;
+        }
         public double GetApproxPos()
         {
             return _PDOP * _rConfig.ReceiverGpsError;

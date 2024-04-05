@@ -1,6 +1,6 @@
 namespace GnssLibGUI
 {
-    internal static class Program
+    internal static class MainProgram
     {
         /// <summary>
         ///  The main entry point for the application.

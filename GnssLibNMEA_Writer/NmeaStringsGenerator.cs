@@ -23,7 +23,7 @@ namespace GnssLibNMEA_Writer
             double VDOP = sc._VDOP;
             List<SatelliteElevationAndAzimuthInfo> satListGPS = sc._satListGPS;
             List<SatelliteElevationAndAzimuthInfo> satListGL = sc._satListGL;
-            DateTime utcTime = sc._rConfig.ReceiverDT.AddSeconds(sc._continousSecFromStart); ;
+            DateTime utcTime = sc._rConfig.ReceiverStartDT.AddSeconds(sc._continousSecFromStart); ;
             double latitude = sc._rConfig.ReceiverLatitude;
             double longitude = sc._rConfig.ReceiverLongitude;
             double elevation = sc._rConfig.ReceiverElevetion;
