@@ -20,17 +20,17 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double LatitudeCorrectionCosinusComponent { get; set; }
         public double OrbitEcentricity { get; set; }
         public double LatitudeCorrectionSinusComponent { get; set; }
-        public double SrqtOfMajorAxis { get; set; }
+        public double SqtOfMajorAxis { get; set; }
 
         //Orbit3
         public double TimeOfEphemeris { get; set; } //toe?
-        public double nclinationCorrectionCosinusComponent { get; set; }
+        public double InclinationCorrectionCosinusComponent { get; set; }
         public double OmegaAngle0 { get; set; } //omega
         public double AngularVelocity { get; set; }
 
         //Orbit4
         public double InitialInclination { get; set; }
-        public double RandiusCorrectionCosinusComponent { get; set; }
+        public double RadiusCorrectionCosinusComponent { get; set; }
         public double OmegaAngle { get; set; }
         public double AngularVelocityPerSec { get; set; }
 
@@ -48,6 +48,21 @@ namespace GnssLibCALC.Models.BroadCastDataModels
 
         //orbit7
         public double TransmissionTime { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"SatId: {SatId}\nDateTime: {DateTime}\nClockBias: {ClockBias}\nClockDrift: {ClockDrift}\nClockDriftRate: {ClockDriftRate}\n\n" +
+                   $"// Orbit1\nIssueOfData: {IssueOfData}\nRadiusCorrectionSinusComponent: {RadiusCorrectionSinusComponent}\nDelta_n: {Delta_n}\nM0_Angle: {M0_Angle}\n\n" +
+                   $"// Orbit2\nLatitudeCorrectionCosinusComponent: {LatitudeCorrectionCosinusComponent}\nOrbitEcentricity: {OrbitEcentricity}\n" +
+                   $"LatitudeCorrectionSinusComponent: {LatitudeCorrectionSinusComponent}\nSqtOfMajorAxis: {SqtOfMajorAxis}\n\n" +
+                   $"// Orbit3\nTimeOfEphemeris: {TimeOfEphemeris}\nInclinationCorrectionCosinusComponent: {InclinationCorrectionCosinusComponent}\n" +
+                   $"OmegaAngle0: {OmegaAngle0}\nAngularVelocity: {AngularVelocity}\n\n" +
+                   $"// Orbit4\nInitialInclination: {InitialInclination}\nRadiusCorrectionCosinusComponent: {RadiusCorrectionCosinusComponent}\n" +
+                   $"OmegaAngle: {OmegaAngle}\nAngularVelocityPerSec: {AngularVelocityPerSec}\n\n" +
+                   $"// Orbit5\nInclinationRate: {InclinationRate}\nDataSources: {DataSources}\nGalileoWeek: {GalileoWeek}\n\n" +
+                   $"// Orbit6\nSignalInSpaceAccuarcy: {SignalInSpaceAccuarcy}\nSpaceVehicleHealth: {SpaceVehicleHealth}\nBGD_a: {BGD_a}\nBGD_b: {BGD_b}";
+        }
     }
 }
 
