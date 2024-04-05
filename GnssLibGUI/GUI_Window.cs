@@ -180,13 +180,13 @@ namespace GnssLibGUI
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
-            Terminal.SelectionStart = Terminal.Text.Length;
-            Terminal.ScrollToCaret();
+            //Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
+            //Terminal.SelectionStart = Terminal.Text.Length;
+            //Terminal.ScrollToCaret();
 
-            Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
-            Terminal.SelectionStart = Terminal.Text.Length;
-            Terminal.ScrollToCaret();
+            //Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
+            //Terminal.SelectionStart = Terminal.Text.Length;
+            //Terminal.ScrollToCaret();
 
             //foreach (var val in _sc.DebugToTerminalGUIGetValuesBool())
             //{
