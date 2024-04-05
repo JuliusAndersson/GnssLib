@@ -69,8 +69,11 @@ namespace GnssLibNMEA_Writer
                 longString = (longitude * -1).ToString(CultureInfo.InvariantCulture);
             }
 
+           
+
+
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count+satListGL.Count, HDOP, elevation, -15, 0, ""));
+            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count+satListGL.Count, HDOP, Math.Round(elevation,3), -15, 0, ""));
             if (satListGPS.Count != 0)
             {
                 NMEAString.Add(ConstructGPGSAString("GP", activeSatellitesGPS, PDOP, HDOP, VDOP));
@@ -108,7 +111,7 @@ namespace GnssLibNMEA_Writer
                                       double geoidSeparation, double ageOfDGPSData, string referenceStationID)
         {
             // Construct GGA message string
-            string ggaMessage = $"${satType}GGA,{utcTime},{latitude},{latitudeDirection},{longitude},{longitudeDirection}," +
+            string ggaMessage = $"${satType}GGA,{utcTime},{latitude}000,{latitudeDirection},{longitude}000,{longitudeDirection}," +
                                 $"{qualityIndicator:D1},{numberOfSatellites:D2},{HDOP.ToString(CultureInfo.InvariantCulture)}," +
                                 $"{orthometricHeight.ToString(CultureInfo.InvariantCulture)},M," +
                                 $"{geoidSeparation.ToString(CultureInfo.InvariantCulture)},M,{ageOfDGPSData},,{referenceStationID}";

@@ -5,7 +5,9 @@ namespace CalculationsTest
     [TestClass]
     public class CalculationsTest
     {
-
+        /// <summary>
+        /// Test to verify distance calculation.  
+        /// </summary>
         [TestMethod]
         public void CalculateDistanceTest()
         {
@@ -15,6 +17,10 @@ namespace CalculationsTest
             Assert.AreEqual(3, result);
         }
 
+
+        /// <summary>
+        /// Test to verify the convertion fron geodetic coordinates to EVEF. WGS84 reference elipsoid is used.  
+        /// </summary>
         [TestMethod]
         public void ConvertGeodeticToECEF()
         {
