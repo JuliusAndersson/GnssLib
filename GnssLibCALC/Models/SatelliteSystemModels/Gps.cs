@@ -8,7 +8,7 @@ namespace GnssLibCALC.Models.SatelliteSystemModels
 {
     public class Gps
     {
-        public List<GPS_Sat> satList { get; set; }
+        public List<GpsSatellite> satList { get; set; }
     }
 }
 

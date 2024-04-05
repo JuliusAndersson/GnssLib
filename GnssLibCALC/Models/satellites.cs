@@ -3,6 +3,7 @@ using GnssLibCALC.Models.SatelliteSystemModels;
 
 namespace GnssLibCALC.Models
 {
+
     public class Satellites
 	{
 

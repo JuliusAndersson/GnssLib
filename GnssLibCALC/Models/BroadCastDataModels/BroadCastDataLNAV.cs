@@ -3,7 +3,7 @@
 namespace GnssLibCALC.Models.BroadCastDataModels
 {
     /// <summary>
-    /// Object for all paramaters parsed from a Rinex v.4 File related to GPS in the LNAV format
+    /// Object for all paramaters in one broadcast message related to Gps. I.e. paramaters from Gps PNR 28 at 2024/01/01 at 12:00:00
     /// </summary>
     public class BroadCastDataLNAV 
     {
@@ -53,6 +53,21 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         //orbit7
         public double TransmissionTime { get; set; }
 
+
+        /// <summary>
+        /// ToString function for debugging. 
+        /// </summary>
+        public override string ToString()
+        {
+            return $"SatId: {SatId}\nDateTime: {DateTime}\n" +
+                   $"Orbit1: IssueOfDataEphemeris={IssueOfDataEphemeris}, RadiusCorrectionSinusComponent={RadiusCorrectionSinusComponent}, Delta_n0={Delta_n0}, M0_Angle={M0_Angle}\n" +
+                   $"Orbit2: LatitudeCorrectionCosinusComponent={LatitudeCorrectionCosinusComponent}, OrbitEcentricity={OrbitEcentricity}, LatitudeCorrectionSinusComponent={LatitudeCorrectionSinusComponent}, SqrtOfMajorAxis={SqrtOfMajorAxis}\n" +
+                   $"Orbit3: TimeOfEphemeris={TimeOfEphemeris}, InclinationCorrectionCosinusComponent={InclinationCorrectionCosinusComponent}, OmegaAngle0={OmegaAngle0}, AngularVelocity={AngularVelocity}\n" +
+                   $"Orbit4: InitialInclination={InitialInclination}, RadiusCorrectionCosinusComponent={RadiusCorrectionCosinusComponent}, OmegaAngle={OmegaAngle}, AngularVelocityPerSec={AngularVelocityPerSec}\n" +
+                   $"Orbit5: InclinationRate={InclinationRate}, CodesOnL2Channel={CodesOnL2Channel}, ContinousGpsWeek={ContinousGpsWeek}, L2PDataFlag={L2PDataFlag}\n" +
+                   $"Orbit6: SpaceVehicleAccuarcy={SpaceVehicleAccuarcy}, SpaceVehicleHealth={SpaceVehicleHealth}, TotalGroupDelay={TotalGroupDelay}, IssueOfDataClock={IssueOfDataClock}\n" +
+                   $"Orbit7: TransmissionTime={TransmissionTime}";
+        }
     }
 }
 

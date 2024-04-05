@@ -32,11 +32,11 @@ namespace GnssLibCALC
             Matrix<double> Q = (A.Transpose() * A).Inverse(); 
 
             //retrive values from matrix to calculate DOP-Values
-            double t = Q.At(0, 0) + Q.At(1, 1) + Q.At(2, 2);
-            double t2 = Q.At(1, 1) + Q.At(0, 0);
+            double diagonalSum3 = Q.At(0, 0) + Q.At(1, 1) + Q.At(2, 2);
+            double diagonalSum2 = Q.At(1, 1) + Q.At(0, 0);
             
-            HDOP = Math.Round(Math.Sqrt(t2), 1);
-            PDOP = Math.Round(Math.Sqrt(t), 1);
+            HDOP = Math.Round(Math.Sqrt(diagonalSum2), 1);
+            PDOP = Math.Round(Math.Sqrt(diagonalSum3), 1);
             VDOP = Math.Round(Math.Sqrt(Q.At(2, 2)), 1);
         }
 
@@ -44,11 +44,11 @@ namespace GnssLibCALC
         /// <summary>
         /// Calculates distance between two points in ECEF coordinates.
         /// </summary>
-        public static double CalculateDistance(double[] pos1, double[] pos2)
+        public static double CalculateDistance(double[] fromPosition, double[] toPosition)
         {
-            double dx = pos2[0] - pos1[0];
-            double dy = pos2[1] - pos1[1];
-            double dz = pos2[2] - pos1[2];
+            double dx = toPosition[0] - fromPosition[0];
+            double dy = toPosition[1] - fromPosition[1];
+            double dz = toPosition[2] - fromPosition[2];
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 

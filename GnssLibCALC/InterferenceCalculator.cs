@@ -6,11 +6,11 @@ namespace GnssLibCALC
         /// <summary>
         /// Calculates distance between two points in ECEF coordinates
         /// </summary>
-        private static double Distance(double[] p1, double[] p2)
+        private static double Distance(double[] fromPosition, double[] toPosition)
         {
-            double dx = p1[0] - p2[0];
-            double dy = p1[1] - p2[1];
-            double dz = p1[2] - p2[2];
+            double dx = fromPosition[0] - toPosition[0];
+            double dy = fromPosition[1] - toPosition[1];
+            double dz = fromPosition[2] - toPosition[2];
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 
