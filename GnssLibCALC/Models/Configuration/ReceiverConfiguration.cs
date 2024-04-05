@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GnssLibCALC.Models.Configuration
 {
-    internal class ReceiverConfiguration
+    public class ReceiverConfiguration
     {
         public bool IsUsingGPS { get; set; }
         public bool IsUsingGalileo { get; set; }

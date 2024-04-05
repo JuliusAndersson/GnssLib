@@ -6,6 +6,7 @@ using GnssLibCALC;
 using System;
 using GeoTiffElevationReader;
 using MightyLittleGeodesy.Positions;
+using GnssLibCALC.Models.Configuration;
 
 
 namespace GnssLibDL
@@ -29,22 +30,8 @@ namespace GnssLibDL
 
 
         //Input
-        private bool _isUsingGPS;
-        private bool _isUsingGalileo;
-        private bool _isUsingGlonass;
-        
-        private double _latPos = 0;
-        private double _longPos;
-
-        private bool _isJamOn;
-        private double _jamStr;
-        private double _jamLat;
-        private double _jamLong;
-
-
-        //Input & Output
-        private DateTime _dt;
-        private double _elevation;
+        private ReceiverConfiguration _rConfig;
+        private JammerConfiguration _jConfig;
 
 
         //Output
@@ -59,32 +46,16 @@ namespace GnssLibDL
         private double _VDOP;
         private double[] _receiverPos;
 
-        public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, String fileName,  
-            double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong, double elevation) {
-            _isUsingGPS = gps;
-            _isUsingGalileo = galileo;
-            _isUsingGlonass = glonass;
+        public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName) {
+            this._rConfig = rConfig;
+            this._jConfig = jConfig;
 
-            _dt = dateTime;
-            this._latPos = latPos;
-            this._longPos = longPos;
-
-            _isJamOn = jammer;
-            _jamStr = jamRad;
-            this._jamLat = jamLat;
-            this._jamLong = jamLong;
-
-            _boxHour = dateTime.Hour - (dateTime.Hour % 2);
-
+            _boxHour = rConfig.ReceiverDT.Hour - (rConfig.ReceiverDT.Hour % 2);
+            _boxMin = rConfig.ReceiverDT.Minute - (rConfig.ReceiverDT.Minute % 15);
             //Read File and put in a Satellites variable
             string filePath = $"Resources/Broadcast/{fileName}"; 
             BroadCastDataReader bcdr = new BroadCastDataReader();
             _GNSS_Data = bcdr.ReadBroadcastData(filePath);
-
-            //Check if elevetion map exists
-
-            _elevation = elevation;
-
 
         }
 
@@ -95,17 +66,17 @@ namespace GnssLibDL
             _visibleSatellitesPRN = new List<string>();
             _satellitePositions = new List<double[]>();
             _satList = new List<SatelliteElevationAndAzimuthInfo>();
-            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_latPos, _longPos, _elevation);
+            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverElevetion);
             
             _visibleSatellitesPRNGL = new List<string>();
             _satListGL = new List<SatelliteElevationAndAzimuthInfo>();
 
             //Check if GPS, Galileo, Glonass is to be Used
-            if (_isUsingGPS)
+            if (_rConfig.IsUsingGPS)
             {
                 MakeGps();
             }
-            if (_isUsingGalileo)
+            if (_rConfig.IsUsingGalileo)
             {
                 MakeGalileo();
             }
@@ -129,19 +100,19 @@ namespace GnssLibDL
                 {
 
                     //Check if it's another 2h mark so the next messege Block should be used
-                    if (_dt.Hour % 2 == 0 && _isNewHour)
+                    if (_rConfig.ReceiverDT.Hour % 2 == 0 && _isNewHour)
                     {
                         _isNewHour = false;
-                        _boxHour = _dt.Hour;
+                        _boxHour = _rConfig.ReceiverDT.Hour;
                         _continousSecGPS = 0;
                     }
-                    else if (_dt.Hour % 2 == 1 && !_isNewHour)
+                    else if (_rConfig.ReceiverDT.Hour % 2 == 1 && !_isNewHour)
                     {
                         _isNewHour = true;
                     }
 
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
-                    if (broadcast.DateTime == new DateTime(_dt.Year, _dt.Month, _dt.Day, _boxHour, 00, 00))
+                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverDT.Year, _rConfig.ReceiverDT.Month, _rConfig.ReceiverDT.Day, _boxHour, 00, 00))
                     {
                         //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGPS);
@@ -149,7 +120,7 @@ namespace GnssLibDL
                         if (isVisible)
                         {
                             //Check if a Satellite is blocked by the jammer
-                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jamLat, _jamLong, 0), _jamStr)) || !_isJamOn)
+                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
                                 _satellitePositions.Add(satPos);
                                 _visibleSatellitesPRN.Add(broadcast.SatId);
@@ -174,20 +145,20 @@ namespace GnssLibDL
                 {
 
                     //Check if it's another 15min mark so the next messege Block should be used
-                    if (_dt.Minute % 15 == 0 && _isNewQuart)
+                    if (_rConfig.ReceiverDT.Minute % 15 == 0 && _isNewQuart)
                     {
                         _isNewQuart = false;
-                        _boxHour = _dt.Hour;
-                        _boxMin = _dt.Minute;
+                        _boxHour = _rConfig.ReceiverDT.Hour;
+                        _boxMin = _rConfig.ReceiverDT.Minute;
                         _continousSecGAL = 0;
                     }
-                    else if (_dt.Hour % 15 == 14 && !_isNewQuart)
+                    else if (_rConfig.ReceiverDT    .Hour % 15 == 14 && !_isNewQuart)
                     {
                         _isNewQuart = true;
                     }
 
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
-                    if (broadcast.DateTime == new DateTime(_dt.Year, _dt.Month, _dt.Day, _boxHour, _boxMin, 00))
+                    if (broadcast.DateTime == new DateTime(_rConfig.ReceiverDT.Year, _rConfig.ReceiverDT.Month, _rConfig.ReceiverDT.Day, _boxHour, _boxMin, 00))
                     {
                         //Check if a Satellite is visible
                         double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGAL);
@@ -197,7 +168,7 @@ namespace GnssLibDL
                         {
                             //Check if a Satellite is blocked by the jammer
                             if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, 
-                                CoordinatesCalculator.GeodeticToECEF(_jamLat, _jamLong, 0), _jamStr)) || !_isJamOn)
+                                CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
                                 _satellitePositions.Add(satPos);
                                 _visibleSatellitesPRNGL.Add(broadcast.SatId);
@@ -216,24 +187,24 @@ namespace GnssLibDL
 
         public void UpdatePos(double latPos, double longPos, double elevation)
         {
-            this._latPos = latPos;
-            this._longPos = longPos;
-            this._elevation = elevation;
+            this._rConfig.ReceiverLatitude = latPos;
+            this._rConfig.ReceiverLongitude = longPos;
+            this._rConfig.ReceiverElevetion = elevation;
             
         }
 
-        public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamStr)
+        public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad)
         {
-            this._isJamOn = jamOn;
-            this._jamLat = jamLat;
-            this._jamLong = jamLong;
-            this._jamStr = jamStr;
+            this._jConfig.IsJammerOn = jamOn;
+            this._jConfig.JammerLatitude = jamLat;
+            this._jConfig.JammerLongitude = jamLong;
+            this._jConfig.JammerRadius = jamRad;
         }
 
         public double GetValues()
         {
             
-            return _elevation;
+            return _rConfig.ReceiverElevetion;
         }
 
         public void NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP, 
@@ -246,10 +217,10 @@ namespace GnssLibDL
             VDOP = this._VDOP;
             satList = this._satList;
             satListGL = this._satListGL;
-            utcTime = _dt.AddSeconds(_continousSecFromStart);
-            latitude = _latPos;
-            longitude = _longPos;
-            elevation = this._elevation;
+            utcTime = _rConfig.ReceiverDT.AddSeconds(_continousSecFromStart);
+            latitude = _rConfig.ReceiverLatitude;
+            longitude = _rConfig.ReceiverLongitude;
+            elevation = this._rConfig.ReceiverElevetion;
         }
 
         public double GetApproxPos()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GnssLibCALC.Models.Configuration
 {
-    internal class JammerConfiguration
+    public class JammerConfiguration
     {
         public bool IsJammerOn { get; set; }
         public double JammerRadius { get; set; }

@@ -1,5 +1,7 @@
 using GeoTiffElevationReader;
 using GnssLibCALC;
+using GnssLibCALC.Models.BroadCastDataModels;
+using GnssLibCALC.Models.Configuration;
 using GnssLibDL;
 using GnssLibNMEA_Writer;
 using MightyLittleGeodesy.Positions;
@@ -114,14 +116,28 @@ namespace GnssLibGUI
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
                     {
-                        _sc = new SimulationController(setGps.Checked, setGalileo.Checked, setGlonass.Checked, dt, fileName,
-                            double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            setIntOn.Checked,
-                            double.Parse(setRadR.Value.ToString()),
-                            double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
-                            initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
+
+                        ReceiverConfiguration rConfig = new ReceiverConfiguration()
+                        {
+                            IsUsingGPS = setGps.Checked,
+                            IsUsingGalileo = setGalileo.Checked,
+                            IsUsingGlonass = setGlonass.Checked,
+                            ReceiverDT = dt,
+                            ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                            ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                            ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture))
+                        };
+
+                        JammerConfiguration jConfig = new JammerConfiguration()
+                        {
+                            IsJammerOn = setIntOn.Checked,
+                            JammerRadius = double.Parse(setRadR.Value.ToString()),
+                            JammerLatitude = double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                            JammerLongitude = double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                        };
+
+
+                            _sc = new SimulationController(rConfig, jConfig, fileName);
 
                         _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
