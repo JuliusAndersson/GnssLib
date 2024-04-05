@@ -50,19 +50,19 @@ namespace GnssLibDL
         
         public double _continousSecFromStart = 0;
 
-        public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName) {
-            this._rConfig = rConfig;
-            this._jConfig = jConfig;
+        public SimulationController( ReceiverConfiguration receiverConfig, JammerConfiguration jammerConfig, String fileName) {
+            this._rConfig = receiverConfig;
+            this._jConfig = jammerConfig;
 
-            _boxHourGPS = rConfig.ReceiverStartDT.Hour - (rConfig.ReceiverStartDT.Hour % 2);
-            if(rConfig.ReceiverStartDT.Hour % 2 == 1)
+            _boxHourGPS = receiverConfig.ReceiverStartDT.Hour - (receiverConfig.ReceiverStartDT.Hour % 2);
+            if(receiverConfig.ReceiverStartDT.Hour % 2 == 1)
             {
                 _continousSecGPS = 3600;
             }
-            _boxMin = rConfig.ReceiverStartDT.Minute - (rConfig.ReceiverStartDT.Minute % 10);
-            if(rConfig.ReceiverStartDT.Minute % 10 != 0)
+            _boxMin = receiverConfig.ReceiverStartDT.Minute - (receiverConfig.ReceiverStartDT.Minute % 10);
+            if(receiverConfig.ReceiverStartDT.Minute % 10 != 0)
             {
-                _continousSecGAL = (rConfig.ReceiverStartDT.Minute % 10) * 60;
+                _continousSecGAL = (receiverConfig.ReceiverStartDT.Minute % 10) * 60;
             }
 
             //Read File and put in a Satellites variable

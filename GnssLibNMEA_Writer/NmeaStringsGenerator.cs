@@ -33,8 +33,8 @@ namespace GnssLibNMEA_Writer
             double longitude = simulationController._rConfig.ReceiverLongitude;
             double elevation = simulationController._rConfig.ReceiverElevetion;
   
-            String latD = "N";
-            String longD = "E";
+            string latD = "N";
+            string longD = "E";
             if(latitude < 0)
             {
                 latD = "S";

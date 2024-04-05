@@ -15,14 +15,13 @@ namespace GnssLibGUI
     public partial class GUI_Window : Form
     {
         System.Windows.Forms.Timer _timerRunTime = new System.Windows.Forms.Timer();
-        private SimulationController? _sc;
-        private SimulationRunTime _srt;
+        private SimulationController? _simulationController;
+        private SimulationRunTime _simulationRunTIme;
         private bool _hasStopped = true;
         private SerialPort _serialPort;
-        private List<String> _fileList = new List<string>();
+        private List<string> _fileList = new List<string>();
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
-        private double _elevation;
         private string _geoFilePath;
         public GUI_Window()
         {
@@ -60,8 +59,8 @@ namespace GnssLibGUI
             _timerRunTime.Interval = 1000;
 
             //subscribe to event in RunTime
-            _srt = new SimulationRunTime();
-            _srt._tickDone += HandleTickEvent;
+            _simulationRunTIme = new SimulationRunTime();
+            _simulationRunTIme._tickDone += HandleTickEvent;
 
             Terminal.ForeColor = Color.Green;
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
@@ -116,7 +115,7 @@ namespace GnssLibGUI
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
                     {
 
-                        ReceiverConfiguration rConfig = new ReceiverConfiguration()
+                        ReceiverConfiguration receiverConfig = new ReceiverConfiguration()
                         {
                             IsUsingGPS = setGps.Checked,
                             IsUsingGalileo = setGalileo.Checked,
@@ -128,7 +127,7 @@ namespace GnssLibGUI
                             ReceiverGpsError = 3
                         };
 
-                        JammerConfiguration jConfig = new JammerConfiguration()
+                        JammerConfiguration jammerConfig = new JammerConfiguration()
                         {
                             IsJammerOn = setIntOn.Checked,
                             JammerRadius = double.Parse(setRadR.Value.ToString()),
@@ -137,7 +136,7 @@ namespace GnssLibGUI
                         };
 
 
-                            _sc = new SimulationController(rConfig, jConfig, fileName);
+                            _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName);
 
                         _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
@@ -173,7 +172,7 @@ namespace GnssLibGUI
         public void HandleRunTime(object sender, EventArgs e)
         {
             //When event happen in this file run SimulationRunTime once
-            _srt.RunSimulation(_sc);
+            _simulationRunTIme.RunSimulation(_simulationController);
         }
 
         public void HandleTickEvent(object sender, EventArgs e)
@@ -194,9 +193,9 @@ namespace GnssLibGUI
             //    Terminal.ScrollToCaret();
             //}
 
-            if (_sc.GetApproxPos() > 0)
+            if (_simulationController.GetApproxPos() > 0)
             {
-                labelPosAcc.Text = _sc.GetApproxPos().ToString("F1") + " m";
+                labelPosAcc.Text = _simulationController.GetApproxPos().ToString("F1") + " m";
             }
             else
             {
@@ -204,7 +203,7 @@ namespace GnssLibGUI
             }
             //When event happen at the end of RunTime write to NMEA if its on
             if (_isNmeaOn) {
-                NmeaStringsGenerator.NmeaGenerator(_serialPort, _sc);
+                NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
             }
         }
 
@@ -243,13 +242,13 @@ namespace GnssLibGUI
         private void updatePos_Click(object sender, EventArgs e)
         {
             //When you update the Position of Reciver check so Simulation is on and that values are correct
-            if (_sc != null)
+            if (_simulationController != null)
             {
                 double value;
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    _sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                    _simulationController.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                        initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
@@ -270,13 +269,13 @@ namespace GnssLibGUI
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
             //When you update the Position of Jammer check so Simulation is on and that values are correct
-            if (_sc != null)
+            if (_simulationController != null)
             {
                 double value;
                 if (double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    _sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
+                    _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
 
                     Terminal.ForeColor = Color.White;
