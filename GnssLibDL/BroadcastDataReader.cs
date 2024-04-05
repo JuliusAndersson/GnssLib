@@ -127,10 +127,10 @@ namespace GnssLibDL
                 }
 
                 var grouptedGPSData = broadcastDataListGps.GroupBy(data => data.SatId);
-                List<GPS_Sat> gpsSatList = new List<GPS_Sat>();
+                List<GpsSatellite> gpsSatList = new List<GpsSatellite>();
                 foreach (var group in grouptedGPSData)
                 {
-                    GPS_Sat gpsSat = new GPS_Sat
+                    GpsSatellite gpsSat = new GpsSatellite
                     {
                         id = group.Key,
                         Data = group.ToList()
@@ -144,10 +144,10 @@ namespace GnssLibDL
 
 
                 var grouptedGlonassData = broadcastDataListGLO.GroupBy(data => data.SatId);
-                List<Glonass_Sat> gloSatList = new List<Glonass_Sat>();
+                List<GlonassSatellite> gloSatList = new List<GlonassSatellite>();
                 foreach (var group in grouptedGlonassData)
                 {
-                    Glonass_Sat GloSat = new Glonass_Sat
+                    GlonassSatellite GloSat = new GlonassSatellite
                     {
                         id = group.Key,
                         Data = group.ToList()
@@ -232,7 +232,7 @@ namespace GnssLibDL
                 LatitudeCorrectionCosinusComponent = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
                 OrbitEcentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
                 LatitudeCorrectionSinusComponent = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
-                SqtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SqrtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 3
                 TimeOfEphemeris = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
                 InclinationCorrectionCosinusComponent = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),

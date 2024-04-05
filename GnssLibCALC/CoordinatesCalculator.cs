@@ -118,7 +118,7 @@ namespace GnssLibCALC
         /// </returns>
         public static double[] CalculatePosition(BroadCastDataINAV broadcastData, double seconds)
         {
-            double A = broadcastData.SqtOfMajorAxis * broadcastData.SqtOfMajorAxis;
+            double A = broadcastData.SqrtOfMajorAxis * broadcastData.SqrtOfMajorAxis;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
             double n = n_0 + broadcastData.Delta_n;
             double e = broadcastData.OrbitEcentricity;

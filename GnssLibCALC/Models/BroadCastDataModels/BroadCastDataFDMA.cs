@@ -2,6 +2,10 @@
 
 namespace GnssLibCALC.Models.BroadCastDataModels
 {
+
+    /// <summary>
+    /// For Glonass BroadcastMessage, NOT IN USE.
+    /// </summary>
     public class BroadCastDataFDMA
     {
 
