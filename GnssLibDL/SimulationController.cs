@@ -60,7 +60,7 @@ namespace GnssLibDL
         private double[] _receiverPos;
 
         public SimulationController(bool gps, bool galileo, bool glonass, DateTime dateTime, String fileName,  
-            double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong) {
+            double latPos, double longPos, bool jammer, double jamRad, double jamLat, double jamLong, double elevation) {
             _isUsingGPS = gps;
             _isUsingGalileo = galileo;
             _isUsingGlonass = glonass;
@@ -82,9 +82,8 @@ namespace GnssLibDL
             _GNSS_Data = bcdr.ReadBroadcastData(filePath);
 
             //Check if elevetion map exists
-            _geoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ElevationMaps/62_3_2023.tif");
-            _elevation = initElevation(latPos, longPos);
 
+            _elevation = elevation;
 
 
         }
@@ -215,12 +214,12 @@ namespace GnssLibDL
             }
         }
 
-        public void UpdatePos(double latPos, double longPos)
+        public void UpdatePos(double latPos, double longPos, double elevation)
         {
             this._latPos = latPos;
             this._longPos = longPos;
-
-            _elevation = initElevation(latPos, longPos);
+            this._elevation = elevation;
+            
         }
 
         public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamStr)
@@ -259,23 +258,7 @@ namespace GnssLibDL
         }
 
 
-        private double initElevation(double latitude, double longitude)
-        {
-            WGS84Position wgsPos = new WGS84Position();
-            wgsPos.SetLatitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(latitude, true), WGS84Position.WGS84Format.DegreesMinutesSeconds);
-            wgsPos.SetLongitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(longitude, false), WGS84Position.WGS84Format.DegreesMinutesSeconds);
-            SWEREF99Position rtPos = new SWEREF99Position(wgsPos, SWEREF99Position.SWEREFProjection.sweref_99_tm);
-            double elevation = 0;
-            if (rtPos.Latitude > 6200000 &&  rtPos.Latitude < 6300000 && rtPos.Longitude <400000 && rtPos.Longitude > 300000)
-            {
-                if (File.Exists(_geoFilePath))
-                {
-                    GeoTiff elevationtiff = new GeoTiff(_geoFilePath);
-                    elevation = elevationtiff.GetElevationAtLatLon(rtPos.Latitude, rtPos.Longitude);
-                }
-            }
-            return elevation;
-        }
+        
 
 
     }

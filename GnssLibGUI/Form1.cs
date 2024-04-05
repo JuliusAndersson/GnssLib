@@ -1,5 +1,8 @@
+using GeoTiffElevationReader;
+using GnssLibCALC;
 using GnssLibDL;
 using GnssLibNMEA_Writer;
+using MightyLittleGeodesy.Positions;
 using System.Globalization;
 using System.IO.Ports;
 
@@ -18,6 +21,8 @@ namespace GnssLibGUI
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
 
+        private double _elevation;
+        private string _geoFilePath;
         public GUI_Window()
         {
             InitializeComponent();
@@ -59,7 +64,9 @@ namespace GnssLibGUI
 
             Terminal.ForeColor = Color.Green;
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
-            
+
+            _geoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ElevationMaps/62_3_2023.tif");
+           
 
         }
 
@@ -113,7 +120,8 @@ namespace GnssLibGUI
                             setIntOn.Checked,
                             double.Parse(setRadR.Value.ToString()),
                             double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                            double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
+                            initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
 
                         _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
@@ -214,7 +222,8 @@ namespace GnssLibGUI
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                   && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
 
-                    _sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                    _sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
+                       initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
@@ -258,6 +267,23 @@ namespace GnssLibGUI
             }
              
 
+        }
+        private double initElevation(double latitude, double longitude)
+        {
+            WGS84Position wgsPos = new WGS84Position();
+            wgsPos.SetLatitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(latitude, true), WGS84Position.WGS84Format.DegreesMinutesSeconds);
+            wgsPos.SetLongitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(longitude, false), WGS84Position.WGS84Format.DegreesMinutesSeconds);
+            SWEREF99Position rtPos = new SWEREF99Position(wgsPos, SWEREF99Position.SWEREFProjection.sweref_99_tm);
+            double elevation = 0;
+            if (rtPos.Latitude > 6200000 && rtPos.Latitude < 6300000 && rtPos.Longitude < 400000 && rtPos.Longitude > 300000)
+            {
+                if (File.Exists(_geoFilePath))
+                {
+                    GeoTiff elevationtiff = new GeoTiff(_geoFilePath);
+                    elevation = elevationtiff.GetElevationAtLatLon(rtPos.Latitude, rtPos.Longitude);
+                }
+            }
+            return elevation;
         }
 
     }
