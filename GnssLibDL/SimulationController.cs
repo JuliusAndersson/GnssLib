@@ -15,11 +15,6 @@ namespace GnssLibDL
     public class SimulationController
     {
 
-        private List<DateTime> debugDT = new List<DateTime>();
-        private double debugAzi = 0;
-        private string debugBrod;
-        private double[] debugSatPos;
-
         private readonly double _speedForSimulation = 600;
         private static readonly double _MIN_ELEVATION = 0;
         private static readonly double _MAX_ELEVATION = 90;
@@ -126,22 +121,19 @@ namespace GnssLibDL
 
                 foreach (var broadcast in gps.Data)
                 {
-
-                    
-
                     //if (broadcast.DateTime > new DateTime(2024, 01, 01, boxHour-1, 55, 00) && broadcast.DateTime < new DateTime(2024, 01, 01, boxHour, 05, 00))
                     if (broadcast.DateTime == new DateTime(_rConfig.ReceiverStartDT.Year, _rConfig.ReceiverStartDT.Month, _rConfig.ReceiverStartDT.Day, _boxHourGPS, 00, 00))
                     {
                         //Check if a Satellite is visible
-                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGPS);
+                        double[] satPosXYZ = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGPS);
 
-                        VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPos, out bool isVisible, out double elevation, out double azimuth);
+                        VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPosXYZ, out bool isVisible, out double elevation, out double azimuth);
                         if (isVisible)
                         {
                             //Check if a Satellite is blocked by the jammer
-                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
+                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
-                                _satellitePositions.Add(satPos);
+                                _satellitePositions.Add(satPosXYZ);
                                 _visibleSatellitesPRN_GPS.Add(broadcast.SatId);
                                 _satListGPS.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
@@ -175,27 +167,18 @@ namespace GnssLibDL
                     if (broadcast.DateTime == new DateTime(_rConfig.ReceiverStartDT.Year, _rConfig.ReceiverStartDT.Month, _rConfig.ReceiverStartDT.Day, _boxHourGAL, _boxMin, 00))
                     {
 
-                        if (broadcast.SatId == "E25")
-                        {
-                            debugBrod = broadcast.ToString();
-                        }
-
-
                         //Check if a Satellite is visible
-                        double[] satPos = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGAL);
-
-                        
-
-                        VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPos, out bool isVisible, 
+                        double[] satPosXYZ = CoordinatesCalculator.CalculatePosition(broadcast, _continousSecGAL);
+                        VisibleSatCalulator.IsSatelliteVisible(_MIN_ELEVATION, _MAX_ELEVATION, _receiverPos, satPosXYZ, out bool isVisible, 
                             out double elevation, out double azimuth);
                         if (isVisible)
                         {
                             //Check if a Satellite is blocked by the jammer
-                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, 
+                            if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos, 
                                 CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
                                
-                                _satellitePositions.Add(satPos);
+                                _satellitePositions.Add(satPosXYZ);
                                 _visibleSatellitesPRN_GL.Add(broadcast.SatId);
                                 _satListGL.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
@@ -214,8 +197,7 @@ namespace GnssLibDL
         {
             this._rConfig.ReceiverLatitude = latPos;
             this._rConfig.ReceiverLongitude = longPos;
-            this._rConfig.ReceiverElevetion = elevation;
-            
+            this._rConfig.ReceiverElevetion = elevation; 
         }
 
         public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad)
@@ -233,21 +215,17 @@ namespace GnssLibDL
 
         public string DebugToTerminalGUIGetValuesDouble()
         {
-            return debugBrod;
+            return "";
         }
 
-        public List<DateTime> DebugToTerminalGUIGetValuesBool()
+        public double DebugToTerminalGUIGetValuesBool()
         {
-            return debugDT;
+            return 0;
         }
         public double GetApproxPos()
         {
             return _PDOP * _rConfig.ReceiverGpsError;
         }
-
-
-        
-
 
     }
 }

@@ -22,7 +22,6 @@ namespace GnssLibGUI
         private List<String> _fileList = new List<string>();
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
-
         private double _elevation;
         private string _geoFilePath;
         public GUI_Window()

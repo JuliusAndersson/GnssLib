@@ -29,8 +29,8 @@ namespace GnssLibNMEA_Writer
             double elevation = sc._rConfig.ReceiverElevetion;
 
               
-            String latD = "N";
-            String longD = "E";
+            string latD = "N";
+            string longD = "E";
             if(latitude < 0)
             {
                 latD = "S";
@@ -40,7 +40,7 @@ namespace GnssLibNMEA_Writer
                 longD = "W";
             }
             
-            String latString = latitude.ToString(CultureInfo.InvariantCulture);
+            string latString = latitude.ToString(CultureInfo.InvariantCulture);
             if(latitude > 0 && latitude < 10)
             {
                 latString = "0" + latString;
@@ -51,7 +51,7 @@ namespace GnssLibNMEA_Writer
             {
                 latString = (latitude * -1).ToString(CultureInfo.InvariantCulture);
             }
-            String longString = longitude.ToString(CultureInfo.InvariantCulture);
+            string longString = longitude.ToString(CultureInfo.InvariantCulture);
             if(longitude > 0 && longitude < 10)
             {
                 longString = "00" + longString;
