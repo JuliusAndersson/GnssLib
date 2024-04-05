@@ -160,9 +160,9 @@ namespace GnssLibDL
                 };
                 Satellites sats = new Satellites
                 {
-                    galileo = GroupAndConstructGalileoObject(broadcastDataListGAL), //Test to make it "prettier/easier to read"
-                    gps = gps,
-                    glonass = glonass
+                    Galileo = GroupAndConstructGalileoObject(broadcastDataListGAL), //Test to make it "prettier/easier to read"
+                    Gps = gps,
+                    Glonass = glonass
                 };
 
                 return sats;
@@ -308,12 +308,12 @@ namespace GnssLibDL
             var groupedGalileoData = broadcastDataListGAL.GroupBy(data => data.SatId);
 
             // Construct GAL_sat objects and populate with grouped data
-            List<GAL_sat> galSatList = new List<GAL_sat>();
+            List<GalileoSatellite> galSatList = new List<GalileoSatellite>();
             foreach (var group in groupedGalileoData)
             {
-                GAL_sat galSat = new GAL_sat
+                GalileoSatellite galSat = new GalileoSatellite
                 {
-                    id = group.Key,
+                    Id = group.Key,
                     Data = group.ToList()
                 };
                 galSatList.Add(galSat);
@@ -322,7 +322,7 @@ namespace GnssLibDL
             // Construct Galileo object
             Galileo galileo = new Galileo()
             {
-                satList = galSatList
+                ListOfSatellites = galSatList
             };
 
            
