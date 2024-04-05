@@ -12,23 +12,27 @@ namespace GnssLibNMEA_Writer
 	{
         private static Random _random = new Random();
         
-        public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
+
+        /// <summary>
+        /// Creates all NMEA-messages from data in the SimulationController and whrites it to the serialPort.
+        /// </summary>
+        /// <param name="serialPort">The output serialPort. I.e. "COM1".</param>
+        /// <param name="simulationController">The SimulationController</param>
+        public static void NmeaGenerator(SerialPort serialPort, SimulationController simulationController)
         {
 
-
-            List<string> activeSatellitesGPS = sc._visibleSatellitesPRN_GPS;
-            List<string> activeSatellitesGL = sc._visibleSatellitesPRN_GL;
-            double PDOP = sc._PDOP;
-            double HDOP = sc._HDOP;
-            double VDOP = sc._VDOP;
-            List<SatelliteElevationAndAzimuthInfo> satListGPS = sc._satListGPS;
-            List<SatelliteElevationAndAzimuthInfo> satListGL = sc._satListGL;
-            DateTime utcTime = sc._rConfig.ReceiverStartDT.AddSeconds(sc._continousSecFromStart); ;
-            double latitude = sc._rConfig.ReceiverLatitude;
-            double longitude = sc._rConfig.ReceiverLongitude;
-            double elevation = sc._rConfig.ReceiverElevetion;
-
-              
+            List<string> activeSatellitesGPS = simulationController._visibleSatellitesPRN_GPS;
+            List<string> activeSatellitesGL = simulationController._visibleSatellitesPRN_GL;
+            double PDOP = simulationController._PDOP;
+            double HDOP = simulationController._HDOP;
+            double VDOP = simulationController._VDOP;
+            List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController._satListGPS;
+            List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController._satListGL;
+            DateTime utcTime = simulationController._rConfig.ReceiverStartDT.AddSeconds(simulationController._continousSecFromStart); ;
+            double latitude = simulationController._rConfig.ReceiverLatitude;
+            double longitude = simulationController._rConfig.ReceiverLongitude;
+            double elevation = simulationController._rConfig.ReceiverElevetion;
+  
             String latD = "N";
             String longD = "E";
             if(latitude < 0)
@@ -69,9 +73,6 @@ namespace GnssLibNMEA_Writer
                 longString = (longitude * -1).ToString(CultureInfo.InvariantCulture);
             }
 
-           
-
-
             List<string> NMEAString = new List<string>();
             NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count+satListGL.Count, HDOP, Math.Round(elevation,3), -15, 0, ""));
             if (satListGPS.Count != 0)
@@ -83,21 +84,14 @@ namespace GnssLibNMEA_Writer
                     NMEAString.Add(message);
                 }
             }
-
-
-            //NMEAString.Add(ConstructGPGGAString("GL", utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count, HDOP, elevation, -15, 0, ""));
-
             if (satListGL.Count != 0)
             {
                 NMEAString.Add(ConstructGPGSAString("GL", activeSatellitesGL, PDOP, HDOP, VDOP));
-
-            foreach (string message in ConstructGPGSVString("GL", satListGL))
-            {
-                NMEAString.Add(message);
+                foreach (string message in ConstructGPGSVString("GL", satListGL))
+                {
+                    NMEAString.Add(message);
+                }
             }
-
-            }
-            
             foreach (string str in NMEAString)
             {
                 serialPort.WriteLine(str);
@@ -105,6 +99,24 @@ namespace GnssLibNMEA_Writer
 
         }
 
+
+        /// <summary>
+        /// Constructs the GNGGA-string for the NMEA-message.
+        /// </summary>
+        /// <param name="satType">GP for Gps, GL for Glonass (used for Galileo in our case) and GN (for GNSS) for combined messages.</param>
+        /// <param name="utcTime"></param>
+        /// <param name="latitude"></param>
+        /// <param name="latitudeDirection"></param>
+        /// <param name="longitude"></param>
+        /// <param name="longitudeDirection"></param>
+        /// <param name="qualityIndicator"></param>
+        /// <param name="numberOfSatellites"></param>
+        /// <param name="HDOP"></param>
+        /// <param name="orthometricHeight"></param>
+        /// <param name="geoidSeparation"></param>
+        /// <param name="ageOfDGPSData"></param>
+        /// <param name="referenceStationID"></param>
+        /// <returns>The GGA-string.</returns>
         public static string ConstructGPGGAString(string satType, string utcTime, string latitude, string latitudeDirection,
                                       string longitude, string longitudeDirection, int qualityIndicator,
                                       int numberOfSatellites, double HDOP, double orthometricHeight,
@@ -121,6 +133,15 @@ namespace GnssLibNMEA_Writer
             return ggaMessage;
         }
 
+        /// <summary>
+        /// Construct the GSA-string for the NMEA-message.
+        /// </summary>
+        /// <param name="satType">GP for Gps, GL for Glonas but in our case used for Galileo.</param>
+        /// <param name="activeSatellites">List of all active satellites.</param>
+        /// <param name="PDOP">Position dilution of precision.</param>
+        /// <param name="HDOP">Horizontal dilution of precision.</param>
+        /// <param name="VDOP">Vertical dilution of precision.</param>
+        /// <returns></returns>
         public static string ConstructGPGSAString(string satType,List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
         {
 
@@ -149,9 +170,12 @@ namespace GnssLibNMEA_Writer
         }
         
         
-        //=====================================================================================
-        //This function constructs the GSV-String for the Nmea Message 
-        //=====================================================================================
+        /// <summary>
+        /// Constructs the GSV-string for the NEMA-messeges.
+        /// </summary>
+        /// <param name="satType"></param>
+        /// <param name="satList"></param>
+        /// <returns></returns>
         public static List<string> ConstructGPGSVString(string satType, List<SatelliteElevationAndAzimuthInfo> satList)
         {
             List<string> messages = new List<string>();
@@ -172,9 +196,15 @@ namespace GnssLibNMEA_Writer
             return messages;
         }
 
-        //=====================================================================================
-        //This is a helper-function for the GSV-String creator 
-        //=====================================================================================
+        /// <summary>
+        /// Helper function for creating the GSV-string in the NMEA-message's.
+        /// </summary>
+        /// <param name="satType"></param>
+        /// <param name="satellites"></param>
+        /// <param name="messageNumber"></param>
+        /// <param name="totalMessages"></param>
+        /// <param name="totaltSats"></param>
+        /// <returns></returns>
         public static string ConstructGSVMessage(string satType, List<SatelliteElevationAndAzimuthInfo> satellites, int messageNumber, int totalMessages, int totaltSats)
         {
             StringBuilder sb = new StringBuilder();
@@ -198,9 +228,11 @@ namespace GnssLibNMEA_Writer
             return sb.ToString();
         }
 
-        //=====================================================================================
-        //Calculate the checksum for each NMEA-String
-        //=====================================================================================
+        /// <summary>
+        /// Calculate the checksum for the NMEA-Strings. 
+        /// </summary>
+        /// <param name="message">The string to be calculated.</param>
+        /// <returns>The checksum for this message string.</returns>
         private static string CalculateChecksum(string message)
         {
             int checksum = 0;
@@ -214,7 +246,11 @@ namespace GnssLibNMEA_Writer
             }
             return checksum.ToString("X2");
         }
-
+        /// <summary>
+        /// Checks if elevation is higher or lower than 10 and returns SNR-number accordingly.
+        /// </summary>
+        /// <param name="elevation">Elevation above horizon (in degrees).</param>
+        /// <returns>Simulated SNR-number.</returns>
         private static int GenerateRandomSNR(double elevation)
         {
             if (elevation < 10)
@@ -227,16 +263,23 @@ namespace GnssLibNMEA_Writer
             }
         }
 
-
+        /// <summary>
+        /// Creates a simulated SNR-number for the NMEA-message. 
+        /// </summary>
+        /// <param name="minValue">Minimum SNR-number.</param>
+        /// <param name="maxValue">Maximum SNR-number.</param>
+        /// <param name="focusMin">Focuses on generating number's from this value.</param>
+        /// <param name="focusMax">Focuses on generating numbers's to this value.</param>
+        /// <returns>A number from minValue to maxValue but with a focus in the range from focusMin to focusMax.</returns>
         private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
         {
             double mean = (focusMin + focusMax) / 2;
             double stdDev = (focusMax - focusMin) / 6;
 
-            double u1 = 1.0 - _random.NextDouble();
-            double u2 = 1.0 - _random.NextDouble();
+            double firstRandom = 1.0 - _random.NextDouble();
+            double secondRandom = 1.0 - _random.NextDouble();
 
-            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(firstRandom)) * Math.Sin(2.0 * Math.PI * secondRandom);
             double randNormal = mean + stdDev * randStdNormal;
             return Math.Max(minValue, Math.Min(maxValue, randNormal));
         }
