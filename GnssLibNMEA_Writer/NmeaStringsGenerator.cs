@@ -137,7 +137,7 @@ namespace GnssLibNMEA_Writer
 
             string prnNumbers = string.Join(",", activeSatellites.Select(prn => prn.ToString().Substring(1)));
             string gsaMessage = $"${satType}GSA,A,3,{prnNumbers},";
-            for (int i = 0; i < numberCommas-1; i++)
+            for (int i = 0; i < numberCommas; i++)
             {
                 gsaMessage += ",";
             }
