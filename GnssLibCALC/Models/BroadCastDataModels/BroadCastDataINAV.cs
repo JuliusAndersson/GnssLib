@@ -20,17 +20,17 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double LatitudeCorrectionCosinusComponent { get; set; }
         public double OrbitEcentricity { get; set; }
         public double LatitudeCorrectionSinusComponent { get; set; }
-        public double SrqtOfMajorAxis { get; set; }
+        public double SqtOfMajorAxis { get; set; }
 
         //Orbit3
         public double TimeOfEphemeris { get; set; } //toe?
-        public double nclinationCorrectionCosinusComponent { get; set; }
+        public double InclinationCorrectionCosinusComponent { get; set; }
         public double OmegaAngle0 { get; set; } //omega
         public double AngularVelocity { get; set; }
 
         //Orbit4
         public double InitialInclination { get; set; }
-        public double RandiusCorrectionCosinusComponent { get; set; }
+        public double RadiusCorrectionCosinusComponent { get; set; }
         public double OmegaAngle { get; set; }
         public double AngularVelocityPerSec { get; set; }
 

@@ -46,9 +46,9 @@ namespace GnssLibCALC
             // Convert degrees to radians
             double phi = latitude * Math.PI / 180.0;   // geodetic latitude in radians
             double lambda = longitude * Math.PI / 180.0; // longitude in radians
-
+            double f = 1 - (WGS84_SEMI_MINOR_AXIS / WGS84_SEMI_MAJOR_AXIS);
             // Convert geodetic latitude to geocentric latitude
-            double esquared = 1 - Math.Pow(WGS84_SEMI_MAJOR_AXIS, 2) / Math.Pow(WGS84_SEMI_MINOR_AXIS, 2);
+            double esquared = f*(2 - f);
             double Nphi = WGS84_SEMI_MAJOR_AXIS / Math.Sqrt(1 - esquared * Math.Pow(Math.Sin(phi), 2));
 
             // Calculate ECEF XYZ coordinates
@@ -118,7 +118,7 @@ namespace GnssLibCALC
         /// </returns>
         public static double[] CalculatePosition(BroadCastDataINAV broadcastData, double seconds)
         {
-            double A = broadcastData.SrqtOfMajorAxis * broadcastData.SrqtOfMajorAxis;
+            double A = broadcastData.SqtOfMajorAxis * broadcastData.SqtOfMajorAxis;
             double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
             double n = n_0 + broadcastData.Delta_n;
             double e = broadcastData.OrbitEcentricity;
@@ -130,8 +130,8 @@ namespace GnssLibCALC
             double phi_k = vk + broadcastData.OmegaAngle;
 
             double d_uk = broadcastData.LatitudeCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.LatitudeCorrectionSinusComponent * Math.Sin(2 * phi_k);
-            double d_rk = broadcastData.RandiusCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.RadiusCorrectionSinusComponent * Math.Sin(2 * phi_k);
-            double d_ik = broadcastData.nclinationCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.AngularVelocity * Math.Sin(2 * phi_k);
+            double d_rk = broadcastData.RadiusCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.RadiusCorrectionSinusComponent * Math.Sin(2 * phi_k);
+            double d_ik = broadcastData.InclinationCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.AngularVelocity * Math.Sin(2 * phi_k);
 
             double uk = phi_k + d_uk;
             double rk = A * (1 - e * Math.Cos(Ek)) + d_rk;

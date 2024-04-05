@@ -232,15 +232,15 @@ namespace GnssLibDL
                 LatitudeCorrectionCosinusComponent = double.Parse(broadCastDataAsList[14], NumberStyles.Float, CultureInfo.InvariantCulture),
                 OrbitEcentricity = double.Parse(broadCastDataAsList[15], NumberStyles.Float, CultureInfo.InvariantCulture),
                 LatitudeCorrectionSinusComponent = double.Parse(broadCastDataAsList[16], NumberStyles.Float, CultureInfo.InvariantCulture),
-                SrqtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
+                SqtOfMajorAxis = double.Parse(broadCastDataAsList[17], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 3
                 TimeOfEphemeris = double.Parse(broadCastDataAsList[18], NumberStyles.Float, CultureInfo.InvariantCulture),
-                nclinationCorrectionCosinusComponent = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
+                InclinationCorrectionCosinusComponent = double.Parse(broadCastDataAsList[19], NumberStyles.Float, CultureInfo.InvariantCulture),
                 OmegaAngle0 = double.Parse(broadCastDataAsList[20], NumberStyles.Float, CultureInfo.InvariantCulture),
                 AngularVelocity = double.Parse(broadCastDataAsList[21], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 4     
                 InitialInclination = double.Parse(broadCastDataAsList[22], NumberStyles.Float, CultureInfo.InvariantCulture),
-                RandiusCorrectionCosinusComponent = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
+                RadiusCorrectionCosinusComponent = double.Parse(broadCastDataAsList[23], NumberStyles.Float, CultureInfo.InvariantCulture),
                 OmegaAngle = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture),
                 AngularVelocityPerSec = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture),
                 //Orbit 5
