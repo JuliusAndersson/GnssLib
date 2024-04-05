@@ -15,13 +15,13 @@ namespace GnssLibCALC
         }
 
         /// <summary>
-        /// Checks if the line between satellite and reciever intersects the sphere
+        /// Checks if the line between satellite and reciever intersects the sphere.
         /// </summary>
         /// <param name="satellitePosition">The coordinates (X ,Y ,Z) of the satellite.</param>
         /// <param name="receieverPosition">The coordinates (X ,Y ,Z) of the receiver.</param>
         /// <param name="jammerCenter">The coordinates (X ,Y ,Z) of the jammers centre.</param>
         /// <param name="jammerRadius">The radius (in kilometers) of the sphere representing a jammer.</param>
-        /// <returns></returns>
+        /// <returns>True if the line from the receiver to the satelliet intersects the sphere.</returns>
         public static bool DoesLineSegmentIntersectSphere(double[] satellitePosition, double[] receieverPosition, double[] jammerCenter, double jammerRadius)
         {
 

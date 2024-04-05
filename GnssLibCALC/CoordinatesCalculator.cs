@@ -46,9 +46,9 @@ namespace GnssLibCALC
             // Convert degrees to radians
             double phi = latitude * Math.PI / 180.0;   // geodetic latitude in radians
             double lambda = longitude * Math.PI / 180.0; // longitude in radians
-
+            double f = 1 - (WGS84_SEMI_MINOR_AXIS / WGS84_SEMI_MAJOR_AXIS);
             // Convert geodetic latitude to geocentric latitude
-            double esquared = 1 - Math.Pow(WGS84_SEMI_MAJOR_AXIS, 2) / Math.Pow(WGS84_SEMI_MINOR_AXIS, 2);
+            double esquared = f*(2 - f);
             double Nphi = WGS84_SEMI_MAJOR_AXIS / Math.Sqrt(1 - esquared * Math.Pow(Math.Sin(phi), 2));
 
             // Calculate ECEF XYZ coordinates

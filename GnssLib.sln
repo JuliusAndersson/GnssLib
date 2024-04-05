@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibGUI", "GnssLibGUI\GnssLibGUI.csproj", "{ECB329EA-81F0-4F0C-AE18-AD3DC41726D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnssLibGUI", "GnssLibGUI\GnssLibGUI.csproj", "{ECB329EA-81F0-4F0C-AE18-AD3DC41726D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibDL", "GnssLibDL\GnssLibDL.csproj", "{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnssLibDL", "GnssLibDL\GnssLibDL.csproj", "{5EA66D59-F4A7-4E52-A17D-1D8173CDCFF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibCALC", "GnssLibCALC\GnssLibCALC.csproj", "{67F96BD0-4585-4A16-AB2A-9E83B117F93F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnssLibCALC", "GnssLibCALC\GnssLibCALC.csproj", "{67F96BD0-4585-4A16-AB2A-9E83B117F93F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnssLibNMEA_Writer", "GnssLibNMEA_Writer\GnssLibNMEA_Writer.csproj", "{8C738C98-8D4D-462A-9160-1D27966624A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnssLibNMEA_Writer", "GnssLibNMEA_Writer\GnssLibNMEA_Writer.csproj", "{8C738C98-8D4D-462A-9160-1D27966624A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationsTest", "CalculationsTest\CalculationsTest.csproj", "{5C4EC373-D7D9-47A5-B495-CF44C04D3CBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8C738C98-8D4D-462A-9160-1D27966624A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C738C98-8D4D-462A-9160-1D27966624A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C738C98-8D4D-462A-9160-1D27966624A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C4EC373-D7D9-47A5-B495-CF44C04D3CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C4EC373-D7D9-47A5-B495-CF44C04D3CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C4EC373-D7D9-47A5-B495-CF44C04D3CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C4EC373-D7D9-47A5-B495-CF44C04D3CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
