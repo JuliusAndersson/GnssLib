@@ -10,15 +10,10 @@ namespace GnssLibDL
     public class SimulationRunTime
     {
         public event EventHandler _tickDone;
-
         public void RunSimulation(SimulationController scIN)
         {
-
-
-            scIN.Tick();
-                
-            _tickDone(this, EventArgs.Empty);  
-
+            scIN.Tick();     
+            _tickDone(this, EventArgs.Empty);
         }
 
     }

@@ -17,7 +17,6 @@ namespace CalculationsTest
             Assert.AreEqual(3, result);
         }
 
-
         /// <summary>
         /// Test to verify the convertion fron geodetic coordinates to EVEF. WGS84 reference elipsoid is used.  
         /// </summary>
@@ -32,7 +31,6 @@ namespace CalculationsTest
             Assert.AreEqual(743.252, Math.Round(result[1], 3));
             Assert.AreEqual(5264.442, Math.Round(result[2], 3));
         }
-
 
         /// <summary>
         /// Scenario tested can be seen in documentation folder.
@@ -71,6 +69,5 @@ namespace CalculationsTest
             Assert.AreEqual(false, isNotVisible);
         
         }
-
     }
 }

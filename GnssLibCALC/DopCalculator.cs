@@ -5,6 +5,7 @@ namespace GnssLibCALC
 {
     public class DOPCalulator
     {
+
         /// <summary>
         /// Calculates VDOP, HDOP, PDOP based on sateliites in satellitePositions and receivers location of XYZ. 
         /// </summary>
@@ -40,7 +41,6 @@ namespace GnssLibCALC
             VDOP = Math.Round(Math.Sqrt(Q.At(2, 2)), 1);
         }
 
-
         /// <summary>
         /// Calculates distance between two points in ECEF coordinates.
         /// </summary>
@@ -51,7 +51,6 @@ namespace GnssLibCALC
             double dz = toPosition[2] - fromPosition[2];
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
-
 
         /// <summary>
         /// calculates the unitvector between the recivers position and the satellites position.
@@ -67,7 +66,5 @@ namespace GnssLibCALC
             return unitVector;
         }
     }
-
-
 }
 
