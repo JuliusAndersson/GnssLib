@@ -29,7 +29,7 @@ namespace CalculationsTest
 
 
         /// <summary>
-        /// Scenario tested can be seen in documentation folder
+        /// Scenario tested can be seen in documentation folder.
         /// </summary>
         [TestMethod]
         public void IntersectTest()
@@ -43,6 +43,27 @@ namespace CalculationsTest
             var result2 = InterferenceCalculator.DoesLineSegmentIntersectSphere(satellitePosition2,receiverPosition, jammerPosition, jammerRadius);
             Assert.AreEqual(true, result); //Line intersects
             Assert.AreEqual(false, result2);//Line does not intersect
+        }
+
+        /// <summary>
+        /// Scenario tested can be seen in documentation folder.
+        /// </summary>
+        [TestMethod]
+        public void SatelliteVisabilityTest()
+        {
+            double minimumElevation = 0;
+            double maximumElevation = 90;
+            double[] receiverPosition = new double[] { 0, 0, 10 };
+            double[] satellitePosition = new double[] { 0, -2, 11 };
+            double[] satellitePosition2 = new double[] { 0, 12, 9 };
+            bool isVisible;
+            bool isNotVisible;
+            double elevation, azmituh;
+            VisibleSatCalulator.IsSatelliteVisible(minimumElevation, maximumElevation,receiverPosition, satellitePosition,out isVisible,out elevation, out azmituh);
+            VisibleSatCalulator.IsSatelliteVisible(minimumElevation, maximumElevation, receiverPosition, satellitePosition2, out isNotVisible, out elevation, out azmituh);
+            Assert.AreEqual(true, isVisible);
+            Assert.AreEqual(false, isNotVisible);
+        
         }
 
     }
