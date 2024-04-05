@@ -15,5 +15,6 @@ namespace GnssLibCALC.Models.Configuration
         public double ReceiverLatitude { get; set; }
         public double ReceiverLongitude { get; set; }
         public double ReceiverElevetion { get; set; }
+        public double ReceiverGpsError { get; set; }
     }
 }

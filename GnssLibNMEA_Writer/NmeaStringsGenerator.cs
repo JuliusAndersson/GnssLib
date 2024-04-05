@@ -14,9 +14,21 @@ namespace GnssLibNMEA_Writer
         
         public static void NmeaGenerator(SerialPort serialPort, SimulationController sc)
         {
-            sc.NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP,
-                                out List<SatelliteElevationAndAzimuthInfo> satList, out List<SatelliteElevationAndAzimuthInfo> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation);
-  
+
+
+            List<string> activeSatellitesGPS = sc._visibleSatellitesPRN_GPS;
+            List<string> activeSatellitesGL = sc._visibleSatellitesPRN_GL;
+            double PDOP = sc._PDOP;
+            double HDOP = sc._HDOP;
+            double VDOP = sc._VDOP;
+            List<SatelliteElevationAndAzimuthInfo> satListGPS = sc._satListGPS;
+            List<SatelliteElevationAndAzimuthInfo> satListGL = sc._satListGL;
+            DateTime utcTime = sc._rConfig.ReceiverDT.AddSeconds(sc._continousSecFromStart); ;
+            double latitude = sc._rConfig.ReceiverLatitude;
+            double longitude = sc._rConfig.ReceiverLongitude;
+            double elevation = sc._rConfig.ReceiverElevetion;
+
+              
             String latD = "N";
             String longD = "E";
             if(latitude < 0)
@@ -58,12 +70,12 @@ namespace GnssLibNMEA_Writer
             }
 
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satList.Count+satListGL.Count, HDOP, elevation, -15, 0, ""));
-            if (satList.Count != 0)
+            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count+satListGL.Count, HDOP, elevation, -15, 0, ""));
+            if (satListGPS.Count != 0)
             {
-                NMEAString.Add(ConstructGPGSAString("GP", activeSatellites, PDOP, HDOP, VDOP));
+                NMEAString.Add(ConstructGPGSAString("GP", activeSatellitesGPS, PDOP, HDOP, VDOP));
 
-                foreach (string message in ConstructGPGSVString("GP", satList))
+                foreach (string message in ConstructGPGSVString("GP", satListGPS))
                 {
                     NMEAString.Add(message);
                 }

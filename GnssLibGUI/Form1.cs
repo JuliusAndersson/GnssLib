@@ -125,7 +125,8 @@ namespace GnssLibGUI
                             ReceiverDT = dt,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture))
+                            ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
+                            ReceiverGpsError = 3
                         };
 
                         JammerConfiguration jConfig = new JammerConfiguration()
@@ -179,7 +180,7 @@ namespace GnssLibGUI
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            Terminal.Text += _sc.GetValues() + Environment.NewLine;
+            Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
 

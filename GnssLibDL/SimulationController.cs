@@ -18,7 +18,7 @@ namespace GnssLibDL
 
         private double _continousSecGPS = 0;
         private double _continousSecGAL = 0;
-        private double _continousSecFromStart = 0;
+        
 
         private bool _isNewHour = false;
         private int _boxHour;
@@ -29,22 +29,25 @@ namespace GnssLibDL
         private string _geoFilePath;
 
 
-        //Input
-        private ReceiverConfiguration _rConfig;
-        private JammerConfiguration _jConfig;
+        //Input & Output
+        public ReceiverConfiguration _rConfig;
+        public JammerConfiguration _jConfig;
 
 
         //Output
-        private List<string> _visibleSatellitesPRN;
-        private List<string> _visibleSatellitesPRNGL;
         private List<double[]> _satellitePositions;
-        private List<SatelliteElevationAndAzimuthInfo> _satList;
-        private List<SatelliteElevationAndAzimuthInfo> _satListGL;
+
+        public List<string> _visibleSatellitesPRN_GPS;
+        public List<string> _visibleSatellitesPRN_GL;
+        public List<SatelliteElevationAndAzimuthInfo> _satListGPS;
+        public List<SatelliteElevationAndAzimuthInfo> _satListGL;
         
-        private double _PDOP;
-        private double _HDOP;
-        private double _VDOP;
-        private double[] _receiverPos;
+        public double _PDOP;
+        public double _HDOP;
+        public double _VDOP;
+        public double[] _receiverPos;
+        
+        public double _continousSecFromStart = 0;
 
         public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName) {
             this._rConfig = rConfig;
@@ -63,12 +66,12 @@ namespace GnssLibDL
         {
 
             //Reset Lists for new values at the new time
-            _visibleSatellitesPRN = new List<string>();
+            _visibleSatellitesPRN_GPS = new List<string>();
             _satellitePositions = new List<double[]>();
-            _satList = new List<SatelliteElevationAndAzimuthInfo>();
+            _satListGPS = new List<SatelliteElevationAndAzimuthInfo>();
             _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverElevetion);
             
-            _visibleSatellitesPRNGL = new List<string>();
+            _visibleSatellitesPRN_GL = new List<string>();
             _satListGL = new List<SatelliteElevationAndAzimuthInfo>();
 
             //Check if GPS, Galileo, Glonass is to be Used
@@ -123,8 +126,8 @@ namespace GnssLibDL
                             if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPos, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
                                 _satellitePositions.Add(satPos);
-                                _visibleSatellitesPRN.Add(broadcast.SatId);
-                                _satList.Add(new SatelliteElevationAndAzimuthInfo()
+                                _visibleSatellitesPRN_GPS.Add(broadcast.SatId);
+                                _satListGPS.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
                                     SatId = broadcast.SatId.Substring(1),
                                     Azimuth = Math.Round(azimuth, 0),
@@ -171,7 +174,7 @@ namespace GnssLibDL
                                 CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
                             {
                                 _satellitePositions.Add(satPos);
-                                _visibleSatellitesPRNGL.Add(broadcast.SatId);
+                                _visibleSatellitesPRN_GL.Add(broadcast.SatId);
                                 _satListGL.Add(new SatelliteElevationAndAzimuthInfo()
                                 {
                                     SatId = broadcast.SatId.Substring(1),
@@ -201,31 +204,14 @@ namespace GnssLibDL
             this._jConfig.JammerRadius = jamRad;
         }
 
-        public double GetValues()
+        public double DebugToTerminalGUIGetValues()
         {
-            
             return _rConfig.ReceiverElevetion;
-        }
-
-        public void NmeaValues(out List<string> activeSatellites, out List<string> activeSatellitesGL, out double PDOP, out double HDOP, out double VDOP, 
-                                out List<SatelliteElevationAndAzimuthInfo> satList, out List<SatelliteElevationAndAzimuthInfo> satListGL, out DateTime utcTime, out double latitude, out double longitude, out double elevation)
-        {
-            activeSatellites = _visibleSatellitesPRN;
-            activeSatellitesGL = _visibleSatellitesPRNGL;
-            PDOP = this._PDOP;
-            HDOP = this._HDOP;
-            VDOP = this._VDOP;
-            satList = this._satList;
-            satListGL = this._satListGL;
-            utcTime = _rConfig.ReceiverDT.AddSeconds(_continousSecFromStart);
-            latitude = _rConfig.ReceiverLatitude;
-            longitude = _rConfig.ReceiverLongitude;
-            elevation = this._rConfig.ReceiverElevetion;
         }
 
         public double GetApproxPos()
         {
-            return _PDOP * 3;
+            return _PDOP * _rConfig.ReceiverGpsError;
         }
 
 
