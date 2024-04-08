@@ -121,7 +121,6 @@ namespace GnssLibGUI
                             IsUsingGPS = setGps.Checked,
                             IsUsingGalileo = setGalileo.Checked,
                             IsUsingGlonass = setGlonass.Checked,
-                            ReceiverStartDT = dt,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
@@ -137,7 +136,7 @@ namespace GnssLibGUI
                         };
 
 
-                            _sc = new SimulationController(rConfig, jConfig, fileName);
+                            _sc = new SimulationController(rConfig, jConfig, fileName, dt);
 
                         _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
@@ -247,7 +246,11 @@ namespace GnssLibGUI
             {
                 double value;
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                  && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
+                  && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                  && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
+                  && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
+                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
+                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
 
                     _sc.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                        initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
@@ -259,7 +262,7 @@ namespace GnssLibGUI
                 else
                 {
                     Terminal.ForeColor = Color.Red;
-                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) #" + Environment.NewLine;
+                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
@@ -274,7 +277,11 @@ namespace GnssLibGUI
             {
                 double value;
                 if (double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                  && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
+                  && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                  && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
+                  && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
+                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
+                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
 
                     _sc.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
@@ -287,7 +294,7 @@ namespace GnssLibGUI
                 else
                 {
                     Terminal.ForeColor = Color.Red;
-                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) #" + Environment.NewLine;
+                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
