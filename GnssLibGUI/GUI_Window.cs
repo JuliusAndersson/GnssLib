@@ -22,6 +22,10 @@ namespace GnssLibGUI
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
         private string _geoFilePath;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public GUI_Window()
         {
             InitializeComponent();
@@ -69,6 +73,9 @@ namespace GnssLibGUI
 
         }
 
+        /// <summary>
+        /// When Simulate button is pressed SimulationController is created and the SimulationRunTime event is started
+        /// </summary>
         private void Simulate_Click(object sender, EventArgs e)
         {
             if (!_isRunning)
@@ -167,12 +174,17 @@ namespace GnssLibGUI
             }
         }
 
+        /// <summary>
+        /// When _timerRunTime event happens in this file run SimulationRunTime once
+        /// </summary>
         public void HandleRunTime(object sender, EventArgs e)
         {
-            //When event happen in this file run SimulationRunTime once
             _simulationRunTIme.RunSimulation(_simulationController);
         }
 
+        /// <summary>
+        /// When event happen at the end of RunTime write to NMEA if its on and update Position accuracy
+        /// </summary>
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
@@ -199,21 +211,25 @@ namespace GnssLibGUI
             {
                 labelPosAcc.Text = "-,- m";
             }
-            //When event happen at the end of RunTime write to NMEA if its on
+
             if (_isNmeaOn) {
                 NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
             }
         }
 
+        /// <summary>
+        /// Set the label when Jammmer str slider is changed
+        /// </summary>
         private void setRadR_Scroll(object sender, EventArgs e)
         {
-            //set the label when Jammmer str slider is changed
             labelRadR.Text = setRadR.Value.ToString() + " km";
         }
 
+        /// <summary>
+        /// When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal
+        /// </summary>
         private void Stop_Click(object sender, EventArgs e)
         {
-            //When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal
             Stop.Text = "Clear";
             Terminal.ForeColor = Color.White;
             Terminal.Text += "Simulation Stopped" + Environment.NewLine;
@@ -237,9 +253,11 @@ namespace GnssLibGUI
 
         }
 
+        /// <summary>
+        /// When you update the Position of Reciver check so Simulation is on and that values are correct
+        /// </summary>
         private void updatePos_Click(object sender, EventArgs e)
         {
-            //When you update the Position of Reciver check so Simulation is on and that values are correct
             if (_simulationController != null)
             {
                 double value;
@@ -268,9 +286,11 @@ namespace GnssLibGUI
             
         }
 
+        /// <summary>
+        /// When you update the Position of Jammer check so Simulation is on and that values are correct
+        /// </summary>
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
-            //When you update the Position of Jammer check so Simulation is on and that values are correct
             if (_simulationController != null)
             {
                 double value;
@@ -300,6 +320,10 @@ namespace GnssLibGUI
              
 
         }
+
+        /// <summary>
+        ///
+        /// </summary>
         private double initElevation(double latitude, double longitude)
         {
             WGS84Position wgsPos = new WGS84Position();
