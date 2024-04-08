@@ -74,7 +74,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When Simulate button is pressed SimulationController is created and the SimulationRunTime event is started
+        /// When Simulate button is pressed SimulationController is created and the SimulationRunTime event is started.
         /// </summary>
         private void Simulate_Click(object sender, EventArgs e)
         {
@@ -175,7 +175,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When _timerRunTime event happens in this file run SimulationRunTime once
+        /// When _timerRunTime event happens in this file run SimulationRunTime once.
         /// </summary>
         public void HandleRunTime(object sender, EventArgs e)
         {
@@ -183,7 +183,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When event happen at the end of RunTime write to NMEA if its on and update Position accuracy
+        /// When event happen at the end of RunTime write to NMEA if its on and update Position accuracy.
         /// </summary>
         public void HandleTickEvent(object sender, EventArgs e)
         {
@@ -218,7 +218,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// Set the label when Jammmer str slider is changed
+        /// Set the label when Jammmer str slider is changed.
         /// </summary>
         private void setRadR_Scroll(object sender, EventArgs e)
         {
@@ -226,7 +226,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal
+        /// When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal.
         /// </summary>
         private void Stop_Click(object sender, EventArgs e)
         {
@@ -254,7 +254,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When you update the Position of Reciver check so Simulation is on and that values are correct
+        /// When you update the Position of Reciver check so Simulation is on and that values are correct.
         /// </summary>
         private void updatePos_Click(object sender, EventArgs e)
         {
@@ -287,7 +287,7 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        /// When you update the Position of Jammer check so Simulation is on and that values are correct
+        /// When you update the Position of Jammer check so Simulation is on and that values are correct.
         /// </summary>
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
@@ -322,8 +322,11 @@ namespace GnssLibGUI
         }
 
         /// <summary>
-        ///
+        /// Finds the elevation from the .tiff file at the location of latitude and longitude and returns the value found.
         /// </summary>
+        /// <param name="latitude">Latitude in DecimalDegrees of the location.</param>
+        /// <param name="longitude">Longitude in DecimalDegrees of the location.</param>
+        /// <returns>Elevation above (in meters) the geoid at given location.</returns>
         private double initElevation(double latitude, double longitude)
         {
             WGS84Position wgsPos = new WGS84Position();

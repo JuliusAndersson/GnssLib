@@ -35,12 +35,12 @@ namespace GnssLibDL
         public double _continousSecFromStart = 0;
 
         /// <summary>
-        /// The init sets global var and reads the Epemeris file
+        /// The init sets global var and reads the Epemeris file.
         /// </summary>
-        /// <param name="rConfig"> Configurations for the reciever </param>
-        /// <param name="jConfig"> Configurations for the jammer </param>
-        /// <param name="fileName"> The name of the epemeris file to be used </param>
-        /// <param name="simulationStartDateTime"> The DateTime that the simulation starts at</param>
+        /// <param name="rConfig"> Configurations for the reciever. </param>
+        /// <param name="jConfig"> Configurations for the jammer. </param>
+        /// <param name="fileName"> The name of the epemeris file to be used.</param>
+        /// <param name="simulationStartDateTime"> The DateTime that the simulation starts at.</param>
         public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName, DateTime simulationStartDateTime) {
             this._rConfig = rConfig;
             this._jConfig = jConfig;
@@ -54,7 +54,7 @@ namespace GnssLibDL
         }
 
         /// <summary>
-        /// The Controller of the program, calls for CALC to calculate and update global var
+        /// The Controller of the program, calls for CALC to calculate and update global var.
         /// </summary>
         public void Tick()
         {
@@ -90,7 +90,7 @@ namespace GnssLibDL
         }
 
         /// <summary>
-        /// If gps is on, Calculate and update lists of satellites with gps
+        /// If gps is on, Calculate and update lists of satellites with gps.
         /// </summary>
         private void MakeGps()
         {
@@ -132,7 +132,7 @@ namespace GnssLibDL
         }
 
         /// <summary>
-        /// If galileo is on, Calculate and update lists of satellites with galileo
+        /// If galileo is on, Calculate and update lists of satellites with galileo.
         /// </summary>
         private void MakeGalileo()
         {
@@ -176,7 +176,7 @@ namespace GnssLibDL
             }
         }
         /// <summary>
-        /// Used to update the receiver position
+        /// Used to update the receiver position.
         /// </summary>
         public void UpdatePos(double latPos, double longPos, double elevation)
         {
@@ -185,7 +185,7 @@ namespace GnssLibDL
             this._rConfig.ReceiverElevetion = elevation; 
         }
         /// <summary>
-        /// Used to update the jammer position
+        /// Used to update the jammer position.
         /// </summary>
         public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad)
         {
@@ -196,7 +196,7 @@ namespace GnssLibDL
         }
 
         /// <summary>
-        /// Calculates position accuracy with PDOP and gps error
+        /// Calculates position accuracy with PDOP and gps error.
         /// </summary>
         public double GetApproxPos()
         {
@@ -205,7 +205,7 @@ namespace GnssLibDL
 
 
         /// <summary>
-        /// 3 methods used to debug and write to the Terminal on the GUI
+        /// 3 methods used to debug and write to the Terminal on the GUI.
         /// </summary>
         public DateTime DebugToTerminalGUIGetValues()
         {

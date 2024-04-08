@@ -2,13 +2,16 @@
 namespace GnssLibDL
 {
     /// <summary>
-    /// The Class that decides when the program will run
+    /// The Class that decides when the program will run.
     /// </summary>
-    /// <param name="scIN">The SimulationController</param>
+    
     public class SimulationRunTime
     {
         public event EventHandler _tickDone;
-        
+        /// <summary>
+        /// Method that runs the simulation.
+        /// </summary>
+        /// <param name="scIN">The simulationController used to run the simulaton.</param>
         public void RunSimulation(SimulationController scIN)
         {
             scIN.Tick();     
