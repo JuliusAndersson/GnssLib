@@ -9,7 +9,6 @@ namespace GnssLibCALC
         private const double GM = 3.986005e14;                             //WGS-84 value for the product of gravitational constant G and the mass of the Earth M
         private const double WGS84_ROTATION_RATE_OF_EARTH = 7.292115e-5;   //WGS-84 value of the Earth’s rotation rate
 
-
         /// <summary>
         /// Converts a DecimalDegree coordinate to a DegreeMinutesSecond 
         /// </summary>
@@ -22,12 +21,10 @@ namespace GnssLibCALC
             double remaining = Math.Abs(coordinate - degrees) * 60;
             int minutes = (int)remaining;
             double seconds = (remaining - minutes) * 60;
-
             char direction = isLatitude ? (coordinate >= 0 ? 'N' : 'S') : (coordinate >= 0 ? 'E' : 'W');
 
             return $"{direction} {degrees:D3}º {minutes:D2}' {seconds:00.00}\"".Replace(',', '.');
         }
-
 
         /// <summary>
         /// Converts from longitude, latitude and altitude in decimalDegrees to ECEF xyz-coordinates.
@@ -59,7 +56,6 @@ namespace GnssLibCALC
             //Convert from meters to km
             return new double[] { x / 1000, y / 1000, z / 1000 };
         }
-
 
         /// <summary>
         /// Calculation of GPS satelliteposition from broadcast ephemeris data. Calculation based on instructions in "Satellite-position-from-ephemeris". 
@@ -103,7 +99,6 @@ namespace GnssLibCALC
             double zk = yk_prim * Math.Sin(ik);
             return new double[] { xk / 1000, yk / 1000, zk / 1000 };
         }
-
 
         /// <summary>
         /// Calculation of GPS satelliteposition from broadcast ephemeris data. Calculation based on instructions in "Satellite-position-from-ephemeris". 
@@ -180,6 +175,5 @@ namespace GnssLibCALC
             return Ek;
         }
     }
-
 }
 

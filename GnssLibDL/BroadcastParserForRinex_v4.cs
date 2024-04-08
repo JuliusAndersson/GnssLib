@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GnssLibDL
 {
-    internal class Parser
+    internal class BroadcastParserForRinex_v4
     {
         public static void GalileoAndGPSParser(string token, List<string> inputList)
         {

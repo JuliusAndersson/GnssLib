@@ -8,6 +8,7 @@ namespace GnssLibCALC
 {
     public class VisibleSatCalulator
     {
+
         /// <summary>
         /// Determines whether a satellite is visible based on specified visibility conditions and coordinates of the satellite and receiver.
         /// </summary>

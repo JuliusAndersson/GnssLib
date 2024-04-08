@@ -57,7 +57,7 @@ namespace GnssLibDL
 
                             foreach (string token in gpsTokens)
                             {
-                                Parser.GalileoAndGPSParser(token, tempList);
+                                BroadcastParserForRinex_v4.GalileoAndGPSParser(token, tempList);
                             }
                             tempList.RemoveRange(0, 4);
                             broadcastDataListGps.Add(createBroadCastDataLNAV(tempList));
@@ -89,7 +89,7 @@ namespace GnssLibDL
 
                             foreach (string token in galileoTokens)
                             {
-                                Parser.GalileoAndGPSParser(token, tempList);
+                                BroadcastParserForRinex_v4.GalileoAndGPSParser(token, tempList);
                             }
                             tempList.RemoveRange(0, 4);
                             broadcastDataListGAL.Add(createBroadCastDataINAV(tempList));
@@ -118,7 +118,7 @@ namespace GnssLibDL
 
                             foreach (string token in GlonasTokens)
                             {
-                                Parser.GlonassParser(token, tempList);
+                                BroadcastParserForRinex_v4.GlonassParser(token, tempList);
                             }
                             tempList.RemoveRange(0, 4);
                             broadcastDataListGLO.Add(createBroadCastDataFDMA(tempList));
@@ -301,7 +301,6 @@ namespace GnssLibDL
                 broadcastData.URAI = double.Parse(broadCastDataAsList[24], NumberStyles.Float, CultureInfo.InvariantCulture);
                 broadcastData.Health_Flags = double.Parse(broadCastDataAsList[25], NumberStyles.Float, CultureInfo.InvariantCulture);
             }
-
             return broadcastData;
         }
 
@@ -327,11 +326,7 @@ namespace GnssLibDL
             {
                 ListOfSatellites = galSatList
             };
-
-           
-            return galileo;
-
-           
+            return galileo;          
         }
     }
 }
