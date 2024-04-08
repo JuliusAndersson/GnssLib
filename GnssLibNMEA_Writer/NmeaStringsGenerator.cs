@@ -261,7 +261,7 @@ namespace GnssLibNMEA_Writer
         {
             if (elevation < 10)
             {
-                return (int) SimulateSnrHelper(0, 25, 10, 20);
+                return (int) SimulateSnrHelper(0, 25, 12, 16);
             }
             else
             {
@@ -280,7 +280,7 @@ namespace GnssLibNMEA_Writer
         private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
         {
             double mean = (focusMin + focusMax) / 2;
-            double stdDev = (focusMax - focusMin) / 6;
+            double stdDev = (focusMax - focusMin) / 4;
 
             double firstRandom = 1.0 - _random.NextDouble();
             double secondRandom = 1.0 - _random.NextDouble();
