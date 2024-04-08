@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace GnssLibDL
 {
+    /// <summary>
+    /// The Class that decides when the program will run
+    /// </summary>
+    /// <param name="scIN">The SimulationController</param>
     public class SimulationRunTime
     {
         public event EventHandler _tickDone;
+        
         public void RunSimulation(SimulationController scIN)
         {
             scIN.Tick();     

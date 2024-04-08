@@ -1,5 +1,4 @@
-﻿using System;
-using GnssLibCALC.Models.SatModels;
+﻿using GnssLibCALC.Models.SatModels;
 
 namespace GnssLibCALC.Models.SatelliteSystemModels
 {

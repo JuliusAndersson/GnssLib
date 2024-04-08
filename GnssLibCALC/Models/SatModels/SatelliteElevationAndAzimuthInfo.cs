@@ -1,8 +1,4 @@
-﻿using System;
-
-
-
-
+﻿
 namespace GnssLibCALC.Models.SatModels
 {
 	/// <summary>

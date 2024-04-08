@@ -1,15 +1,7 @@
 ﻿using GnssLibCALC.Models;
 using GnssLibCALC.Models.SatModels;
-using GnssLibCALC.Models.BroadCastDataModels;
-using System.IO.Ports;
 using GnssLibCALC;
-using System;
-using GeoTiffElevationReader;
-using MightyLittleGeodesy.Positions;
 using GnssLibCALC.Models.Configuration;
-using System.Reflection.Metadata.Ecma335;
-using GnssLibCALC.Models.SatelliteSystemModels;
-
 
 namespace GnssLibDL
 {
@@ -42,6 +34,13 @@ namespace GnssLibDL
         
         public double _continousSecFromStart = 0;
 
+        /// <summary>
+        /// The init sets global var and reads the Epemeris file
+        /// </summary>
+        /// <param name="rConfig"> Configurations for the reciever </param>
+        /// <param name="jConfig"> Configurations for the jammer </param>
+        /// <param name="fileName"> The name of the epemeris file to be used </param>
+        /// <param name="simulationStartDateTime"> The DateTime that the simulation starts at</param>
         public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName, DateTime simulationStartDateTime) {
             this._rConfig = rConfig;
             this._jConfig = jConfig;
@@ -54,6 +53,9 @@ namespace GnssLibDL
 
         }
 
+        /// <summary>
+        /// The Controller of the program, calls for CALC to calculate and update global var
+        /// </summary>
         public void Tick()
         {
 
@@ -87,6 +89,9 @@ namespace GnssLibDL
             _continousSecFromStart += _speedForSimulation;
         }
 
+        /// <summary>
+        /// If gps is on, Calculate and update lists of satellites with gps
+        /// </summary>
         private void MakeGps()
         {
             var currentDatetime = _simulationStartDateTime.AddSeconds(_continousSecFromStart);
@@ -126,6 +131,9 @@ namespace GnssLibDL
             }
         }
 
+        /// <summary>
+        /// If galileo is on, Calculate and update lists of satellites with galileo
+        /// </summary>
         private void MakeGalileo()
         {
             var currentDatetime = _simulationStartDateTime.AddSeconds(_continousSecFromStart);
@@ -167,14 +175,18 @@ namespace GnssLibDL
                 
             }
         }
-
+        /// <summary>
+        /// Used to update the receiver position
+        /// </summary>
         public void UpdatePos(double latPos, double longPos, double elevation)
         {
             this._rConfig.ReceiverLatitude = latPos;
             this._rConfig.ReceiverLongitude = longPos;
             this._rConfig.ReceiverElevetion = elevation; 
         }
-
+        /// <summary>
+        /// Used to update the jammer position
+        /// </summary>
         public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad)
         {
             this._jConfig.IsJammerOn = jamOn;
@@ -183,6 +195,18 @@ namespace GnssLibDL
             this._jConfig.JammerRadius = jamRad;
         }
 
+        /// <summary>
+        /// Calculates position accuracy with PDOP and gps error
+        /// </summary>
+        public double GetApproxPos()
+        {
+            return _PDOP * _rConfig.ReceiverGpsError;
+        }
+
+
+        /// <summary>
+        /// 3 methods used to debug and write to the Terminal on the GUI
+        /// </summary>
         public DateTime DebugToTerminalGUIGetValues()
         {
             return new DateTime(_simulationStartDateTime.Year, _simulationStartDateTime.Month, _simulationStartDateTime.Day, 00, 00, 00);
@@ -196,10 +220,6 @@ namespace GnssLibDL
         public double DebugToTerminalGUIGetValuesBool()
         {
             return 0;
-        }
-        public double GetApproxPos()
-        {
-            return _PDOP * _rConfig.ReceiverGpsError;
         }
 
     }

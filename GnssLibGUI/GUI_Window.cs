@@ -1,6 +1,5 @@
 using GeoTiffElevationReader;
 using GnssLibCALC;
-using GnssLibCALC.Models.BroadCastDataModels;
 using GnssLibCALC.Models.Configuration;
 using GnssLibDL;
 using GnssLibNMEA_Writer;
@@ -29,7 +28,7 @@ namespace GnssLibGUI
             _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
             _serialPort.Handshake = Handshake.None;
 
-            //Check what files exist
+            //Check what files exist and creates a Dropdown
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Broadcast");
             if (Directory.Exists(folderPath))
             {

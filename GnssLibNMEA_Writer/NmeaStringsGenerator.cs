@@ -1,10 +1,8 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO.Ports;
 using System.Text;
 using GnssLibCALC.Models.SatModels;
 using GnssLibDL;
-using MathNet.Numerics.RootFinding;
 
 namespace GnssLibNMEA_Writer
 {
