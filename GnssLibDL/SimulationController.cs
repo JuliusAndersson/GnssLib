@@ -27,9 +27,12 @@ namespace GnssLibDL
         public List<SatelliteElevationAndAzimuthInfo> _satListGPS;
         public List<SatelliteElevationAndAzimuthInfo> _satListGL;
         
-        public double _PDOP;
-        public double _HDOP;
-        public double _VDOP;
+        private double _PDOP;
+        public double PDOP { get{ return _PDOP; } }
+        private double _HDOP;
+        public double HDOP { get { return _HDOP; } }
+        private double _VDOP;
+        public double VDOP { get { return _VDOP; } }
         public double[] _receiverPos;
         
         public double _continousSecFromStart = 0;

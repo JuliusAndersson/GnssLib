@@ -22,9 +22,9 @@ namespace GnssLibNMEA_Writer
 
             List<string> activeSatellitesGPS = simulationController._visibleSatellitesPRN_GPS;
             List<string> activeSatellitesGL = simulationController._visibleSatellitesPRN_GL;
-            double PDOP = simulationController._PDOP;
-            double HDOP = simulationController._HDOP;
-            double VDOP = simulationController._VDOP;
+            double PDOP = simulationController.PDOP;
+            double HDOP = simulationController.HDOP;
+            double VDOP = simulationController.VDOP;
             List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController._satListGPS;
             List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController._satListGL;
             DateTime utcTime = simulationController._simulationStartDateTime.AddSeconds(simulationController._continousSecFromStart); ;
