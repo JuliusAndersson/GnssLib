@@ -20,17 +20,17 @@ namespace GnssLibNMEA_Writer
         public static void NmeaGenerator(SerialPort serialPort, SimulationController simulationController)
         {
 
-            List<string> activeSatellitesGPS = simulationController._visibleSatellitesPRN_GPS;
-            List<string> activeSatellitesGL = simulationController._visibleSatellitesPRN_GL;
+            List<string> activeSatellitesGPS = simulationController.visibleSatellitesPRN_GPS;
+            List<string> activeSatellitesGL = simulationController.visibleSatellitesPRN_GL;
             double PDOP = simulationController.PDOP;
             double HDOP = simulationController.HDOP;
             double VDOP = simulationController.VDOP;
-            List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController._satListGPS;
-            List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController._satListGL;
-            DateTime utcTime = simulationController._simulationStartDateTime.AddSeconds(simulationController._continousSecFromStart); ;
-            double latitude = simulationController._rConfig.ReceiverLatitude;
-            double longitude = simulationController._rConfig.ReceiverLongitude;
-            double elevation = simulationController._rConfig.ReceiverElevetion;
+            List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController.satListGPS;
+            List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController.satListGL;
+            DateTime utcTime = simulationController.simulationStartDateTime.AddSeconds(simulationController.continousSecFromStart); ;
+            double latitude = simulationController.rConfig.ReceiverLatitude;
+            double longitude = simulationController.rConfig.ReceiverLongitude;
+            double elevation = simulationController.rConfig.ReceiverElevetion;
   
             string latD = "N";
             string longD = "E";

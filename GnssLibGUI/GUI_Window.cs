@@ -63,7 +63,7 @@ namespace GnssLibGUI
 
             //subscribe to event in RunTime
             _simulationRunTIme = new SimulationRunTime();
-            _simulationRunTIme._tickDone += HandleTickEvent;
+            _simulationRunTIme.tickDone += HandleTickEvent;
 
             Terminal.ForeColor = Color.Green;
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
@@ -188,15 +188,15 @@ namespace GnssLibGUI
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            //Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
+            //Terminal.Text += _simulationController.DebugToTerminalGUIGetValues() + Environment.NewLine;
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-            //Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
+            //Terminal.Text += _simulationController.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-            //foreach (var val in _sc.DebugToTerminalGUIGetValuesBool())
+            //foreach (var val in _simulationController.DebugToTerminalGUIGetValuesBool())
             //{
             //    Terminal.Text += val + Environment.NewLine;
             //    Terminal.SelectionStart = Terminal.Text.Length;
