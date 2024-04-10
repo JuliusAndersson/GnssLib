@@ -1,13 +1,15 @@
 ﻿using GnssLibCALC.Models.BroadCastDataModels;
 namespace GnssLibCALC
 {
-	public class CoordinatesCalculator
+    public class CoordinatesCalculator
     {
-        private const double WGS84_SEMI_MAJOR_AXIS = 6378137;              //semi-major axis in meters
-        private const double WGS84_SEMI_MINOR_AXIS = 6356752.3142;         //semi-minor axis in meters
-        private const double GM = 3.986005e14;                             //WGS-84 value for the product of gravitational constant G and the mass of the Earth M
-        private const double WGS84_ROTATION_RATE_OF_EARTH = 7.292115e-5;   //WGS-84 value of the Earth’s rotation rate
+        private const double _WGS84_SEMI_MAJOR_AXIS = 6378137;              //semi-major axis in meters
+        private const double _WGS84_SEMI_MINOR_AXIS = 6356752.3142;         //semi-minor axis in meters
+        private const double _GM = 3.986005e14;                             //WGS-84 value for the product of gravitational constant G and the mass of the Earth M
+        private const double _WGS84_ROTATION_RATE_OF_EARTH = 7.292115e-5;   //WGS-84 value of the Earth’s rotation rate
 
+        public static double WGS84_SEMI_MAJOR_AXIS{ get { return _WGS84_SEMI_MAJOR_AXIS; } }
+        public static double WGS84_SEMI_MINOR_AXIS { get { return _WGS84_SEMI_MINOR_AXIS; } }
         /// <summary>
         /// Converts a DecimalDegree coordinate to a DegreeMinutesSecond 
         /// </summary>
@@ -24,6 +26,16 @@ namespace GnssLibCALC
 
             return $"{direction} {degrees:D3}º {minutes:D2}' {seconds:00.00}\"".Replace(',', '.');
         }
+
+
+
+        public bool hasLineOfSight(double[] pos1, double[] pos2)
+        {
+            
+            
+            return true;
+        }
+
 
         /// <summary>
         /// Converts from longitude, latitude and altitude in decimalDegrees to ECEF xyz-coordinates.
@@ -42,10 +54,10 @@ namespace GnssLibCALC
             // Convert degrees to radians
             double phi = latitude * Math.PI / 180.0;   // geodetic latitude in radians
             double lambda = longitude * Math.PI / 180.0; // longitude in radians
-            double f = 1 - (WGS84_SEMI_MINOR_AXIS / WGS84_SEMI_MAJOR_AXIS);
+            double f = 1 - (_WGS84_SEMI_MINOR_AXIS / _WGS84_SEMI_MAJOR_AXIS);
             // Convert geodetic latitude to geocentric latitude
             double esquared = f*(2 - f);
-            double Nphi = WGS84_SEMI_MAJOR_AXIS / Math.Sqrt(1 - esquared * Math.Pow(Math.Sin(phi), 2));
+            double Nphi = _WGS84_SEMI_MAJOR_AXIS / Math.Sqrt(1 - esquared * Math.Pow(Math.Sin(phi), 2));
 
             // Calculate ECEF XYZ coordinates
             double x = (Nphi + altitude) * Math.Cos(phi) * Math.Cos(lambda);
@@ -70,7 +82,7 @@ namespace GnssLibCALC
         public static double[] CalculatePosition(BroadCastDataLNAV broadcastData, double seconds)
         {
             double A = broadcastData.SqrtOfMajorAxis * broadcastData.SqrtOfMajorAxis;
-            double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
+            double n_0 = Math.Sqrt(_GM / Math.Pow(A, 3));
             double n = n_0 + broadcastData.Delta_n0;
             double e = broadcastData.OrbitEcentricity;
             double tk = CalculateTk(broadcastData.TransmissionTime + seconds, broadcastData.TimeOfEphemeris);
@@ -91,7 +103,7 @@ namespace GnssLibCALC
             double xk_prim = rk * Math.Cos(uk);
             double yk_prim = rk * Math.Sin(uk);
 
-            double omega_k = broadcastData.OmegaAngle0 + (broadcastData.AngularVelocityPerSec - WGS84_ROTATION_RATE_OF_EARTH) * tk - WGS84_ROTATION_RATE_OF_EARTH * broadcastData.TimeOfEphemeris;
+            double omega_k = broadcastData.OmegaAngle0 + (broadcastData.AngularVelocityPerSec - _WGS84_ROTATION_RATE_OF_EARTH) * tk - _WGS84_ROTATION_RATE_OF_EARTH * broadcastData.TimeOfEphemeris;
 
             double xk = xk_prim * Math.Cos(omega_k) - yk_prim * Math.Cos(ik) * Math.Sin(omega_k);
             double yk = xk_prim * Math.Sin(omega_k) + yk_prim * Math.Cos(ik) * Math.Cos(omega_k);
@@ -113,7 +125,7 @@ namespace GnssLibCALC
         public static double[] CalculatePosition(BroadCastDataINAV broadcastData, double seconds)
         {
             double A = broadcastData.SqrtOfMajorAxis * broadcastData.SqrtOfMajorAxis;
-            double n_0 = Math.Sqrt(GM / Math.Pow(A, 3));
+            double n_0 = Math.Sqrt(_GM / Math.Pow(A, 3));
             double n = n_0 + broadcastData.Delta_n;
             double e = broadcastData.OrbitEcentricity;
             double tk = CalculateTk(broadcastData.TransmissionTime + seconds, broadcastData.TimeOfEphemeris);
@@ -134,7 +146,7 @@ namespace GnssLibCALC
             double xk_prim = rk * Math.Cos(uk);
             double yk_prim = rk * Math.Sin(uk);
 
-            double omega_k = broadcastData.OmegaAngle0 + (broadcastData.AngularVelocityPerSec - WGS84_ROTATION_RATE_OF_EARTH) * tk - WGS84_ROTATION_RATE_OF_EARTH * broadcastData.TimeOfEphemeris;
+            double omega_k = broadcastData.OmegaAngle0 + (broadcastData.AngularVelocityPerSec - _WGS84_ROTATION_RATE_OF_EARTH) * tk - _WGS84_ROTATION_RATE_OF_EARTH * broadcastData.TimeOfEphemeris;
 
             double xk = xk_prim * Math.Cos(omega_k) - yk_prim * Math.Cos(ik) * Math.Sin(omega_k);
             double yk = xk_prim * Math.Sin(omega_k) + yk_prim * Math.Cos(ik) * Math.Cos(omega_k);

@@ -214,6 +214,8 @@ namespace GnssLibDL
 
         public string DebugToTerminalGUIGetValuesDouble()
         {
+            double[] jampos = CoordinatesCalculator.GeodeticToECEF(55.706094, 13.190011, 0);
+            double[] recpos = CoordinatesCalculator.GeodeticToECEF(55.718279, 13.174734,0);
             return "";
         }
 

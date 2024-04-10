@@ -192,11 +192,11 @@ namespace GnssLibGUI
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-            //Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
-            //Terminal.SelectionStart = Terminal.Text.Length;
-            //Terminal.ScrollToCaret();
+            Terminal.Text += _simulationController.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
+            Terminal.SelectionStart = Terminal.Text.Length;
+            Terminal.ScrollToCaret();
 
-            //foreach (var val in _sc.DebugToTerminalGUIGetValuesBool())
+            //foreach (var val in _simulationController.DebugToTerminalGUIGetValuesDouble())
             //{
             //    Terminal.Text += val + Environment.NewLine;
             //    Terminal.SelectionStart = Terminal.Text.Length;

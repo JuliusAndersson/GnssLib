@@ -2,6 +2,13 @@
 {
 	public class InterferenceCalculator
 	{
+
+
+        private static readonly double _Xsquare = Math.Pow(CoordinatesCalculator.WGS84_SEMI_MAJOR_AXIS, 2);
+        private static readonly double _Ysquare = Math.Pow(CoordinatesCalculator.WGS84_SEMI_MAJOR_AXIS, 2);
+        private static readonly double _Csquare = Math.Pow(CoordinatesCalculator.WGS84_SEMI_MINOR_AXIS, 2);
+
+
         /// <summary>
         /// Calculates distance between two points in ECEF coordinates
         /// </summary>
@@ -53,6 +60,44 @@
             // Check if the closest point is within the jammer's radius
             return Distance(closestPoint, jammerCenter) <= jammerRadius;
         }
+
+        /// <summary>
+        /// Checks if the line from p1 to p2 intersect the wgs84 elipsoid at any value of t.
+        /// </summary>
+        /// <param name="fromPosition">From-position.</param>
+        /// <param name="toPosition">To-position.</param>
+        /// <returns>True if it intersects, else false.</returns>
+        public static bool CheckIntersection(double[] fromPosition, double[] toPosition)
+        {
+            double x, y, z;
+            for (double t = 0; t <= 1; t += 0.02)
+            {
+                x = fromPosition[0] + t * (toPosition[0] - fromPosition[0]);
+                y = fromPosition[1] + t * (toPosition[1] - fromPosition[1]);
+                z = fromPosition[2] + t * (toPosition[2] - fromPosition[2]);
+
+                if (CalculateIntersect(x, y, z))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a position is on or inside the elipsoid. If result if less than or equal to 1 returns true.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns>True if point is inside elipsoid.</returns>
+        public static bool CalculateIntersect(double x, double y, double z)
+        {
+            double result = (x * x) / _Xsquare + (y * y) / _Ysquare + (z * z) / _Csquare;
+            return result <= 1;
+        }
+
+
     }
 }
 
