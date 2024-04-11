@@ -230,6 +230,7 @@ namespace GnssLibNMEA_Writer
 
         /// <summary>
         /// Calculate the checksum for the NMEA-Strings. 
+        /// For each character, it performs a bitwise XOR operation with the current checksum.
         /// </summary>
         /// <param name="message">The string to be calculated.</param>
         /// <returns>The checksum for this message string.</returns>
