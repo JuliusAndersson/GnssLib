@@ -1,6 +1,5 @@
 using GeoTiffElevationReader;
 using GnssLibCALC;
-using GnssLibCALC.Models.BroadCastDataModels;
 using GnssLibCALC.Models.Configuration;
 using GnssLibDL;
 using GnssLibNMEA_Writer;
@@ -23,13 +22,17 @@ namespace GnssLibGUI
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
         private string _geoFilePath;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public GUI_Window()
         {
             InitializeComponent();
             _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
             _serialPort.Handshake = Handshake.None;
 
-            //Check what files exist
+            //Check what files exist and creates a Dropdown
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Broadcast");
             if (Directory.Exists(folderPath))
             {
@@ -60,7 +63,7 @@ namespace GnssLibGUI
 
             //subscribe to event in RunTime
             _simulationRunTIme = new SimulationRunTime();
-            _simulationRunTIme._tickDone += HandleTickEvent;
+            _simulationRunTIme.tickDone += HandleTickEvent;
 
             Terminal.ForeColor = Color.Green;
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
@@ -70,6 +73,9 @@ namespace GnssLibGUI
 
         }
 
+        /// <summary>
+        /// When Simulate button is pressed SimulationController is created and the SimulationRunTime event is started.
+        /// </summary>
         private void Simulate_Click(object sender, EventArgs e)
         {
             if (!_isRunning)
@@ -120,7 +126,6 @@ namespace GnssLibGUI
                             IsUsingGPS = setGps.Checked,
                             IsUsingGalileo = setGalileo.Checked,
                             IsUsingGlonass = setGlonass.Checked,
-                            ReceiverStartDT = dt,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
@@ -136,7 +141,7 @@ namespace GnssLibGUI
                         };
 
 
-                            _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName);
+                            _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName, dt);
 
                         _timerRunTime.Start();
                         Terminal.ForeColor = Color.White;
@@ -169,24 +174,29 @@ namespace GnssLibGUI
             }
         }
 
+        /// <summary>
+        /// When _timerRunTime event happens in this file run SimulationRunTime once.
+        /// </summary>
         public void HandleRunTime(object sender, EventArgs e)
         {
-            //When event happen in this file run SimulationRunTime once
             _simulationRunTIme.RunSimulation(_simulationController);
         }
 
+        /// <summary>
+        /// When event happen at the end of RunTime write to NMEA if its on and update Position accuracy.
+        /// </summary>
         public void HandleTickEvent(object sender, EventArgs e)
         {
             //Test values from Controller
-            //Terminal.Text += _sc.DebugToTerminalGUIGetValues() + Environment.NewLine;
+            //Terminal.Text += _simulationController.DebugToTerminalGUIGetValues() + Environment.NewLine;
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-            //Terminal.Text += _sc.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
+            //Terminal.Text += _simulationController.DebugToTerminalGUIGetValuesDouble() + Environment.NewLine;
             //Terminal.SelectionStart = Terminal.Text.Length;
             //Terminal.ScrollToCaret();
 
-            //foreach (var val in _sc.DebugToTerminalGUIGetValuesBool())
+            //foreach (var val in _simulationController.DebugToTerminalGUIGetValuesBool())
             //{
             //    Terminal.Text += val + Environment.NewLine;
             //    Terminal.SelectionStart = Terminal.Text.Length;
@@ -201,21 +211,25 @@ namespace GnssLibGUI
             {
                 labelPosAcc.Text = "-,- m";
             }
-            //When event happen at the end of RunTime write to NMEA if its on
+
             if (_isNmeaOn) {
                 NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
             }
         }
 
+        /// <summary>
+        /// Set the label when Jammmer str slider is changed.
+        /// </summary>
         private void setRadR_Scroll(object sender, EventArgs e)
         {
-            //set the label when Jammmer str slider is changed
             labelRadR.Text = setRadR.Value.ToString() + " km";
         }
 
+        /// <summary>
+        /// When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal.
+        /// </summary>
         private void Stop_Click(object sender, EventArgs e)
         {
-            //When Stop is pressed once stop the simulation and change the name to Clear, 2nd time clear the Terminal
             Stop.Text = "Clear";
             Terminal.ForeColor = Color.White;
             Terminal.Text += "Simulation Stopped" + Environment.NewLine;
@@ -239,14 +253,20 @@ namespace GnssLibGUI
 
         }
 
+        /// <summary>
+        /// When you update the Position of Reciver check so Simulation is on and that values are correct.
+        /// </summary>
         private void updatePos_Click(object sender, EventArgs e)
         {
-            //When you update the Position of Reciver check so Simulation is on and that values are correct
             if (_simulationController != null)
             {
                 double value;
                 if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                  && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
+                  && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                  && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
+                  && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
+                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
+                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
 
                     _simulationController.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                        initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
@@ -258,7 +278,7 @@ namespace GnssLibGUI
                 else
                 {
                     Terminal.ForeColor = Color.Red;
-                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) #" + Environment.NewLine;
+                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
@@ -266,14 +286,20 @@ namespace GnssLibGUI
             
         }
 
+        /// <summary>
+        /// When you update the Position of Jammer check so Simulation is on and that values are correct.
+        /// </summary>
         private void updateJammerPos_Click(object sender, EventArgs e)
         {
-            //When you update the Position of Jammer check so Simulation is on and that values are correct
             if (_simulationController != null)
             {
                 double value;
                 if (double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                  && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)) { 
+                  && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                  && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
+                  && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
+                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
+                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
 
                     _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
@@ -286,7 +312,7 @@ namespace GnssLibGUI
                 else
                 {
                     Terminal.ForeColor = Color.Red;
-                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) #" + Environment.NewLine;
+                    Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
                     Terminal.ScrollToCaret();
                 }
@@ -294,6 +320,13 @@ namespace GnssLibGUI
              
 
         }
+
+        /// <summary>
+        /// Finds the elevation from the .tiff file at the location of latitude and longitude and returns the value found.
+        /// </summary>
+        /// <param name="latitude">Latitude in DecimalDegrees of the location.</param>
+        /// <param name="longitude">Longitude in DecimalDegrees of the location.</param>
+        /// <returns>Elevation above (in meters) the geoid at given location.</returns>
         private double initElevation(double latitude, double longitude)
         {
             WGS84Position wgsPos = new WGS84Position();

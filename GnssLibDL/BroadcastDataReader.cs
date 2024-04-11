@@ -2,12 +2,7 @@
 using GnssLibCALC.Models.BroadCastDataModels;
 using GnssLibCALC.Models.SatelliteSystemModels;
 using GnssLibCALC.Models.SatModels;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GnssLibDL
 {

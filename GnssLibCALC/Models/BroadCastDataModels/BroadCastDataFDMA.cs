@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace GnssLibCALC.Models.BroadCastDataModels
 {
 

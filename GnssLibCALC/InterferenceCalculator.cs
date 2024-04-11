@@ -1,5 +1,4 @@
-﻿using System;
-namespace GnssLibCALC
+﻿namespace GnssLibCALC
 {
 	public class InterferenceCalculator
 	{

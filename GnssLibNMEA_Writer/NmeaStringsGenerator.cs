@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO.Ports;
 using System.Text;
 using GnssLibCALC.Models.SatModels;
@@ -21,17 +20,17 @@ namespace GnssLibNMEA_Writer
         public static void NmeaGenerator(SerialPort serialPort, SimulationController simulationController)
         {
 
-            List<string> activeSatellitesGPS = simulationController._visibleSatellitesPRN_GPS;
-            List<string> activeSatellitesGL = simulationController._visibleSatellitesPRN_GL;
-            double PDOP = simulationController._PDOP;
-            double HDOP = simulationController._HDOP;
-            double VDOP = simulationController._VDOP;
-            List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController._satListGPS;
-            List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController._satListGL;
-            DateTime utcTime = simulationController._rConfig.ReceiverStartDT.AddSeconds(simulationController._continousSecFromStart); ;
-            double latitude = simulationController._rConfig.ReceiverLatitude;
-            double longitude = simulationController._rConfig.ReceiverLongitude;
-            double elevation = simulationController._rConfig.ReceiverElevetion;
+            List<string> activeSatellitesGPS = simulationController.visibleSatellitesPRN_GPS;
+            List<string> activeSatellitesGL = simulationController.visibleSatellitesPRN_GL;
+            double PDOP = simulationController.PDOP;
+            double HDOP = simulationController.HDOP;
+            double VDOP = simulationController.VDOP;
+            List<SatelliteElevationAndAzimuthInfo> satListGPS = simulationController.satListGPS;
+            List<SatelliteElevationAndAzimuthInfo> satListGL = simulationController.satListGL;
+            DateTime utcTime = simulationController.simulationStartDateTime.AddSeconds(simulationController.continousSecFromStart); ;
+            double latitude = simulationController.rConfig.ReceiverLatitude;
+            double longitude = simulationController.rConfig.ReceiverLongitude;
+            double elevation = simulationController.rConfig.ReceiverElevetion;
   
             string latD = "N";
             string longD = "E";
@@ -43,34 +42,41 @@ namespace GnssLibNMEA_Writer
             {
                 longD = "W";
             }
-            
-            string latString = latitude.ToString(CultureInfo.InvariantCulture);
-            if(latitude > 0 && latitude < 10)
+
+           
+            int latDegrees = Math.Abs((int)latitude);
+            double latDecimalMinutes = (Math.Abs(latitude) - Math.Abs(latDegrees)) * 60;
+
+            int longDegrees = Math.Abs((int)longitude);
+            double longDecimalMinutes = (Math.Abs(longitude) - Math.Abs(longDegrees)) * 60;
+
+
+            string latString = $"{latDegrees}{latDecimalMinutes}".Replace(',', '.');
+            if (latitude > 0 && latitude < 10)
             {
-                latString = "0" + latString;
-            }else if(latitude > -10 && latitude < 0)
-            {
-                latString = "0" + (latitude * -1).ToString(CultureInfo.InvariantCulture);
-            }else if(latitude < -10)
-            {
-                latString = (latitude * -1).ToString(CultureInfo.InvariantCulture);
+                latString = $"0{latDegrees}{latDecimalMinutes}".Replace(',', '.');
             }
-            string longString = longitude.ToString(CultureInfo.InvariantCulture);
-            if(longitude > 0 && longitude < 10)
+            else if(latitude > -10 && latitude < 0)
             {
-                longString = "00" + longString;
-            }else if(longitude > 0 && longitude < 100)
+                latString = $"0{latDegrees}{latDecimalMinutes}".Replace(',', '.'); ;
+            }
+
+            string longString = $"{longDegrees}{longDecimalMinutes}".Replace(',', '.');
+            if (longitude > 0 && longitude < 10)
             {
-                longString = "0" + longString;
-            }else if(longitude > -10 && longitude < 0)
+                longString = $"00{longDegrees}{longDecimalMinutes}".Replace(',', '.');
+            }
+            else if(longitude > 0 && longitude < 100)
             {
-                longString = "00" +(longitude * -1).ToString(CultureInfo.InvariantCulture);
-            }else if(longitude > -100 && longitude < 0 )
+                longString = $"0{longDegrees}{longDecimalMinutes}".Replace(',', '.');
+            }
+            else if(longitude > -10 && longitude < 0)
             {
-                longString = "0" + (longitude * -1).ToString(CultureInfo.InvariantCulture);
-            }else if(longitude < -100)
+                longString = $"00{longDegrees}{longDecimalMinutes}".Replace(',', '.');
+            }
+            else if(longitude > -100 && longitude < 0 )
             {
-                longString = (longitude * -1).ToString(CultureInfo.InvariantCulture);
+                longString = $"0{longDegrees}{longDecimalMinutes}".Replace(',', '.');
             }
 
             List<string> NMEAString = new List<string>();
@@ -256,7 +262,7 @@ namespace GnssLibNMEA_Writer
         {
             if (elevation < 10)
             {
-                return (int) SimulateSnrHelper(0, 25, 10, 20);
+                return (int) SimulateSnrHelper(0, 25, 12, 16);
             }
             else
             {
@@ -275,7 +281,7 @@ namespace GnssLibNMEA_Writer
         private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
         {
             double mean = (focusMin + focusMax) / 2;
-            double stdDev = (focusMax - focusMin) / 6;
+            double stdDev = (focusMax - focusMin) / 4;
 
             double firstRandom = 1.0 - _random.NextDouble();
             double secondRandom = 1.0 - _random.NextDouble();

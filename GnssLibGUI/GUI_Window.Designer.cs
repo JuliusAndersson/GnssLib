@@ -89,7 +89,7 @@
             Terminal.Name = "Terminal";
             Terminal.ReadOnly = true;
             Terminal.ScrollBars = ScrollBars.Both;
-            Terminal.Size = new Size(692, 177);
+            Terminal.Size = new Size(692, 159);
             Terminal.TabIndex = 0;
             Terminal.TabStop = false;
             // 
