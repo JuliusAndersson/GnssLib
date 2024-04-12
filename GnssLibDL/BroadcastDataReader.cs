@@ -8,6 +8,12 @@ namespace GnssLibDL
 {
     internal class BroadCastDataReader
     {
+
+        /// <summary>
+        /// Takes a filepath to Rinex file. Extracts all broadcast messages for GPS, Galileo and Glonass. 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public Satellites ReadBroadcastData(string filePath)
         {
             List<BroadCastDataLNAV> broadcastDataListGps = new List<BroadCastDataLNAV>();
@@ -165,6 +171,12 @@ namespace GnssLibDL
             }
         }
 
+
+        /// <summary>
+        /// Helper Method for creating the GPS BroadcastObjects.
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataLNAV createBroadCastDataLNAV(List<string> broadCastDataAsList)
         {
             return new BroadCastDataLNAV()
@@ -208,7 +220,11 @@ namespace GnssLibDL
                 TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
-
+        /// <summary>
+        ///  Helper Method for creating the Galileo BroadcastObjects.
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataINAV createBroadCastDataINAV(List<string> broadCastDataAsList)
         {
             return new BroadCastDataINAV()
@@ -253,7 +269,11 @@ namespace GnssLibDL
                 TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
-
+        /// <summary> 
+        /// Helper Method for creating the Glonass BroadcastObjects. NOT USED
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataFDMA createBroadCastDataFDMA(List<string> broadCastDataAsList)
         {
             BroadCastDataFDMA broadcastData = new BroadCastDataFDMA()
