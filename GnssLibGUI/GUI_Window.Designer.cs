@@ -200,7 +200,7 @@
             groupBox2.Size = new Size(370, 58);
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Reciever Position";
+            groupBox2.Text = "Receiver Position";
             // 
             // updatePos
             // 
