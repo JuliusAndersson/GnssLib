@@ -7,4 +7,5 @@ Required third party programs in order for the program to work as intended:
 - VisualGPSView for visualisation. [VisualGPSView](https://www.visualgps.net/#visualgpsview-content)
 - Virutal serial ports tool for communication with VisualGPSView. [Virtual COM port](https://freevirtualserialports.com/)
 
-If you want to add more ehpemeris files for different days they can be downloaded from NASA here: [NASA.GOV](https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/broadcast_ephemeris_data.html) Be sure to download in the RINEX V.4 format. 
+- If you want to add more ehpemeris files for different days they can be downloaded from NASA here: [NASA.GOV](https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/broadcast_ephemeris_data.html) Be sure to download in the RINEX V.4 format. 
+- If you would want to add different digital elevation models, they can also be downloaded from NASA here: [Earth Data](https://search.earthdata.nasa.gov/search/granules?p=C1711961296-LPCLOUD&pg[0][v]=f&pg[0][gsk]=-start_date&fi=ASTER&tl=1712687657!3!!)
