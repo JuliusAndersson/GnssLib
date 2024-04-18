@@ -1,6 +1,6 @@
 # GnssLib
 
-This is a prototype GNSS simulator developed during a thesis project. It calculates satellite positions based on broadcast files downloaded from NASA. From inputs such as position, time, GNSS type and ephemeris files. You get satellite positions visualised via VisualGPSView, Qualityindicators in the form of PDOP, VDOP and HDOP, and the position. You also have the ability to "simulate" interference by configuring the jammer in the GUI. 
+This is a prototype GNSS simulator developed during a thesis project. It calculates satellite positions based on broadcast files downloaded from NASA. From inputs such as position, time, GNSS-type and ephemeris files you get satellite positions visualised via VisualGPSView, Quality indicators in the form of PDOP, VDOP and HDOP, and the position. You also have the ability to "simulate" interference by configuring the jammer in the GUI. 
 
 Required third party programs in order for the program to work as intended:
 
