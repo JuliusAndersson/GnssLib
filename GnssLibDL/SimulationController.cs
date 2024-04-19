@@ -111,7 +111,7 @@ namespace GnssLibDL
 
             foreach (var gps in _GNSS_Data.Gps.satList)
             {
-
+               
                 var lastBroadcast = gps.Data.LastOrDefault(b => b.DateTime <= currentDatetime);
 
                 if (lastBroadcast != null)
