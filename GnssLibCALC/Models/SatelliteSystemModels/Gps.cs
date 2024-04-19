@@ -1,9 +1,10 @@
 ﻿using GnssLibCALC.Models.SatModels;
 namespace GnssLibCALC.Models.SatelliteSystemModels
 {
-    public class Gps
+
+    public class GPS
     {
-        public List<GpsSatellite> satList { get; set; }
+        public List<GPSSatellite> satList { get; set; }
     }
 }
 

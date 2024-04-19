@@ -3,6 +3,11 @@ namespace GnssLibDL
 {
     internal class BroadcastParserForRinex_v4
     {
+        /// <summary>
+        /// Takes a token (parameter from a broadcastmessage), manipulates it accordingly and adds it to the inputlist.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="inputList"></param>
         public static void GalileoAndGPSParser(string token, List<string> inputList)
         {
             string temp;
@@ -41,6 +46,11 @@ namespace GnssLibDL
             }
         }
 
+        /// <summary>
+        /// Takes a token (parameter from a broadcastmessage), manipulates it accordingly and adds it to the inputlist.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="inputList"></param>
         public static void GlonassParser(string token, List<string> inputList)
         {
             string temp;

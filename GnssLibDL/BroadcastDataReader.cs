@@ -8,7 +8,13 @@ namespace GnssLibDL
 {
     internal class BroadCastDataReader
     {
-        public Satellites ReadBroadcastData(string filePath)
+
+        /// <summary>
+        /// Takes a filepath to Rinex file. Extracts all broadcast messages for GPS, Galileo and Glonass. 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public GNSS ReadBroadcastData(string filePath)
         {
             List<BroadCastDataLNAV> broadcastDataListGps = new List<BroadCastDataLNAV>();
             List<BroadCastDataINAV> broadcastDataListGAL = new List<BroadCastDataINAV>();
@@ -122,17 +128,17 @@ namespace GnssLibDL
                 }
 
                 var grouptedGPSData = broadcastDataListGps.GroupBy(data => data.SatId);
-                List<GpsSatellite> gpsSatList = new List<GpsSatellite>();
+                List<GPSSatellite> gpsSatList = new List<GPSSatellite>();
                 foreach (var group in grouptedGPSData)
                 {
-                    GpsSatellite gpsSat = new GpsSatellite
+                    GPSSatellite gpsSat = new GPSSatellite
                     {
-                        id = group.Key,
+                        Id = group.Key,
                         Data = group.ToList()
                     };
                     gpsSatList.Add(gpsSat);
                 }
-                Gps gps = new Gps()
+                GPS gps = new GPS()
                 {
                     satList = gpsSatList
                 };
@@ -154,7 +160,7 @@ namespace GnssLibDL
                     satList = gloSatList
                 };
 
-                Satellites sats = new Satellites
+                GNSS sats = new GNSS
                 {
                     Galileo = GroupAndConstructGalileoObject(broadcastDataListGAL), //Test to make it "prettier/easier to read"
                     Gps = gps,
@@ -165,6 +171,12 @@ namespace GnssLibDL
             }
         }
 
+
+        /// <summary>
+        /// Helper Method for creating the GPS BroadcastObjects.
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataLNAV createBroadCastDataLNAV(List<string> broadCastDataAsList)
         {
             return new BroadCastDataLNAV()
@@ -208,7 +220,11 @@ namespace GnssLibDL
                 TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
-
+        /// <summary>
+        ///  Helper Method for creating the Galileo BroadcastObjects.
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataINAV createBroadCastDataINAV(List<string> broadCastDataAsList)
         {
             return new BroadCastDataINAV()
@@ -253,7 +269,11 @@ namespace GnssLibDL
                 TransmissionTime = double.Parse(broadCastDataAsList[34], NumberStyles.Float, CultureInfo.InvariantCulture)
             };
         }
-
+        /// <summary> 
+        /// Helper Method for creating the Glonass BroadcastObjects. NOT USED
+        /// </summary>
+        /// <param name="broadCastDataAsList"></param>
+        /// <returns></returns>
         private BroadCastDataFDMA createBroadCastDataFDMA(List<string> broadCastDataAsList)
         {
             BroadCastDataFDMA broadcastData = new BroadCastDataFDMA()

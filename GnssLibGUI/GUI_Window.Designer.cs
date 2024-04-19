@@ -200,7 +200,7 @@
             groupBox2.Size = new Size(370, 58);
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Reciever Position";
+            groupBox2.Text = "Receiver Position";
             // 
             // updatePos
             // 
@@ -386,9 +386,9 @@
             labelRadR.AutoSize = true;
             labelRadR.Location = new Point(36, 27);
             labelRadR.Name = "labelRadR";
-            labelRadR.Size = new Size(47, 21);
+            labelRadR.Size = new Size(65, 21);
             labelRadR.TabIndex = 17;
-            labelRadR.Text = "0 km";
+            labelRadR.Text = "420 km";
             // 
             // setRadR
             // 
@@ -401,6 +401,7 @@
             setRadR.Size = new Size(255, 27);
             setRadR.TabIndex = 15;
             setRadR.TickFrequency = 10;
+            setRadR.Value = 420;
             setRadR.Scroll += setRadR_Scroll;
             // 
             // groupBox6

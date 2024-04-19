@@ -7,7 +7,12 @@ namespace GnssLibDL
     
     public class SimulationRunTime
     {
-        public event EventHandler _tickDone;
+        private event EventHandler _tickDone;
+        public event EventHandler tickDone
+        {
+            add { _tickDone += value; }
+            remove { _tickDone -= value; }
+        }
         /// <summary>
         /// Method that runs the simulation.
         /// </summary>

@@ -12,27 +12,39 @@ namespace GnssLibDL
         private static readonly double _MIN_ELEVATION = 0;
         private static readonly double _MAX_ELEVATION = 90;
         
-        private Satellites _GNSS_Data;
+        private GNSS _GNSS_Data;
 
         //Input & Output
-        public ReceiverConfiguration _rConfig;
-        public JammerConfiguration _jConfig;
-        public DateTime _simulationStartDateTime;
+        private ReceiverConfiguration _rConfig;
+        private JammerConfiguration _jConfig;
+        private DateTime _simulationStartDateTime;
 
         //Output
         private List<double[]> _satellitePositions;
+        private List<string> _visibleSatellitesPRN_GPS;
+        private List<string> _visibleSatellitesPRN_GL;
+        private List<SatelliteElevationAndAzimuthInfo> _satListGPS;
+        private List<SatelliteElevationAndAzimuthInfo> _satListGL;
 
-        public List<string> _visibleSatellitesPRN_GPS;
-        public List<string> _visibleSatellitesPRN_GL;
-        public List<SatelliteElevationAndAzimuthInfo> _satListGPS;
-        public List<SatelliteElevationAndAzimuthInfo> _satListGL;
-        
-        public double _PDOP;
-        public double _HDOP;
-        public double _VDOP;
-        public double[] _receiverPos;
-        
-        public double _continousSecFromStart = 0;
+        private double _PDOP;
+        private double _HDOP;
+        private double _VDOP;
+        private double[] _receiverPos;
+        private double _continousSecFromStart = 0;
+
+
+        public ReceiverConfiguration rConfig { get { return _rConfig; } }
+        public DateTime simulationStartDateTime { get { return _simulationStartDateTime; } }
+        public List<string> visibleSatellitesPRN_GPS { get { return _visibleSatellitesPRN_GPS; } }
+        public List<string> visibleSatellitesPRN_GL { get { return _visibleSatellitesPRN_GL; } }
+        public List<SatelliteElevationAndAzimuthInfo> satListGPS { get { return _satListGPS; } }
+        public List<SatelliteElevationAndAzimuthInfo> satListGL { get { return _satListGL; } }
+        public double PDOP { get { return _PDOP; } }
+        public double HDOP { get { return _HDOP; } }
+        public double VDOP { get { return _VDOP; } }
+        public double continousSecFromStart { get { return _continousSecFromStart; } }
+
+
 
         /// <summary>
         /// The init sets global var and reads the Epemeris file.
