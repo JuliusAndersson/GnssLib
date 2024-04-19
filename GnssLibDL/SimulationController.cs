@@ -12,7 +12,7 @@ namespace GnssLibDL
         private static readonly double _MIN_ELEVATION = 0;
         private static readonly double _MAX_ELEVATION = 90;
         
-        private Satellites _GNSS_Data;
+        private GNSS _GNSS_Data;
 
         //Input & Output
         private ReceiverConfiguration _rConfig;

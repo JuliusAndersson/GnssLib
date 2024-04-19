@@ -4,6 +4,7 @@ namespace GnssLibCALC.Models.BroadCastDataModels
     /// <summary>
     /// Object for all paramaters in one broadcast message related to Gps. I.e. paramaters from Gps PNR 28 at 2024/01/01 at 12:00:00
     /// </summary>
+
     public class BroadCastDataLNAV 
     {
         

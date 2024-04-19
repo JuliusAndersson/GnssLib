@@ -14,7 +14,7 @@ namespace GnssLibDL
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public Satellites ReadBroadcastData(string filePath)
+        public GNSS ReadBroadcastData(string filePath)
         {
             List<BroadCastDataLNAV> broadcastDataListGps = new List<BroadCastDataLNAV>();
             List<BroadCastDataINAV> broadcastDataListGAL = new List<BroadCastDataINAV>();
@@ -128,17 +128,17 @@ namespace GnssLibDL
                 }
 
                 var grouptedGPSData = broadcastDataListGps.GroupBy(data => data.SatId);
-                List<GpsSatellite> gpsSatList = new List<GpsSatellite>();
+                List<GPSSatellite> gpsSatList = new List<GPSSatellite>();
                 foreach (var group in grouptedGPSData)
                 {
-                    GpsSatellite gpsSat = new GpsSatellite
+                    GPSSatellite gpsSat = new GPSSatellite
                     {
-                        id = group.Key,
+                        Id = group.Key,
                         Data = group.ToList()
                     };
                     gpsSatList.Add(gpsSat);
                 }
-                Gps gps = new Gps()
+                GPS gps = new GPS()
                 {
                     satList = gpsSatList
                 };
@@ -160,7 +160,7 @@ namespace GnssLibDL
                     satList = gloSatList
                 };
 
-                Satellites sats = new Satellites
+                GNSS sats = new GNSS
                 {
                     Galileo = GroupAndConstructGalileoObject(broadcastDataListGAL), //Test to make it "prettier/easier to read"
                     Gps = gps,

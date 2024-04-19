@@ -3,11 +3,11 @@
 namespace GnssLibCALC.Models
 {
 
-    public class Satellites
+    public class GNSS
 	{
 
 		public Galileo Galileo {get;set;}
-		public Gps Gps { get; set; }
+		public GPS Gps { get; set; }
 		public Glonass Glonass { get; set; }
 	}
 }
