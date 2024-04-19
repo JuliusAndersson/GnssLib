@@ -25,9 +25,9 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double SqrtOfMajorAxis { get; set; }
 
         //Orbit3
-        public double TimeOfEphemeris { get; set; } 
+        public double TimeOfEphemeris { get; set; }
         public double InclinationCorrectionCosinusComponent { get; set; }
-        public double OmegaAngle0 { get; set; } 
+        public double OmegaAngle0 { get; set; }
         public double AngularVelocity { get; set; }
 
         //Orbit4
@@ -67,11 +67,6 @@ namespace GnssLibCALC.Models.BroadCastDataModels
                    $"// Orbit5\nInclinationRate: {InclinationRate}\nDataSources: {DataSources}\nGalileoWeek: {GalileoWeek}\n\n" +
                    $"// Orbit6\nSignalInSpaceAccuarcy: {SignalInSpaceAccuarcy}\nSpaceVehicleHealth: {SpaceVehicleHealth}\nBGD_a: {BGD_a}\nBGD_b: {BGD_b} \n TransmissionTime: {TransmissionTime}";
         }
-
-
-
-
     }
-
 }
 

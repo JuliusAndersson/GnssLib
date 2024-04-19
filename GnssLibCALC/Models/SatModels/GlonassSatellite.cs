@@ -6,7 +6,6 @@ namespace GnssLibCALC.Models.SatModels
     {
         public List<BroadCastDataFDMA> Data { get; set; }
         public string id { get; set; }
-
     }
 }
 

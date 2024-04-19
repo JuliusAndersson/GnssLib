@@ -8,12 +8,11 @@ using System.Globalization;
 using System.IO.Ports;
 
 
-
 namespace GnssLibGUI
 {
     public partial class GUI_Window : Form
     {
-        System.Windows.Forms.Timer _timerRunTime = new System.Windows.Forms.Timer();
+
         private SimulationController? _simulationController;
         private SimulationRunTime _simulationRunTIme;
         private bool _hasStopped = true;
@@ -38,7 +37,7 @@ namespace GnssLibGUI
             {
                 string[] fileNames = Directory.GetFiles(folderPath);
 
-                
+
                 foreach (string filePath in fileNames)
                 {
                     _fileList.Add(Path.GetFileName(filePath));
@@ -57,9 +56,7 @@ namespace GnssLibGUI
 
             setFile.SelectedIndex = 0;
 
-            //Event that repeats ever 1s
-            _timerRunTime.Tick += HandleRunTime;
-            _timerRunTime.Interval = 1000;
+
 
             //subscribe to event in RunTime
             _simulationRunTIme = new SimulationRunTime();
@@ -69,7 +66,7 @@ namespace GnssLibGUI
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
 
             _geoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ElevationMaps/62_3_2023.tif");
-           
+
 
         }
 
@@ -95,7 +92,7 @@ namespace GnssLibGUI
                     _hasStopped = false;
                     DateTime dt;
                     Stop.Text = "Stop";
-                    
+
 
                     //Get DateTime from file
                     string fileName = _fileList[setFile.SelectedIndex];
@@ -114,8 +111,8 @@ namespace GnssLibGUI
                     if (double.TryParse(setLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                         && double.TryParse(setLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
                         && double.TryParse(setJammerLat.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-                        && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value) 
-                        && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90 
+                        && double.TryParse(setJammerLong.Text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                        && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
                         && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
                         && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
@@ -128,7 +125,7 @@ namespace GnssLibGUI
                             IsUsingGlonass = setGlonass.Checked,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            ReceiverElevetion = initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
+                            ReceiverAltitude = GetAltitude(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
                             ReceiverGpsError = 3
                         };
 
@@ -141,9 +138,9 @@ namespace GnssLibGUI
                         };
 
 
-                            _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName, dt);
+                        _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName, dt);
 
-                        _timerRunTime.Start();
+                        _simulationRunTIme.RunSimulation(_simulationController);
                         Terminal.ForeColor = Color.White;
                         Terminal.Text += "Simulation Started: " + dt + Environment.NewLine;
                         Terminal.SelectionStart = Terminal.Text.Length;
@@ -155,7 +152,7 @@ namespace GnssLibGUI
                         Terminal.Text += "# Invalid inputs (Check if you use , or . in Coordinates) ( Lat: -90 -> 90 ) ( Long: -180 -> 180 ) #" + Environment.NewLine;
                         Terminal.SelectionStart = Terminal.Text.Length;
                         Terminal.ScrollToCaret();
-                        
+
                     }
 
                 }
@@ -170,16 +167,8 @@ namespace GnssLibGUI
                 Terminal.Text += "# Stop the Simulation before pressing Simulate again #" + Environment.NewLine;
                 Terminal.SelectionStart = Terminal.Text.Length;
                 Terminal.ScrollToCaret();
-                
-            }
-        }
 
-        /// <summary>
-        /// When _timerRunTime event happens in this file run SimulationRunTime once.
-        /// </summary>
-        public void HandleRunTime(object sender, EventArgs e)
-        {
-            _simulationRunTIme.RunSimulation(_simulationController);
+            }
         }
 
         /// <summary>
@@ -212,7 +201,8 @@ namespace GnssLibGUI
                 labelPosAcc.Text = "-,- m";
             }
 
-            if (_isNmeaOn) {
+            if (_isNmeaOn)
+            {
                 NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
             }
         }
@@ -236,9 +226,10 @@ namespace GnssLibGUI
             labelPosAcc.Text = "-,- m";
             Terminal.SelectionStart = Terminal.Text.Length;
             Terminal.ScrollToCaret();
-            _timerRunTime.Stop();
             _isRunning = false;
             _isNmeaOn = false;
+
+            _simulationRunTIme.StopSimulation();
 
             if (_serialPort.IsOpen)
             {
@@ -266,10 +257,11 @@ namespace GnssLibGUI
                   && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
                   && double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
                   && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
-                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
+                  && double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
+                {
 
                     _simulationController.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                       initElevation(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
+                       GetAltitude(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
@@ -283,7 +275,6 @@ namespace GnssLibGUI
                     Terminal.ScrollToCaret();
                 }
             }
-            
         }
 
         /// <summary>
@@ -299,9 +290,10 @@ namespace GnssLibGUI
                   && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -90
                   && double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 90
                   && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) > -180
-                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180) { 
+                  && double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture) < 180)
+                {
 
-                    _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), 
+                    _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                         double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
 
                     Terminal.ForeColor = Color.White;
@@ -317,7 +309,7 @@ namespace GnssLibGUI
                     Terminal.ScrollToCaret();
                 }
             }
-             
+
 
         }
 
@@ -327,7 +319,7 @@ namespace GnssLibGUI
         /// <param name="latitude">Latitude in DecimalDegrees of the location.</param>
         /// <param name="longitude">Longitude in DecimalDegrees of the location.</param>
         /// <returns>Elevation above (in meters) the geoid at given location.</returns>
-        private double initElevation(double latitude, double longitude)
+        private double GetAltitude(double latitude, double longitude)
         {
             WGS84Position wgsPos = new WGS84Position();
             wgsPos.SetLatitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(latitude, true), WGS84Position.WGS84Format.DegreesMinutesSeconds);
@@ -344,6 +336,5 @@ namespace GnssLibGUI
             }
             return elevation;
         }
-
     }
 }

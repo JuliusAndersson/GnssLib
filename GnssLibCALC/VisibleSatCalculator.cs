@@ -42,11 +42,11 @@ namespace GnssLibCALC
             double numeratorCos = (-z1 * x1 * dx) - (z1 * y1 * dy) + ((x1 * x1) + (y1 * y1)) * dz;
             double denominatorCos = Math.Sqrt((x1 * x1 + y1 * y1) * (x1 * x1 + y1 * y1 + z1 * z1) * (dx * dx + dy * dy + dz * dz));
             double cosAzimuth = numeratorCos / denominatorCos;
-            
+
             double numeratorSin = (-y1 * dx) + (x1 * dy);
             double denominatorSin = Math.Sqrt((x1 * x1 + y1 * y1) * (dx * dx + dy * dy + dz * dz));
             double sinAzimuth = numeratorSin / denominatorSin;
-           
+
             double azimuthRadians = Math.Atan2(sinAzimuth, cosAzimuth);
             azimuthDegrees = azimuthRadians * (180 / Math.PI);
 

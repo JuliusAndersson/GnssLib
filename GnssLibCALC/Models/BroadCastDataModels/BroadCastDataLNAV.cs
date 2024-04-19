@@ -4,10 +4,8 @@ namespace GnssLibCALC.Models.BroadCastDataModels
     /// <summary>
     /// Object for all paramaters in one broadcast message related to Gps. I.e. paramaters from Gps PNR 28 at 2024/01/01 at 12:00:00
     /// </summary>
-
-    public class BroadCastDataLNAV 
+    public class BroadCastDataLNAV
     {
-        
         public string SatId { get; set; }
         public DateTime DateTime { get; set; }
         public double ClockBias { get; set; } //Not Used
@@ -27,9 +25,9 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double SqrtOfMajorAxis { get; set; }
 
         //Orbit3
-        public double TimeOfEphemeris { get; set; } 
+        public double TimeOfEphemeris { get; set; }
         public double InclinationCorrectionCosinusComponent { get; set; }
-        public double OmegaAngle0 { get; set; } 
+        public double OmegaAngle0 { get; set; }
         public double AngularVelocity { get; set; }
 
         //Orbit4
@@ -48,11 +46,10 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double SpaceVehicleAccuarcy { get; set; } //Not Used
         public double SpaceVehicleHealth { get; set; } //Not Used
         public double TotalGroupDelay { get; set; } //Not Used
-        public double IssueOfDataClock { get; set; } 
+        public double IssueOfDataClock { get; set; }
 
         //orbit7
         public double TransmissionTime { get; set; }
-
 
         /// <summary>
         /// ToString function for debugging. 

@@ -1,7 +1,7 @@
 ﻿namespace GnssLibCALC
 {
-	public class InterferenceCalculator
-	{
+    public class InterferenceCalculator
+    {
         /// <summary>
         /// Calculates distance between two points in ECEF coordinates
         /// </summary>

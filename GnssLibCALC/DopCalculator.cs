@@ -27,14 +27,14 @@ namespace GnssLibCALC
                 }
                 matrix[i, 3] = 1; // Last element of each row is always 1
             }
-            
+
             Matrix<double> A = DenseMatrix.OfArray(matrix);
-            Matrix<double> Q = (A.Transpose() * A).Inverse(); 
+            Matrix<double> Q = (A.Transpose() * A).Inverse();
 
             //retrive values from matrix to calculate DOP-Values
             double diagonalSum3 = Q.At(0, 0) + Q.At(1, 1) + Q.At(2, 2);
             double diagonalSum2 = Q.At(1, 1) + Q.At(0, 0);
-            
+
             HDOP = Math.Round(Math.Sqrt(diagonalSum2), 1);
             PDOP = Math.Round(Math.Sqrt(diagonalSum3), 1);
             VDOP = Math.Round(Math.Sqrt(Q.At(2, 2)), 1);

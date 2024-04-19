@@ -11,7 +11,7 @@ namespace GnssLibDL
         private readonly double _speedForSimulation = 1;
         private static readonly double _MIN_ELEVATION = 0;
         private static readonly double _MAX_ELEVATION = 90;
-        
+
         private GNSS _GNSS_Data;
 
         //Input & Output
@@ -53,13 +53,14 @@ namespace GnssLibDL
         /// <param name="jConfig"> Configurations for the jammer. </param>
         /// <param name="fileName"> The name of the epemeris file to be used.</param>
         /// <param name="simulationStartDateTime"> The DateTime that the simulation starts at.</param>
-        public SimulationController( ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName, DateTime simulationStartDateTime) {
+        public SimulationController(ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName, DateTime simulationStartDateTime)
+        {
             this._rConfig = rConfig;
             this._jConfig = jConfig;
             this._simulationStartDateTime = simulationStartDateTime;
 
             //Read File and put in a Satellites variable
-            string filePath = $"Resources/Broadcast/{fileName}"; 
+            string filePath = $"Resources/Broadcast/{fileName}";
             BroadCastDataReader bcdr = new BroadCastDataReader();
             _GNSS_Data = bcdr.ReadBroadcastData(filePath);
 
@@ -78,9 +79,9 @@ namespace GnssLibDL
             _satListGL = new List<SatelliteElevationAndAzimuthInfo>();
 
             _satellitePositions = new List<double[]>();
-            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverElevetion);
-            
-            
+            _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverAltitude);
+
+
 
             //Check if GPS, Galileo, Glonass is to be Used
             if (_rConfig.IsUsingGPS)
@@ -138,7 +139,7 @@ namespace GnssLibDL
                             });
                         }
                     }
-                    
+
                 }
             }
         }
@@ -183,8 +184,8 @@ namespace GnssLibDL
                         }
                     }
                 }
-                    
-                
+
+
             }
         }
         /// <summary>
@@ -194,7 +195,7 @@ namespace GnssLibDL
         {
             this._rConfig.ReceiverLatitude = latPos;
             this._rConfig.ReceiverLongitude = longPos;
-            this._rConfig.ReceiverElevetion = elevation; 
+            this._rConfig.ReceiverAltitude = elevation;
         }
         /// <summary>
         /// Used to update the jammer position.
@@ -217,7 +218,7 @@ namespace GnssLibDL
 
 
         /// <summary>
-        /// 3 methods used to debug and write to the Terminal on the GUI.
+        /// 3 methods used to write to the Terminal on the GUI. (DELETE! NOT USED IN FINISHED PRODUCT)
         /// </summary>
         public DateTime DebugToTerminalGUIGetValues()
         {

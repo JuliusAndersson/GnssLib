@@ -7,10 +7,10 @@ using GnssLibDL;
 namespace GnssLibNMEA_Writer
 {
 
-	public class NmeaStringsGenerator
-	{
+    public class NmeaStringsGenerator
+    {
         private static Random _random = new Random();
-        
+
 
         /// <summary>
         /// Creates all NMEA-messages from data in the SimulationController and whrites it to the serialPort.
@@ -30,20 +30,20 @@ namespace GnssLibNMEA_Writer
             DateTime utcTime = simulationController.simulationStartDateTime.AddSeconds(simulationController.continousSecFromStart); ;
             double latitude = simulationController.rConfig.ReceiverLatitude;
             double longitude = simulationController.rConfig.ReceiverLongitude;
-            double elevation = simulationController.rConfig.ReceiverElevetion;
-  
+            double elevation = simulationController.rConfig.ReceiverAltitude;
+
             string latD = "N";
             string longD = "E";
-            if(latitude < 0)
+            if (latitude < 0)
             {
                 latD = "S";
             }
-            if(longitude < 0)
+            if (longitude < 0)
             {
                 longD = "W";
             }
 
-           
+
             int latDegrees = Math.Abs((int)latitude);
             double latDecimalMinutes = (Math.Abs(latitude) - Math.Abs(latDegrees)) * 60;
 
@@ -56,7 +56,7 @@ namespace GnssLibNMEA_Writer
             {
                 latString = $"0{latDegrees}{latDecimalMinutes}".Replace(',', '.');
             }
-            else if(latitude > -10 && latitude < 0)
+            else if (latitude > -10 && latitude < 0)
             {
                 latString = $"0{latDegrees}{latDecimalMinutes}".Replace(',', '.'); ;
             }
@@ -66,21 +66,21 @@ namespace GnssLibNMEA_Writer
             {
                 longString = $"00{longDegrees}{longDecimalMinutes}".Replace(',', '.');
             }
-            else if(longitude > 0 && longitude < 100)
+            else if (longitude > 0 && longitude < 100)
             {
                 longString = $"0{longDegrees}{longDecimalMinutes}".Replace(',', '.');
             }
-            else if(longitude > -10 && longitude < 0)
+            else if (longitude > -10 && longitude < 0)
             {
                 longString = $"00{longDegrees}{longDecimalMinutes}".Replace(',', '.');
             }
-            else if(longitude > -100 && longitude < 0 )
+            else if (longitude > -100 && longitude < 0)
             {
                 longString = $"0{longDegrees}{longDecimalMinutes}".Replace(',', '.');
             }
 
             List<string> NMEAString = new List<string>();
-            NMEAString.Add(ConstructGPGGAString("GN",utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count+satListGL.Count, HDOP, Math.Round(elevation,3), -15, 0, ""));
+            NMEAString.Add(ConstructGPGGAString("GN", utcTime.ToString("hhmmss.ff"), latString, latD, longString, longD, 1, satListGPS.Count + satListGL.Count, HDOP, Math.Round(elevation, 3), -15, 0, ""));
             if (satListGPS.Count != 0)
             {
                 NMEAString.Add(ConstructGPGSAString("GP", activeSatellitesGPS, PDOP, HDOP, VDOP));
@@ -148,7 +148,7 @@ namespace GnssLibNMEA_Writer
         /// <param name="HDOP">Horizontal dilution of precision.</param>
         /// <param name="VDOP">Vertical dilution of precision.</param>
         /// <returns></returns>
-        public static string ConstructGPGSAString(string satType,List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
+        public static string ConstructGPGSAString(string satType, List<string> activeSatellites, double PDOP, double HDOP, double VDOP)
         {
 
             int numberCommas = 0;
@@ -174,8 +174,8 @@ namespace GnssLibNMEA_Writer
             gsaMessage += "*" + checksum;
             return gsaMessage;
         }
-        
-        
+
+
         /// <summary>
         /// Constructs the GSV-string for the NEMA-messeges.
         /// </summary>
@@ -220,7 +220,7 @@ namespace GnssLibNMEA_Writer
             {
                 if (satType == "GL")
                 {
-                    sb.Append($",{int.Parse(satellite.SatId)+64},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
+                    sb.Append($",{int.Parse(satellite.SatId) + 64},{satellite.Elevation},{satellite.Azimuth},{GenerateRandomSNR(satellite.Elevation)}");// fixed snr for now, to test
                 }
                 else
                 {
@@ -262,7 +262,7 @@ namespace GnssLibNMEA_Writer
         {
             if (elevation < 10)
             {
-                return (int) SimulateSnrHelper(0, 25, 12, 16);
+                return (int)SimulateSnrHelper(0, 25, 12, 16);
             }
             else
             {
@@ -278,7 +278,7 @@ namespace GnssLibNMEA_Writer
         /// <param name="focusMin">Focuses on generating number's from this value.</param>
         /// <param name="focusMax">Focuses on generating numbers's to this value.</param>
         /// <returns>A number from minValue to maxValue but with a focus in the range from focusMin to focusMax.</returns>
-        private static double SimulateSnrHelper(double minValue, double maxValue,double focusMin, double focusMax)
+        private static double SimulateSnrHelper(double minValue, double maxValue, double focusMin, double focusMax)
         {
             double mean = (focusMin + focusMax) / 2;
             double stdDev = (focusMax - focusMin) / 4;

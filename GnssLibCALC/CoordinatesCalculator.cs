@@ -1,7 +1,7 @@
 ﻿using GnssLibCALC.Models.BroadCastDataModels;
 namespace GnssLibCALC
 {
-	public class CoordinatesCalculator
+    public class CoordinatesCalculator
     {
         private const double WGS84_SEMI_MAJOR_AXIS = 6378137;              //semi-major axis in meters
         private const double WGS84_SEMI_MINOR_AXIS = 6356752.3142;         //semi-minor axis in meters
@@ -44,14 +44,14 @@ namespace GnssLibCALC
             double lambda = longitude * Math.PI / 180.0; // longitude in radians
             double f = 1 - (WGS84_SEMI_MINOR_AXIS / WGS84_SEMI_MAJOR_AXIS);
             // Convert geodetic latitude to geocentric latitude
-            double esquared = f*(2 - f);
+            double esquared = f * (2 - f);
             double Nphi = WGS84_SEMI_MAJOR_AXIS / Math.Sqrt(1 - esquared * Math.Pow(Math.Sin(phi), 2));
 
             // Calculate ECEF XYZ coordinates
             double x = (Nphi + altitude) * Math.Cos(phi) * Math.Cos(lambda);
             double y = (Nphi + altitude) * Math.Cos(phi) * Math.Sin(lambda);
             double z = ((1 - esquared) * Nphi + altitude) * Math.Sin(phi);
-            
+
             //Convert from meters to km
             return new double[] { x / 1000, y / 1000, z / 1000 };
         }
@@ -120,7 +120,7 @@ namespace GnssLibCALC
             double Mk = broadcastData.M0_Angle + n * tk;
             double Ek = CalculateEk(Mk, e);
 
-            double vk = Math.Atan2(Math.Sqrt(1 - e * e) * Math.Sin(Ek), Math.Cos(Ek) - e); 
+            double vk = Math.Atan2(Math.Sqrt(1 - e * e) * Math.Sin(Ek), Math.Cos(Ek) - e);
             double phi_k = vk + broadcastData.OmegaAngle;
 
             double d_uk = broadcastData.LatitudeCorrectionCosinusComponent * Math.Cos(2 * phi_k) + broadcastData.LatitudeCorrectionSinusComponent * Math.Sin(2 * phi_k);
@@ -161,7 +161,7 @@ namespace GnssLibCALC
         /// <summary>
         /// 
         /// </summary>
-     
+
         private static double CalculateEk(double Mk, double e)
         {
             double Ek = Mk;

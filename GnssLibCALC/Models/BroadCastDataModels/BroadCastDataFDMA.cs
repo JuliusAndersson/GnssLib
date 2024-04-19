@@ -7,7 +7,6 @@ namespace GnssLibCALC.Models.BroadCastDataModels
     /// </summary>
     public class BroadCastDataFDMA
     {
-
         public string SatId { get; set; }
         public DateTime DateTime { get; set; }
         public double ClockBias { get; set; }
@@ -37,7 +36,6 @@ namespace GnssLibCALC.Models.BroadCastDataModels
         public double L1_L2_delay_diff { get; set; }
         public double URAI { get; set; }
         public double Health_Flags { get; set; }
-
     }
 }
 
