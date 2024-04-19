@@ -145,9 +145,9 @@ namespace GnssLibCALC
         /// <summary>
         ///  
         /// </summary>
-        private static double CalculateTk(double t, double toe)
+        private static double CalculateTk(double transmissionTime, double timeOfEphemeris)
         {
-            double tk = t - toe;
+            double tk = transmissionTime - timeOfEphemeris;
             if (tk > 302400.0)
             {
                 tk -= 604800.0;
