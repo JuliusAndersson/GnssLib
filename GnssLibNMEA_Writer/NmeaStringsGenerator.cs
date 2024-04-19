@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO.Ports;
+using System.Runtime.InteropServices;
 using System.Text;
 using GnssLibCALC.Models.SatModels;
 using GnssLibDL;
@@ -10,7 +11,7 @@ namespace GnssLibNMEA_Writer
     public class NmeaStringsGenerator
     {
         private static Random _random = new Random();
-
+        private static SerialPort _SerialPort;
 
         /// <summary>
         /// Creates all NMEA-messages from data in the SimulationController and whrites it to the serialPort.
@@ -19,7 +20,7 @@ namespace GnssLibNMEA_Writer
         /// <param name="simulationController">The SimulationController</param>
         public static void NmeaGenerator(SerialPort serialPort, SimulationController simulationController)
         {
-
+            _SerialPort = serialPort;
             List<string> activeSatellitesGPS = simulationController.visibleSatellitesPRN_GPS;
             List<string> activeSatellitesGL = simulationController.visibleSatellitesPRN_GL;
             double PDOP = simulationController.PDOP;
@@ -98,13 +99,32 @@ namespace GnssLibNMEA_Writer
                     NMEAString.Add(message);
                 }
             }
-            foreach (string str in NMEAString)
-            {
-                serialPort.WriteLine(str);
-            }
+
+            WriteToCOM(NMEAString);
 
         }
 
+        public static void ClearGPSView()
+        {
+            List<string> NMEAString = new List<string>();
+            NMEAString.Add("$GPGSA,A,3,,,,,,,,,,,,0,0,0*" + CalculateChecksum("$GPGSA,A,1,,,,,,,,,,,,0,0,0"));
+            NMEAString.Add("$GPGSV,1,0*" + CalculateChecksum("$GPGSV,1,0"));
+            NMEAString.Add("$GLGSA,A,3,0.0,0.0,0.0*" + CalculateChecksum("$GLGSA,A,3,0.0,0.0,0.0"));
+            NMEAString.Add("$GLGSV,1,0*" + CalculateChecksum("$GLGSV,1,0"));
+            string tempnone = "$GNGGA, 120001.00, 000.00, N, 00000.000, E, 1, 0, 0.0, 0.0, M, 0, M, 0,,";
+            NMEAString.Add(tempnone + "*" + CalculateChecksum(tempnone));
+
+            WriteToCOM(NMEAString);
+        }
+
+
+        public static void WriteToCOM(List<string> NMEAString)
+        {
+            foreach (string str in NMEAString)
+            {
+                _SerialPort.WriteLine(str);
+            }
+        }
 
         /// <summary>
         /// Constructs the GNGGA-string for the NMEA-message.

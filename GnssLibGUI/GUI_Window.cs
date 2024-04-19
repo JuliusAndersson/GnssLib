@@ -20,6 +20,7 @@ namespace GnssLibGUI
         private List<string> _fileList = new List<string>();
         private bool _isRunning = false;
         private bool _isNmeaOn = false;
+        private bool _hasRunnedOnce = false;
         private string _geoFilePath;
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace GnssLibGUI
                     }
 
 
-
+                    _hasRunnedOnce = true;
                     _isRunning = true;
                     _hasStopped = false;
                     DateTime dt;
@@ -229,16 +230,26 @@ namespace GnssLibGUI
             _isRunning = false;
             _isNmeaOn = false;
 
-            _simulationRunTIme.StopSimulation();
-
-            if (_serialPort.IsOpen)
+            if (_hasRunnedOnce)
             {
-                _serialPort.Close();
+                _simulationRunTIme.StopSimulation();
             }
+            
 
             if (_hasStopped)
             {
                 Terminal.Clear();
+
+                if (_hasRunnedOnce)
+                {
+                    _serialPort.Open();
+                    NmeaStringsGenerator.ClearGPSView();
+                    _serialPort.Close();
+                }
+            }
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.Close();
             }
             _hasStopped = true;
 

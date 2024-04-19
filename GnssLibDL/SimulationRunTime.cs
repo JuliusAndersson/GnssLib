@@ -22,6 +22,7 @@ namespace GnssLibDL
         /// <param name="scIN">The simulationController used to run the simulaton.</param>
         public void RunSimulation(SimulationController scIN)
         {
+            
             _timerRunTime = new System.Timers.Timer();
             // Event that repeats every 1s
             _timerRunTime.Elapsed += RunTick;
@@ -29,6 +30,8 @@ namespace GnssLibDL
             _timerRunTime.AutoReset = true;
             _timerRunTime.Start();
             _simulationController = scIN;
+            _simulationController.Tick();
+            _tickDone?.Invoke(this, EventArgs.Empty);
         }
 
         public void StopSimulation()
