@@ -7,6 +7,7 @@ namespace GnssLibCALC
 
         /// <summary>
         /// Calculates VDOP, HDOP, PDOP based on sateliites in satellitePositions and receivers location of XYZ. 
+        /// Formulas can be found on page X in the thesis report. 
         /// </summary>
         /// <param name="receiverXYZ">Reciver's position in (X, Y, Z).</param>
         /// <param name="satellitePositions">A list of visible satelliteposition coordinates in (X, Y, Z).</param>
