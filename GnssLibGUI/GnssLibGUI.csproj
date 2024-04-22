@@ -36,6 +36,24 @@
     <None Update="Resources\ElevationMaps\62_3_2023.tif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E011_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E012_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E013_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E011_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E012_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E013_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
