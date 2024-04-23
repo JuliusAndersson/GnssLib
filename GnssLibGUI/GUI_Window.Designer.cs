@@ -213,7 +213,7 @@
             updatePos.TabIndex = 10;
             updatePos.Text = "Update pos";
             updatePos.UseVisualStyleBackColor = false;
-            updatePos.Click += updatePos_Click;
+            updatePos.Click += UpdatePos_Click;
             // 
             // setLong
             // 
@@ -364,7 +364,7 @@
             updateJammerPos.TabIndex = 10;
             updateJammerPos.Text = "Update pos";
             updateJammerPos.UseVisualStyleBackColor = false;
-            updateJammerPos.Click += updateJammerPos_Click;
+            updateJammerPos.Click += UpdateJammerPos_Click;
             // 
             // groupBox7
             // 
@@ -402,7 +402,7 @@
             setRadR.TabIndex = 15;
             setRadR.TickFrequency = 10;
             setRadR.Value = 420;
-            setRadR.Scroll += setRadR_Scroll;
+            setRadR.Scroll += SetRadR_Scroll;
             // 
             // groupBox6
             // 

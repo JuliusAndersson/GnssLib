@@ -22,7 +22,9 @@ namespace GnssLibGUI
         private bool _isNmeaOn = false;
         private bool _hasRunnedOnce = false;
         private string _geoFilePath;
-
+        private string _geoFolderPath;
+        private AltitudeChecker _altitudeChecker;
+       
         /// <summary>
         /// 
         /// </summary>
@@ -67,7 +69,9 @@ namespace GnssLibGUI
             Terminal.Text += "Enter VALUES, then PRESS 'Simulate' to start the simulation." + Environment.NewLine;
 
             _geoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ElevationMaps/62_3_2023.tif");
+            _geoFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/NasaElevationMaps/");
 
+            _altitudeChecker = new AltitudeChecker(_geoFolderPath);
 
         }
 
@@ -126,7 +130,7 @@ namespace GnssLibGUI
                             IsUsingGlonass = setGlonass.Checked,
                             ReceiverLatitude = double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             ReceiverLongitude = double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                            ReceiverAltitude = GetAltitude(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
+                            ReceiverAltitude = _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)),
                             ReceiverGpsError = 3
                         };
 
@@ -211,7 +215,7 @@ namespace GnssLibGUI
         /// <summary>
         /// Set the label when Jammmer str slider is changed.
         /// </summary>
-        private void setRadR_Scroll(object sender, EventArgs e)
+        private void SetRadR_Scroll(object sender, EventArgs e)
         {
             labelRadR.Text = setRadR.Value.ToString() + " km";
         }
@@ -258,7 +262,7 @@ namespace GnssLibGUI
         /// <summary>
         /// When you update the Position of Reciver check so Simulation is on and that values are correct.
         /// </summary>
-        private void updatePos_Click(object sender, EventArgs e)
+        private void UpdatePos_Click(object sender, EventArgs e)
         {
             if (_simulationController != null)
             {
@@ -272,7 +276,7 @@ namespace GnssLibGUI
                 {
 
                     _simulationController.UpdatePos(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                       GetAltitude(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
+                       _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture)));
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Position Value Set:  Lat: " + setLat.Text + " Long: " + setLong.Text + Environment.NewLine;
                     Terminal.SelectionStart = Terminal.Text.Length;
@@ -291,7 +295,7 @@ namespace GnssLibGUI
         /// <summary>
         /// When you update the Position of Jammer check so Simulation is on and that values are correct.
         /// </summary>
-        private void updateJammerPos_Click(object sender, EventArgs e)
+        private void UpdateJammerPos_Click(object sender, EventArgs e)
         {
             if (_simulationController != null)
             {
@@ -347,5 +351,6 @@ namespace GnssLibGUI
             }
             return elevation;
         }
+
     }
 }
