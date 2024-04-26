@@ -1,4 +1,6 @@
-﻿namespace GnssLibCALC
+﻿using GnssLibCALC.Models.Configuration;
+
+namespace GnssLibCALC
 {
     public class InterferenceCalculator
     {
@@ -52,6 +54,13 @@
 
             // Check if the closest point is within the jammer's radius
             return Distance(closestPoint, jammerCenter) <= jammerRadius;
+        }
+
+        public static double LineOfSightCalculation(double recAlt, double jamAlt)
+        {
+            double lineOfSigth = 0;
+            lineOfSigth = 2.2 * 1.8 * (Math.Sqrt(recAlt) + Math.Sqrt(jamAlt));
+            return lineOfSigth;
         }
     }
 }

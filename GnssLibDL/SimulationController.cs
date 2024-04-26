@@ -13,6 +13,8 @@ namespace GnssLibDL
         private static readonly double _MAX_ELEVATION = 90;
 
         private GNSS _GNSS_Data;
+        private bool _onDomeMode = false;
+        private bool _isJammed = false;
 
         //Input & Output
         private ReceiverConfiguration _rConfig;
@@ -30,9 +32,10 @@ namespace GnssLibDL
         private double _HDOP;
         private double _VDOP;
         private double[] _receiverPos;
+        private double[] _jammerPos;
         private double _continousSecFromStart = 0;
 
-
+        public bool isJammed { get { return _isJammed; } }
         public ReceiverConfiguration rConfig { get { return _rConfig; } }
         public DateTime simulationStartDateTime { get { return _simulationStartDateTime; } }
         public List<string> visibleSatellitesPRN_GPS { get { return _visibleSatellitesPRN_GPS; } }
@@ -53,12 +56,13 @@ namespace GnssLibDL
         /// <param name="jConfig"> Configurations for the jammer. </param>
         /// <param name="fileName"> The name of the epemeris file to be used.</param>
         /// <param name="simulationStartDateTime"> The DateTime that the simulation starts at.</param>
-        public SimulationController(ReceiverConfiguration rConfig, JammerConfiguration jConfig, String fileName, DateTime simulationStartDateTime)
+        public SimulationController(ReceiverConfiguration rConfig, JammerConfiguration jConfig, string fileName, DateTime simulationStartDateTime, 
+            bool domeMode)
         {
             this._rConfig = rConfig;
             this._jConfig = jConfig;
             this._simulationStartDateTime = simulationStartDateTime;
-
+            this._onDomeMode = domeMode;
             //Read File and put in a Satellites variable
             string filePath = $"Resources/Broadcast/{fileName}";
             BroadCastDataReader bcdr = new BroadCastDataReader();
@@ -80,19 +84,33 @@ namespace GnssLibDL
 
             _satellitePositions = new List<double[]>();
             _receiverPos = CoordinatesCalculator.GeodeticToECEF(_rConfig.ReceiverLatitude, _rConfig.ReceiverLongitude, _rConfig.ReceiverAltitude);
+            _jammerPos = CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0);
 
+            if (!_onDomeMode && _jConfig.IsJammerOn)
+            {
+                if(DOPCalulator.CalculateDistance(_receiverPos, _jammerPos) < InterferenceCalculator.LineOfSightCalculation(_rConfig.ReceiverAltitude, _jConfig.JammerRange))
+                {
+                    _isJammed = true;
+                }
+                else
+                {
+                    _isJammed = false;
+                }
 
+            }
 
             //Check if GPS, Galileo, Glonass is to be Used
-            if (_rConfig.IsUsingGPS)
+            if (!_isJammed || _onDomeMode || !_jConfig.IsJammerOn)
             {
-                MakeGps();
+                if (_rConfig.IsUsingGPS)
+                {
+                    MakeGps();
+                }
+                if (_rConfig.IsUsingGalileo)
+                {
+                    MakeGalileo();
+                }
             }
-            if (_rConfig.IsUsingGalileo)
-            {
-                MakeGalileo();
-            }
-
 
             // Calculate DOP for Visible Satellites
             DOPCalulator.CalculateDOP(_receiverPos, _satellitePositions, out double PDOP, out double HDOP, out double VDOP);
@@ -107,8 +125,9 @@ namespace GnssLibDL
         /// </summary>
         private void MakeGps()
         {
-            var currentDatetime = _simulationStartDateTime.AddSeconds(_continousSecFromStart);
 
+            var currentDatetime = _simulationStartDateTime.AddSeconds(_continousSecFromStart);
+            
             foreach (var gps in _GNSS_Data.Gps.satList)
             {
                
@@ -127,7 +146,8 @@ namespace GnssLibDL
                     if (isVisible)
                     {
                         //Check if a Satellite is blocked by the jammer
-                        if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos, CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
+                        if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos, _jammerPos, _jConfig.JammerRange)) || 
+                            !_jConfig.IsJammerOn || !_onDomeMode)
                         {
                             _satellitePositions.Add(satPosXYZ);
                             _visibleSatellitesPRN_GPS.Add(lastBroadcast.SatId);
@@ -169,8 +189,8 @@ namespace GnssLibDL
                     if (isVisible)
                     {
                         //Check if a Satellite is blocked by the jammer
-                        if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos,
-                            CoordinatesCalculator.GeodeticToECEF(_jConfig.JammerLatitude, _jConfig.JammerLongitude, 0), _jConfig.JammerRadius)) || !_jConfig.IsJammerOn)
+                        if (!(InterferenceCalculator.DoesLineSegmentIntersectSphere(satPosXYZ, _receiverPos, _jammerPos, _jConfig.JammerRange)) || 
+                            !_jConfig.IsJammerOn || !_onDomeMode)
                         {
 
                             _satellitePositions.Add(satPosXYZ);
@@ -200,12 +220,13 @@ namespace GnssLibDL
         /// <summary>
         /// Used to update the jammer position.
         /// </summary>
-        public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad)
+        public void UpdateJammerPos(bool jamOn, double jamLat, double jamLong, double jamRad, bool domeMode)
         {
             this._jConfig.IsJammerOn = jamOn;
             this._jConfig.JammerLatitude = jamLat;
             this._jConfig.JammerLongitude = jamLong;
-            this._jConfig.JammerRadius = jamRad;
+            this._jConfig.JammerRange = jamRad;
+            this._onDomeMode = domeMode;
         }
 
         /// <summary>
@@ -216,6 +237,11 @@ namespace GnssLibDL
             return _PDOP * _rConfig.ReceiverGpsError;
         }
 
+        public bool IsNoSatVisible()
+        {
+            if (visibleSatellitesPRN_GL.Count + visibleSatellitesPRN_GPS.Count < 1) return true;
+            return false;
+        }
 
         /// <summary>
         /// 3 methods used to write to the Terminal on the GUI. (DELETE! NOT USED IN FINISHED PRODUCT)
@@ -230,9 +256,10 @@ namespace GnssLibDL
             return "";
         }
 
-        public double DebugToTerminalGUIGetValuesBool()
+        public bool DebugToTerminalGUIGetValuesBool()
         {
-            return 0;
+            if(visibleSatellitesPRN_GL.Count+visibleSatellitesPRN_GPS.Count < 1) return true;
+            return false;
         }
 
     }

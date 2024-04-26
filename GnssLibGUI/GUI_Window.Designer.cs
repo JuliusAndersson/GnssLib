@@ -50,9 +50,10 @@
             setGps = new CheckBox();
             setFile = new ComboBox();
             groupBox4 = new GroupBox();
-            groupBox5 = new GroupBox();
+            jamBox = new GroupBox();
+            DomeMode = new CheckBox();
             updateJammerPos = new Button();
-            groupBox7 = new GroupBox();
+            jamRadBox = new GroupBox();
             labelRadR = new Label();
             setRadR = new TrackBar();
             groupBox6 = new GroupBox();
@@ -73,8 +74,8 @@
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox4.SuspendLayout();
-            groupBox5.SuspendLayout();
-            groupBox7.SuspendLayout();
+            jamBox.SuspendLayout();
+            jamRadBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)setRadR).BeginInit();
             groupBox6.SuspendLayout();
             SuspendLayout();
@@ -104,6 +105,7 @@
             Simulate.Name = "Simulate";
             Simulate.Size = new Size(102, 31);
             Simulate.TabIndex = 2;
+            Simulate.TabStop = false;
             Simulate.Text = "Simulate";
             Simulate.UseVisualStyleBackColor = false;
             Simulate.Click += Simulate_Click;
@@ -206,11 +208,12 @@
             // 
             updatePos.BackColor = Color.DimGray;
             updatePos.Cursor = Cursors.Hand;
-            updatePos.Location = new Point(282, 25);
+            updatePos.Location = new Point(282, 23);
             updatePos.Margin = new Padding(3, 2, 3, 2);
             updatePos.Name = "updatePos";
-            updatePos.Size = new Size(83, 26);
+            updatePos.Size = new Size(83, 28);
             updatePos.TabIndex = 10;
+            updatePos.TabStop = false;
             updatePos.Text = "Update pos";
             updatePos.UseVisualStyleBackColor = false;
             updatePos.Click += UpdatePos_Click;
@@ -334,61 +337,78 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "Choose File";
             // 
-            // groupBox5
+            // jamBox
             // 
-            groupBox5.Controls.Add(updateJammerPos);
-            groupBox5.Controls.Add(groupBox7);
-            groupBox5.Controls.Add(groupBox6);
-            groupBox5.Controls.Add(setIntOff);
-            groupBox5.Controls.Add(setIntOn);
-            groupBox5.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            groupBox5.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox5.Location = new Point(489, 15);
-            groupBox5.Margin = new Padding(3, 2, 3, 2);
-            groupBox5.Name = "groupBox5";
-            groupBox5.Padding = new Padding(3, 2, 3, 2);
-            groupBox5.Size = new Size(370, 208);
-            groupBox5.TabIndex = 12;
-            groupBox5.TabStop = false;
-            groupBox5.Text = "Interference";
+            jamBox.Controls.Add(DomeMode);
+            jamBox.Controls.Add(updateJammerPos);
+            jamBox.Controls.Add(jamRadBox);
+            jamBox.Controls.Add(groupBox6);
+            jamBox.Controls.Add(setIntOff);
+            jamBox.Controls.Add(setIntOn);
+            jamBox.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            jamBox.ForeColor = Color.FromArgb(255, 184, 56);
+            jamBox.Location = new Point(489, 15);
+            jamBox.Margin = new Padding(3, 2, 3, 2);
+            jamBox.Name = "jamBox";
+            jamBox.Padding = new Padding(3, 2, 3, 2);
+            jamBox.Size = new Size(370, 208);
+            jamBox.TabIndex = 12;
+            jamBox.TabStop = false;
+            jamBox.Text = "Interference";
+            // 
+            // DomeMode
+            // 
+            DomeMode.AutoSize = true;
+            DomeMode.Cursor = Cursors.Hand;
+            DomeMode.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            DomeMode.Location = new Point(231, 35);
+            DomeMode.Margin = new Padding(3, 2, 3, 2);
+            DomeMode.Name = "DomeMode";
+            DomeMode.Size = new Size(114, 24);
+            DomeMode.TabIndex = 17;
+            DomeMode.TabStop = false;
+            DomeMode.Text = "Dome Mode";
+            DomeMode.UseVisualStyleBackColor = true;
+            DomeMode.CheckedChanged += DomeMode_CheckedChanged;
             // 
             // updateJammerPos
             // 
             updateJammerPos.BackColor = Color.DimGray;
             updateJammerPos.Cursor = Cursors.Hand;
             updateJammerPos.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
-            updateJammerPos.Location = new Point(285, 159);
+            updateJammerPos.Location = new Point(285, 158);
             updateJammerPos.Margin = new Padding(3, 2, 3, 2);
             updateJammerPos.Name = "updateJammerPos";
-            updateJammerPos.Size = new Size(83, 26);
+            updateJammerPos.Size = new Size(83, 28);
             updateJammerPos.TabIndex = 10;
+            updateJammerPos.TabStop = false;
             updateJammerPos.Text = "Update pos";
             updateJammerPos.UseVisualStyleBackColor = false;
             updateJammerPos.Click += UpdateJammerPos_Click;
             // 
-            // groupBox7
+            // jamRadBox
             // 
-            groupBox7.Controls.Add(labelRadR);
-            groupBox7.Controls.Add(setRadR);
-            groupBox7.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            groupBox7.ForeColor = Color.FromArgb(255, 184, 56);
-            groupBox7.Location = new Point(14, 66);
-            groupBox7.Margin = new Padding(3, 2, 3, 2);
-            groupBox7.Name = "groupBox7";
-            groupBox7.Padding = new Padding(3, 2, 3, 2);
-            groupBox7.Size = new Size(350, 62);
-            groupBox7.TabIndex = 16;
-            groupBox7.TabStop = false;
-            groupBox7.Text = "Jammer Radius";
+            jamRadBox.Controls.Add(labelRadR);
+            jamRadBox.Controls.Add(setRadR);
+            jamRadBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            jamRadBox.ForeColor = Color.FromArgb(255, 184, 56);
+            jamRadBox.Location = new Point(14, 66);
+            jamRadBox.Margin = new Padding(3, 2, 3, 2);
+            jamRadBox.Name = "jamRadBox";
+            jamRadBox.Padding = new Padding(3, 2, 3, 2);
+            jamRadBox.Size = new Size(350, 62);
+            jamRadBox.TabIndex = 16;
+            jamRadBox.TabStop = false;
+            jamRadBox.Text = "Jammer Height     (Approx Range: ~ km)";
             // 
             // labelRadR
             // 
             labelRadR.AutoSize = true;
             labelRadR.Location = new Point(36, 27);
             labelRadR.Name = "labelRadR";
-            labelRadR.Size = new Size(65, 21);
+            labelRadR.Size = new Size(47, 21);
             labelRadR.TabIndex = 17;
-            labelRadR.Text = "420 km";
+            labelRadR.Text = "0 km";
             // 
             // setRadR
             // 
@@ -396,12 +416,12 @@
             setRadR.Cursor = Cursors.Hand;
             setRadR.Location = new Point(89, 27);
             setRadR.Margin = new Padding(3, 2, 3, 2);
-            setRadR.Maximum = 500;
+            setRadR.Maximum = 200;
             setRadR.Name = "setRadR";
             setRadR.Size = new Size(255, 27);
             setRadR.TabIndex = 15;
-            setRadR.TickFrequency = 10;
-            setRadR.Value = 420;
+            setRadR.TabStop = false;
+            setRadR.TickFrequency = 5;
             setRadR.Scroll += SetRadR_Scroll;
             // 
             // groupBox6
@@ -496,6 +516,7 @@
             setNMEA.Name = "setNMEA";
             setNMEA.Size = new Size(101, 19);
             setNMEA.TabIndex = 13;
+            setNMEA.TabStop = false;
             setNMEA.Text = "NMEA Output";
             setNMEA.UseVisualStyleBackColor = true;
             // 
@@ -510,6 +531,7 @@
             Stop.Name = "Stop";
             Stop.Size = new Size(102, 31);
             Stop.TabIndex = 14;
+            Stop.TabStop = false;
             Stop.Text = "Clear";
             Stop.UseVisualStyleBackColor = false;
             Stop.Click += Stop_Click;
@@ -544,7 +566,7 @@
             Controls.Add(labelPosAcc);
             Controls.Add(Stop);
             Controls.Add(setNMEA);
-            Controls.Add(groupBox5);
+            Controls.Add(jamBox);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -570,10 +592,10 @@
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox4.ResumeLayout(false);
-            groupBox5.ResumeLayout(false);
-            groupBox5.PerformLayout();
-            groupBox7.ResumeLayout(false);
-            groupBox7.PerformLayout();
+            jamBox.ResumeLayout(false);
+            jamBox.PerformLayout();
+            jamRadBox.ResumeLayout(false);
+            jamRadBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)setRadR).EndInit();
             groupBox6.ResumeLayout(false);
             groupBox6.PerformLayout();
@@ -604,7 +626,7 @@
         private Button updatePos;
         private ComboBox setFile;
         private GroupBox groupBox4;
-        private GroupBox groupBox5;
+        private GroupBox jamBox;
         private GroupBox groupBox6;
         private Button updateJammerPos;
         private TextBox setJammerLong;
@@ -616,10 +638,11 @@
         private CheckBox setNMEA;
         private Button Stop;
         private Label label8;
-        private GroupBox groupBox7;
+        private GroupBox jamRadBox;
         private TrackBar setRadR;
         private Label labelRadR;
         private Label labelPosAcc;
         private Label label10;
+        private CheckBox DomeMode;
     }
 }

@@ -24,7 +24,7 @@ namespace GnssLibGUI
         private string _geoFilePath;
         private string _geoFolderPath;
         private AltitudeChecker _altitudeChecker;
-       
+
         /// <summary>
         /// 
         /// </summary>
@@ -137,13 +137,13 @@ namespace GnssLibGUI
                         JammerConfiguration jammerConfig = new JammerConfiguration()
                         {
                             IsJammerOn = setIntOn.Checked,
-                            JammerRadius = double.Parse(setRadR.Value.ToString()),
+                            JammerRange = double.Parse(setRadR.Value.ToString()),
                             JammerLatitude = double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                             JammerLongitude = double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                         };
 
 
-                        _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName, dt);
+                        _simulationController = new SimulationController(receiverConfig, jammerConfig, fileName, dt, DomeMode.Checked);
 
                         _simulationRunTIme.RunSimulation(_simulationController);
                         Terminal.ForeColor = Color.White;
@@ -208,7 +208,14 @@ namespace GnssLibGUI
 
             if (_isNmeaOn)
             {
-                NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
+                if (_simulationController.IsNoSatVisible())
+                {
+                    NmeaStringsGenerator.ClearGPSView();
+                }
+                else
+                {
+                    NmeaStringsGenerator.NmeaGenerator(_serialPort, _simulationController);
+                }
             }
         }
 
@@ -217,7 +224,21 @@ namespace GnssLibGUI
         /// </summary>
         private void SetRadR_Scroll(object sender, EventArgs e)
         {
-            labelRadR.Text = setRadR.Value.ToString() + " km";
+            double radInt = 0;
+            if (DomeMode.Checked)
+            {
+                radInt = setRadR.Value;
+                labelRadR.Text = ((int)radInt).ToString() + " km";
+            }
+            else
+            {
+                double alts = _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                radInt = InterferenceCalculator.LineOfSightCalculation(alts, setRadR.Value);
+
+                jamRadBox.Text = "Jammer Height     (Approx Range: " + (int)radInt + " km)";
+                labelRadR.Text = setRadR.Value + " m";
+            }
+
         }
 
         /// <summary>
@@ -238,7 +259,7 @@ namespace GnssLibGUI
             {
                 _simulationRunTIme.StopSimulation();
             }
-            
+
 
             if (_hasStopped)
             {
@@ -309,7 +330,8 @@ namespace GnssLibGUI
                 {
 
                     _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()));
+                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()), 
+                        DomeMode.Checked);
 
                     Terminal.ForeColor = Color.White;
                     Terminal.Text += "New Jammer Value Set:  Lat: " + setJammerLat.Text + " Long: " + setJammerLong.Text + Environment.NewLine;
@@ -352,5 +374,27 @@ namespace GnssLibGUI
             return elevation;
         }
 
+        private void DomeMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if(DomeMode.Checked == true)
+            {
+                setRadR.Maximum = 500;
+                setRadR.TickFrequency = 10;
+                labelRadR.Text = setRadR.Value + " km";
+                jamBox.Text = "Interference Dome Mode";
+                jamRadBox.Text = "Jammer Radius";
+            }
+            else
+            {
+                if (setRadR.Value > 200)
+                {
+                    labelRadR.Text = "200" + " m";
+                }
+                setRadR.Maximum = 200;
+                setRadR.TickFrequency = 5;
+                jamBox.Text = "Interference";
+                jamRadBox.Text = "Jammer Height     (Approx Range: " + "~" + " km)";
+            }
+        }
     }
 }
