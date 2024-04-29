@@ -350,30 +350,6 @@ namespace GnssLibGUI
 
         }
 
-        /// <summary>
-        /// Finds the elevation from the .tiff file at the location of latitude and longitude and returns the value found.
-        /// </summary>
-        /// <param name="latitude">Latitude in DecimalDegrees of the location.</param>
-        /// <param name="longitude">Longitude in DecimalDegrees of the location.</param>
-        /// <returns>Elevation above (in meters) the geoid at given location.</returns>
-        private double GetAltitude(double latitude, double longitude)
-        {
-            WGS84Position wgsPos = new WGS84Position();
-            wgsPos.SetLatitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(latitude, true), WGS84Position.WGS84Format.DegreesMinutesSeconds);
-            wgsPos.SetLongitudeFromString(CoordinatesCalculator.DoubleToDegreesMinutesSeconds(longitude, false), WGS84Position.WGS84Format.DegreesMinutesSeconds);
-            SWEREF99Position rtPos = new SWEREF99Position(wgsPos, SWEREF99Position.SWEREFProjection.sweref_99_tm);
-            double elevation = 0;
-            if (rtPos.Latitude > 6200000 && rtPos.Latitude < 6300000 && rtPos.Longitude < 400000 && rtPos.Longitude > 300000)
-            {
-                if (File.Exists(_geoFilePath))
-                {
-                    GeoTiff elevationtiff = new GeoTiff(_geoFilePath);
-                    elevation = elevationtiff.GetElevationAtLatLon(rtPos.Latitude, rtPos.Longitude);
-                }
-            }
-            return elevation;
-        }
-
         private void DomeMode_CheckedChanged(object sender, EventArgs e)
         {
             if(DomeMode.Checked == true)
