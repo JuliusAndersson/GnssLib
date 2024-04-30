@@ -14,5 +14,13 @@ If you would want functionality outside the pre-added files. Make sure you place
 - If you want to add more broadcast ephemeris files for different days they can be downloaded from NASA here: [NASA.GOV](https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/broadcast_ephemeris_data.html) Be sure to download in the RINEX V.4 format. 
 - If you would want to add different digital elevation models, they can also be downloaded from NASA here: [Earth Data](https://search.earthdata.nasa.gov/search/granules?p=C1711961296-LPCLOUD&pg[0][v]=f&pg[0][gsk]=-start_date&fi=ASTER&tl=1712687657!3!!)
 
-
-#Instructions
+## Instructions
+1. Load the broadcast file from the desired day by adding it to the "Broadcast" folder.
+2. Load elevation maps for the desired location by downloading DEM's from NASA and add them to the "NasaElevationMaps" folder.
+3. Configure the receiver with a latitude and longitude coordinate, specify what time of the day the simulation should start, and what constellation you want to use. Currently, GPS and Galileo are available.
+4. Configure the jammer with latitude and longitude coordinates, choose which model you want to use, and specify the range condition.
+## For visualisation
+5. Install VisualGPSView.
+6. Install Virtual Serial Ports (VSP).
+7. In VSP, set up a virtual COM port, e.g. COM1 -> COM2.
+8. Then specify the VisualGPSView to take COM2 as input.
