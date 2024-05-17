@@ -330,7 +330,7 @@ namespace GnssLibGUI
                 {
 
                     _simulationController.UpdateJammerPos(setIntOn.Checked, double.Parse(setJammerLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
-                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()), 
+                        double.Parse(setJammerLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setRadR.Value.ToString()),
                         DomeMode.Checked);
 
                     Terminal.ForeColor = Color.White;
@@ -376,7 +376,7 @@ namespace GnssLibGUI
 
         private void DomeMode_CheckedChanged(object sender, EventArgs e)
         {
-            if(DomeMode.Checked == true)
+            if (DomeMode.Checked == true)
             {
                 setRadR.Maximum = 500;
                 setRadR.TickFrequency = 10;

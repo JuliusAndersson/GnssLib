@@ -406,9 +406,9 @@
             labelRadR.AutoSize = true;
             labelRadR.Location = new Point(36, 27);
             labelRadR.Name = "labelRadR";
-            labelRadR.Size = new Size(47, 21);
+            labelRadR.Size = new Size(38, 21);
             labelRadR.TabIndex = 17;
-            labelRadR.Text = "0 km";
+            labelRadR.Text = "0 m";
             // 
             // setRadR
             // 
