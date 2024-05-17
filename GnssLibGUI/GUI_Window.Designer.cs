@@ -51,6 +51,7 @@
             setFile = new ComboBox();
             groupBox4 = new GroupBox();
             jamBox = new GroupBox();
+            ApproxLab = new Label();
             DomeMode = new CheckBox();
             updateJammerPos = new Button();
             jamRadBox = new GroupBox();
@@ -356,6 +357,15 @@
             jamBox.TabStop = false;
             jamBox.Text = "Interference";
             // 
+            // ApproxLab
+            // 
+            ApproxLab.AutoSize = true;
+            ApproxLab.Location = new Point(144, 0);
+            ApproxLab.Name = "ApproxLab";
+            ApproxLab.Size = new Size(177, 21);
+            ApproxLab.TabIndex = 17;
+            ApproxLab.Text = "(Approx Range: ~ km)";
+            // 
             // DomeMode
             // 
             DomeMode.AutoSize = true;
@@ -388,6 +398,7 @@
             // 
             // jamRadBox
             // 
+            jamRadBox.Controls.Add(ApproxLab);
             jamRadBox.Controls.Add(labelRadR);
             jamRadBox.Controls.Add(setRadR);
             jamRadBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
@@ -399,7 +410,7 @@
             jamRadBox.Size = new Size(350, 62);
             jamRadBox.TabIndex = 16;
             jamRadBox.TabStop = false;
-            jamRadBox.Text = "Jammer Height     (Approx Range: ~ km)";
+            jamRadBox.Text = "Jammer Height";
             // 
             // labelRadR
             // 
@@ -644,5 +655,6 @@
         private Label labelPosAcc;
         private Label label10;
         private CheckBox DomeMode;
+        private Label ApproxLab;
     }
 }

@@ -24,6 +24,8 @@ namespace GnssLibGUI
         private string _geoFilePath;
         private string _geoFolderPath;
         private AltitudeChecker _altitudeChecker;
+        private bool _isPosChanged = true;
+        private double alts;
 
         /// <summary>
         /// 
@@ -232,10 +234,15 @@ namespace GnssLibGUI
             }
             else
             {
-                double alts = _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                if (_isPosChanged)
+                {
+                    alts = _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                    _isPosChanged = false;
+                }
+
                 radInt = InterferenceCalculator.LineOfSightCalculation(alts, setRadR.Value);
 
-                jamRadBox.Text = "Jammer Height     (Approx Range: " + (int)radInt + " km)";
+                ApproxLab.Text = "(Approx Range: " + (int)radInt + " km)";
                 labelRadR.Text = setRadR.Value + " m";
             }
 
@@ -285,6 +292,7 @@ namespace GnssLibGUI
         /// </summary>
         private void UpdatePos_Click(object sender, EventArgs e)
         {
+            _isPosChanged = true;
             if (_simulationController != null)
             {
                 double value;
@@ -359,6 +367,7 @@ namespace GnssLibGUI
                 labelRadR.Text = setRadR.Value + " km";
                 jamBox.Text = "Interference Dome Mode";
                 jamRadBox.Text = "Jammer Radius";
+                ApproxLab.Text = "";
             }
             else
             {
@@ -369,7 +378,18 @@ namespace GnssLibGUI
                 setRadR.Maximum = 200;
                 setRadR.TickFrequency = 5;
                 jamBox.Text = "Interference";
-                jamRadBox.Text = "Jammer Height     (Approx Range: " + "~" + " km)";
+                jamRadBox.Text = "Jammer Height";
+                labelRadR.Text = setRadR.Value + " m";
+
+
+                if (alts == null)
+                {
+                    alts = _altitudeChecker.GetAltitudeAtCoordinates(double.Parse(setLat.Text.Replace(',', '.'), CultureInfo.InvariantCulture), double.Parse(setLong.Text.Replace(',', '.'), CultureInfo.InvariantCulture));
+                }
+                double radInt = 0;
+                radInt = InterferenceCalculator.LineOfSightCalculation(alts, setRadR.Value);
+
+                ApproxLab.Text = "(Approx Range: " + (int)radInt + " km)";
             }
         }
     }
