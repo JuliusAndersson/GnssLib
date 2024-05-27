@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GnssLibCALC\GnssLibCALC.csproj" />
+    <ProjectReference Include="..\GnssLibDL\GnssLibDL.csproj" />
+    <ProjectReference Include="..\GnssLibNMEA_Writer\GnssLibNMEA_Writer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20231260000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20240010000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20240020000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20240030000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20240040000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Broadcast\BRD400DLR_S_20240050000_01D_MN.rnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ElevationMaps\62_3_2023.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E011_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E012_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N55E013_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E011_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E012_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\NasaElevationMaps\ASTGTMV003_N56E013_dem.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
