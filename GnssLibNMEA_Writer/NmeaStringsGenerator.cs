@@ -287,36 +287,22 @@ namespace GnssLibNMEA_Writer
             }
             else
             {
-                return (int)SimulateSnrHelper(10, 45, 22, 33, 5);
+                return (int)SimulateSnrHelper(10, 45, 20, 30, 5);
             }
         }
 
         /// <summary>
-        /// Creates a simulated SNR-number for the NMEA-message. 
+        /// Creates a simulated SNR-number for the NMEA-message using box-muller method. Generates random numbers with a normaldistrubution using a median and standard deviation values. 
         /// </summary>
         /// <param name="minValue">Minimum SNR-number.</param>
         /// <param name="maxValue">Maximum SNR-number.</param>
         /// <param name="focusMin">Focuses on generating number's from this value.</param>
         /// <param name="focusMax">Focuses on generating numbers's to this value.</param>
         /// <returns>A number from minValue to maxValue but with a focus in the range from focusMin to focusMax.</returns>
-        private static double SimulateSnrHelper(double minValue, double maxValue, double focusMin, double focusMax)
-        {
-            double mean = (focusMin + focusMax) / 2;
-            double stdDev = (focusMax - focusMin) / 4;
-
-            double firstRandom = 1.0 - _random.NextDouble();
-            double secondRandom = 1.0 - _random.NextDouble();
-
-            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(firstRandom)) * Math.Sin(2.0 * Math.PI * secondRandom);
-            double randNormal = mean + stdDev * randStdNormal;
-            return Math.Max(minValue, Math.Min(maxValue, randNormal));
-        }
-
+        
         private static double SimulateSnrHelper(double minValue, double maxValue, double focusMin, double focusMax, double stdDev)
         {
             double mean = (focusMin + focusMax) / 2;
-           
-
             double firstRandom = _random.NextDouble();
             double secondRandom = _random.NextDouble();
 
