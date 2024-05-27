@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -282,11 +283,11 @@ namespace GnssLibNMEA_Writer
         {
             if (elevation < 10)
             {
-                return (int)SimulateSnrHelper(0, 25, 12, 16);
+                return (int)SimulateSnrHelper(0, 25, 12, 16, 4);
             }
             else
             {
-                return (int)SimulateSnrHelper(10, 45, 22, 33);
+                return (int)SimulateSnrHelper(10, 45, 22, 33, 5);
             }
         }
 
@@ -305,6 +306,19 @@ namespace GnssLibNMEA_Writer
 
             double firstRandom = 1.0 - _random.NextDouble();
             double secondRandom = 1.0 - _random.NextDouble();
+
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(firstRandom)) * Math.Sin(2.0 * Math.PI * secondRandom);
+            double randNormal = mean + stdDev * randStdNormal;
+            return Math.Max(minValue, Math.Min(maxValue, randNormal));
+        }
+
+        private static double SimulateSnrHelper(double minValue, double maxValue, double focusMin, double focusMax, double stdDev)
+        {
+            double mean = (focusMin + focusMax) / 2;
+           
+
+            double firstRandom = _random.NextDouble();
+            double secondRandom = _random.NextDouble();
 
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(firstRandom)) * Math.Sin(2.0 * Math.PI * secondRandom);
             double randNormal = mean + stdDev * randStdNormal;
